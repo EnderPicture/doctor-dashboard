@@ -1,5 +1,5 @@
 let patients = [
-    abdominalPain = 
+    abdominalPain =
     {
         name: "james john",
         labTests: [
@@ -3728,7 +3728,7 @@ let patients = [
 
 
     },
-    
+
     chestPain = {
         name: "james john",
         EDM: [
