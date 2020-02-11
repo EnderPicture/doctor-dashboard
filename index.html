@@ -10,46 +10,18 @@
 
 <body>
     <div id="app">
-        <input v-model="query" type="text">
-        <p>{{query}}</p>
-        <div v-for="text in array">
-            <div v-if="text.name.includes(query)">
-                <p>{{text.name}}</p>
-                <p>{{text.id}}</p>
-            </div>
-        </div>
+        
     </div>
 
 
 
+    <script src="fake_patient_data.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
         new Vue({
             el: '#app',
             data: {
-                query: '',
-                array: [
-                    {
-                        name: 'googasdfle',
-                        id: '123412341234',
-                    },
-                    {
-                        name: 'google',
-                        id: '1234123asdfasf41234',
-                    },
-                    {
-                        name: 'google',
-                        id: '123412341234',
-                    },
-                    {
-                        name: 'google',
-                        id: '123412341234',
-                    },
-                    {
-                        name: 'google',
-                        id: '123412341234',
-                    },
-                ]
+                patients: patients,        
             }
         })
     </script>
