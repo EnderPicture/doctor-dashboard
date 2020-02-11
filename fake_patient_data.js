@@ -1,5 +1,20 @@
 let patients = [
     {
+        PatientInfo: {
+            FirstName: "David",
+            MiddleName: "E.",
+            LastName: "Kea",
+            Gender: "Male",
+            Address: "4171 Woodstock Drive",
+            City: "Surrey",
+            Province: "BC",
+            PostalCode: "V3V 1Z2",
+            Birthday: "October 23, 1977",
+            Email: "DavidEKea@rhyta.com",
+            Weight: 64.1,
+            Height: 187,
+            BloodType: "A+",
+        },
         MeditechEDM: {
             CTAS: "3",
             ChiefComplaint: "Abdo Pain,Mod,+/- Episod N&V",
