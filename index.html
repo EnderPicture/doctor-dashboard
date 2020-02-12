@@ -78,6 +78,13 @@
                 },
                 timeHuman(date) {
                     return this.readDate(date).format('MMMM Do, YYYY');
+                },
+                moreThanAMonthAgo(date) {
+                    let humanTime = this.timeWhenHuman(date);
+                    return (humanTime.includes('month ago') ||
+                        humanTime.includes('months ago') ||
+                        humanTime.includes('year ago') ||
+                        humanTime.includes('years ago'));
                 }
             },
         });
@@ -97,22 +104,22 @@
                         <article class="lab-tests__day" v-for="(orderDay, index) in groupByDateOrders">
                             <div class="lab-tests__date-tag">
                                 <p class="lab-tests__when">
-                                    <template v-if="!timeWhenHuman(orderDay.ServiceDate).includes('month ago')">
+                                    <template v-if="!moreThanAMonthAgo(orderDay.ServiceDate)">
                                         {{timeWhenHuman(orderDay.ServiceDate)}}
                                     </template>
                                     <template v-else>
                                         {{timeHuman(orderDay.ServiceDate)}}
                                     </template>
                                 </p>
-                                <p class="lab-tests__date" v-if="!timeWhenHuman(orderDay.ServiceDate).includes('month ago')">
+                                <p class="lab-tests__date" v-if="!moreThanAMonthAgo(orderDay.ServiceDate)">
                                     {{timeHuman(orderDay.ServiceDate)}}
                                 </p>
                             </div>
 
                             <div class="lab-tests__order" v-for="order in orderDay.Orders">
-                                <p class="lab-tests__order-procedure">{{order.Procedure}}</p> 
+                                <p class="lab-tests__order-procedure">{{order.Procedure}}</p>
                                 <p>{{order.Category}}</p>
-                                
+
                             </div>
                         </article>
                         <!-- <button v-if="countAfterRecentOrders > 0">view {{countAfterRecentOrders}} more</button> -->
