@@ -42,11 +42,15 @@
                 today() {
                     return moment("2031 02 20", "YYYY MM DD");
                 },
+                sortedOrders() {
+                    return this.sortDate(this.patient.OrderEntry, "ServiceDate");
+                },
                 groupByDateOrders() {
                     let d3Nest = d3.nest()
                         .key(d => d.ServiceDate)
                         .rollup(d => d)
-                        .entries(this.patient.OrderEntry);
+                        .entries(this.sortedOrders);
+
                     let nice = d3Nest.map(d => {
                         return {
                             ServiceDate: d.key,
