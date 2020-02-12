@@ -97,14 +97,23 @@
                         <article class="lab-tests__day" v-for="(orderDay, index) in groupByDateOrders">
                             <div class="lab-tests__date-tag">
                                 <p class="lab-tests__when">
-                                    {{timeWhenHuman(orderDay.ServiceDate)}}
+                                    <template v-if="!timeWhenHuman(orderDay.ServiceDate).includes('month ago')">
+                                        {{timeWhenHuman(orderDay.ServiceDate)}}
+                                    </template>
+                                    <template v-else>
+                                        {{timeHuman(orderDay.ServiceDate)}}
+                                    </template>
                                 </p>
-                                <p class="lab-tests__date">
+                                <p class="lab-tests__date" v-if="!timeWhenHuman(orderDay.ServiceDate).includes('month ago')">
                                     {{timeHuman(orderDay.ServiceDate)}}
                                 </p>
                             </div>
 
-                            <p class="lab-tests__order" v-for="order in orderDay.Orders">{{order.Category}} {{order.Procedure}}</p>
+                            <div class="lab-tests__order" v-for="order in orderDay.Orders">
+                                <p class="lab-tests__order-procedure">{{order.Procedure}}</p> 
+                                <p>{{order.Category}}</p>
+                                
+                            </div>
                         </article>
                         <!-- <button v-if="countAfterRecentOrders > 0">view {{countAfterRecentOrders}} more</button> -->
                     </div>

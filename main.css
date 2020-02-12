@@ -125,5 +125,15 @@ body {
 
 .lab-tests__order {
   margin: .5rem 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.lab-tests__order-procedure {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  font-weight: 900;
 }
 /*# sourceMappingURL=main.css.map */

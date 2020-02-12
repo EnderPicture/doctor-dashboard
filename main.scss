@@ -112,5 +112,10 @@ body {
     }
     &__order {
         margin: .5rem 1rem;
+        display: flex;
+        &-procedure {
+            flex: 1;
+            font-weight: 900;
+        }
     }
 }
