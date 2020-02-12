@@ -15,27 +15,116 @@
 <body>
     <div id="app">
         <div class="top">
-            
+            <p>{{doctor.firstName}} {{doctor.middleName}} {{doctor.lastName}} - {{doctor.type}}</p>
         </div>
-        <div class="side">
-            <div class="patient">
-                <p class="patient__large-name">{{doctor.lastName}}</p>
-                <p class="patient__small-name">{{doctor.firstName}} {{doctor.middleName}}</p>
-            </div>
-        </div>
-        <div class="main">
-            <div v-for="entry in getRecentTests(patients[0],5)">
-                <p>{{entry.ServiceDate}}{{entry.Category}}{{entry.Procedure}}</p>
-            </div>
-        </div>
+        <patient-info v-bind:patient="patients[0]"></patient-info>
     </div>
 
 
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://momentjs.com/downloads/moment.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="fake_patient_data.js"></script>
-    <script src="main.js"></script>
+
+    <script>
+        Vue.component('patient-info', {
+            template: '#patient-info-template',
+            props: {
+                patient: Object,
+            },
+            data() {
+                return {
+                    ordersToShow: 20,
+                }
+            },
+            computed: {
+                today() {
+                    return moment("2031 02 20", "YYYY MM DD");
+                },
+                groupByDateOrders() {
+                    let d3Nest = d3.nest()
+                        .key(d => d.ServiceDate)
+                        .rollup(d => d)
+                        .entries(this.patient.OrderEntry);
+                    let nice = d3Nest.map(d => {
+                        return {
+                            ServiceDate: d.key,
+                            Orders: d.value,
+                        }
+                    });
+                    return nice;
+                },
+            },
+            methods: {
+                sortDate(dataSet, valueToSort, descending = true) {
+                    return dataSet.sort((a, b) => {
+                        if (descending) {
+                            return this.readDate(b[valueToSort]).unix() - this.readDate(a[valueToSort]).unix();
+                        } else {
+                            return this.readDate(a[valueToSort]).unix() - this.readDate(b[valueToSort]).unix();
+                        }
+                    });
+                },
+                readDate(date) {
+                    return moment(date, 'DD-MMMM-YYYY');
+                },
+                timeWhenHuman(date) {
+                    return this.readDate(date).from(this.today);
+                },
+                timeHuman(date) {
+                    return this.readDate(date).format('MMMM Do, YYYY');
+                }
+            },
+        });
+    </script>
+    <template id="patient-info-template">
+        <div class="patient-data">
+            <div class="side">
+                <div class="patient">
+                    <p class="patient__large-name">{{patient.Info.LastName}}</p>
+                    <p class="patient__small-name">{{patient.Info.FirstName}} {{patient.Info.MiddleName}}</p>
+                    <p>{{patient.Info.Gender}}</p>
+                </div>
+            </div>
+            <div class="main">
+                <div class="lab-tests">
+                    <div class="lab-tests__scroll">
+                        <article class="lab-tests__day" v-for="(orderDay, index) in groupByDateOrders">
+                            <div class="lab-tests__date-tag">
+                                <p class="lab-tests__when">
+                                    {{timeWhenHuman(orderDay.ServiceDate)}}
+                                </p>
+                                <p class="lab-tests__date">
+                                    {{timeHuman(orderDay.ServiceDate)}}
+                                </p>
+                            </div>
+
+                            <p class="lab-tests__order" v-for="order in orderDay.Orders">{{order.Category}} {{order.Procedure}}</p>
+                        </article>
+                        <!-- <button v-if="countAfterRecentOrders > 0">view {{countAfterRecentOrders}} more</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                doctor: {
+                    firstName: "Jorge",
+                    middleName: "L.",
+                    lastName: "Weaver",
+                    type: "Physician",
+                    id: "03578115",
+                },
+                patients: patients,
+            },
+        })
+    </script>
 </body>
 
 </html>

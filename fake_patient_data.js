@@ -1,6 +1,6 @@
 let patients = [
     {
-        PatientInfo: {
+        Info: {
             FirstName: "David",
             MiddleName: "E.",
             LastName: "Kea",
@@ -9,7 +9,7 @@ let patients = [
             City: "Surrey",
             Province: "BC",
             PostalCode: "V3V 1Z2",
-            Birthday: "October 23, 1977",
+            Birthday: "23-Oct-2030 October 1987",
             Email: "DavidEKea@rhyta.com",
             Weight: 64.1,
             Height: 187,
