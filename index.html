@@ -5,18 +5,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="main.css">
+
     <title>Document</title>
 </head>
 
 <body>
     <div id="app">
-        
+        <div class="top">
+            
+        </div>
+        <div class="side">
+            <div class="patient">
+                <p class="patient__large-name">{{doctor.lastName}}</p>
+                <p class="patient__small-name">{{doctor.firstName}} {{doctor.middleName}}</p>
+            </div>
+        </div>
+        <div class="main">
+            <div v-for="entry in getRecentTests(patients[0],5)">
+                <p>{{entry.ServiceDate}}{{entry.Category}}{{entry.Procedure}}</p>
+            </div>
+        </div>
     </div>
 
 
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://momentjs.com/downloads/moment.js"></script>
     <script src="fake_patient_data.js"></script>
     <script src="main.js"></script>
 </body>

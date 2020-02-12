@@ -1,1 +1,61 @@
-/* No CSS *//*# sourceMappingURL=main.css.map */
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: "Roboto Condensed", sans-serif;
+}
+
+body {
+  margin: 0;
+  color: #003049;
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  background-color: #EDDDD4;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 30fr 70fr;
+      grid-template-columns: 30fr 70fr;
+  -ms-grid-rows: 10fr 90fr;
+      grid-template-rows: 10fr 90fr;
+  overflow: hidden;
+}
+
+.patient {
+  color: #EDDDD4;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.patient__large-name {
+  font-size: 3.2rem;
+  margin: 0;
+}
+
+.patient__small-name {
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.top {
+  grid-column: 1 / -1;
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1 / 2;
+  background-color: #003049;
+}
+
+.side {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1 / 2;
+  grid-row: 2 / -1;
+  background-color: #003049;
+}
+
+.main {
+  grid-column: 2 / -1;
+  grid-row: 2 / -1;
+}
+/*# sourceMappingURL=main.css.map */

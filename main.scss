@@ -1,0 +1,57 @@
+$color-background:#EDDDD4;
+$color-main:#003049;
+$color-good:#306B34;
+$color-bad:#C44536;
+$color-5:#F3FFC6;
+
+$font-condensed: 'Roboto Condensed', sans-serif;
+$font-normal: 'Roboto', sans-serif;
+
+* {
+    box-sizing: border-box;
+    font-family: $font-condensed;
+}
+body {
+    margin: 0;
+    color: $color-main;
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    background-color: $color-background;
+    display: grid;
+    grid-template-columns: 30fr 70fr;
+    grid-template-rows: 10fr 90fr;
+    overflow: hidden;
+}
+.patient {
+    color: $color-background;
+    padding: 2rem;
+    background-color: rgba(255,255,255,.1);
+    &__large-name {
+        font-size: 3.2rem;
+        margin: 0;
+    }
+    &__small-name {
+        font-size: 1.6rem;
+        margin: 0;
+    }
+}
+.top {
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+    background-color: $color-main;
+}
+.side {
+    
+    grid-column: 1 / 2;
+    grid-row: 2 / -1;
+    background-color: $color-main;
+}
+
+.main {
+    grid-column: 2 / -1;
+    grid-row: 2 / -1;
+    
+}
