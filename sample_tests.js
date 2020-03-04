@@ -32,49 +32,126 @@ let sample_tests = [
                 units: "billion/L",
 
             },
+            {
+                type: "Platelets",
+                range: "150,000 to 450,000",
+                units: "platelets/mcL",
+
+            },
         ],
         Chem7: [
             //https://www.ucsfbenioffchildrens.org/tests/003462.html
             {
                 type: "BUN",
-                value: "7-20",
-                range: "mg/dL",
+                range: "7-20",
+                units: "mg/dL",
             },
             {
                 type: "CO2",
-                value: "20 to 29",
-                range: "mmol/L",
+                range: "20 to 29",
+                units: "mmol/L",
             },
             {
                 type: "Creatinine",
-                value: "0.8 to 1.4",
-                range: "mg/dL",
+                range: "0.8 to 1.4",
+                units: "mg/dL",
             },
             {
                 type: "Glucose",
-                value: "64 to 128",
-                range: "mg/dL",
+                range: "64 to 128",
+                units: "mg/dL",
             },
             {
                 type: "Serum chloride",
-                value: "101 to 111",
-                range: "mmol/L",
+                range: "101 to 111",
+                units: "mmol/L",
             },
             {
                 type: "Serum potassium",
-                value: "3.7 to 5.2",
-                range: "mEq/L",
+                range: "3.7 to 5.2",
+                units: "mEq/L",
             },
             {
                 type: "Serum sodium",
-                value: "136 to 144",
-                range: "mEq/L",
+                range: "136 to 144",
+                units: "mEq/L",
+            },
+        ],
+        Chem6: [
+            //https://www.ucsfbenioffchildrens.org/tests/003462.html
+            {
+                type: "BUN",
+                range: "7-20",
+                units: "mg/dL",
+            },
+            {
+                type: "CO2",
+                range: "20 to 29",
+                units: "mmol/L",
+            },
+            {
+                type: "Glucose",
+                range: "64 to 128",
+                units: "mg/dL",
+            },
+            {
+                type: "Serum chloride",
+                range: "101 to 111",
+                units: "mmol/L",
+            },
+            {
+                type: "Serum potassium",
+                range: "3.7 to 5.2",
+                units: "mEq/L",
+            },
+            {
+                type: "Serum sodium",
+                range: "136 to 144",
+                units: "mEq/L",
+            },
+        ],
+        LiverFunctionTests: [
+            //https://geekymedics.com/interpretation-of-liver-function-tests-lfts/
+            {
+                type: "ALT",
+                range: "3-40",
+                units: "iu/l",
+            },
+            {
+                type: "AST",
+                range: "3-30",
+                units: "iu/l",
+            },
+            {
+                type: "ALP",
+                range: "30-100",
+                units: "umol/l",
+            },
+            {
+                type: "GGT",
+                range: "8-60",
+                units: "u/l",
+            },
+            {
+                type: "Bilirubin",
+                range: "3-17",
+                units: "umol/l",
+            },
+            {
+                type: "Albumin",
+                range: "35-50",
+                units: "g/l",
+            },
+            {
+                type: "PT",
+                range: "10-14",
+                units: "s/1",
             },
         ],
         Magnesium: [
             //https://medlineplus.gov/ency/article/003487.htm
             {
-            value: "1.7 to 2.2",
+            range: "1.7 to 2.2",
             units: "mg/dL",
             }
 
@@ -82,23 +159,24 @@ let sample_tests = [
         Phosphorus: [
             //https://medlineplus.gov/ency/article/003487.htm
             {
-            value: "3.4 to 4.5",
+            range: "3.4 to 4.5",
             units: "mg/dl",
             }
 
         ],
-        Phosphorus: [
-            //https://www.ncbi.nlm.nih.gov/books/NBK310/
-            {
-            value: "3.4 to 4.5",
-            units: "mg/dl",
-            }
-
-        ],
+        
         PartialThromboplastinTime: [
             //https://emedicine.medscape.com/article/2085837-overview
             {
-            value: "30-40",
+            range: "30-40",
+            units: "mg/seconds",
+            }
+
+        ],
+        Chem6: [
+            //https://emedicine.medscape.com/article/2085837-overview
+            {
+            range: "30-40",
             units: "mg/seconds",
             }
 
