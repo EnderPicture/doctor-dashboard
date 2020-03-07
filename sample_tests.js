@@ -193,6 +193,86 @@ let sample_tests = [
 
         ],
         
+        Lipase: [
+            //https://www.healthline.com/health/amylase-and-lipase-tests#normal-amylase-and-lipase
+            {
+            range: "0-160",
+            units: "U/L",
+            type: "number",
+            }
+
+        ],
+
+        CReactiveProtein: [
+            //https://www.healthline.com/health/amylase-and-lipase-tests#normal-amylase-and-lipase
+            {
+            testValue: "C-Reactive Protein (CRP)",
+            range: "0-2.0",
+            units: "mg/L",
+            type: "number",
+            }
+
+        ],
+
+        IonizedCalciumProfile: [
+            //https://www.healthline.com/health/calcium-ionized
+            {
+            testValue: "Ionized Calcium Profile",
+            range: "4.64-5.28",
+            units: "mg/dL",
+            type: "number",
+            }
+
+        ],
+
+        TroponinI: [
+            //https://www.medicalnewstoday.com/articles/325415
+            {
+            range: "0-0.04",
+            units: "ng/mL",
+            type: "number",
+            }
+
+        ],
+
+        BloodGasArterial: [
+            //https://nurse.org/articles/arterial-blood-gas-test/
+            {
+            testValue: "pH",
+            range: "7.35-7.45",
+            units: "pH",
+            type: "number",
+            },
+
+            {
+                testValue: "Partial pressure of oxygen (PaO2)",
+                range: "75-100",
+                units: "mmHg",
+                type: "number",
+                },
+                {
+                    testValue: "Partial pressure of carbon dioxide (PaCO2)",
+                    range: "35-45",
+                    units: "mmHg",
+                    type: "number",
+                    },
+                    {
+                        testValue: "Bicarbonate (HCO3)",
+                        range: "22-26",
+                        units: "mEq/L",
+                        type: "number",
+                        },
+                        {
+                            testValue: "Oxygen saturation (O2 Sat)",
+                            range: "94-100",
+                            units: "%",
+                            type: "number",
+                            },
+
+
+        ],
+
+
         PartialThromboplastinTime: [
             //https://emedicine.medscape.com/article/2085837-overview
             {
