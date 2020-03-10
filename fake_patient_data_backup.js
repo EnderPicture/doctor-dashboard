@@ -3005,7 +3005,7 @@ let patients = [
     }, 
     {
         name: "Mildred F. Valles",
-        EDM: [
+        EDM: 
             {
                 CTAS: "2",
                 ChiefComplaint: "Chest Pain, Cardiac Feature",
@@ -3015,8 +3015,8 @@ let patients = [
                 PhysicianInitialAssessmentTime: "09-Mar-2031 10:16",
                 AdmittedTime: "09-Mar-2031 15:27",
             },
-        ],
-        ADM: [
+        
+        ADM: 
             {
                 AdmitTime: "09-Mar-2031 15:27",
                 AdmitUnit: "ED Unit #1",
@@ -3033,7 +3033,7 @@ let patients = [
                 DischargePhysician: "Physician #2",
                 DischargeService: "Orthopedic Surgery",
             },
-        ],
+        
         OrderEntry: [
             {
                 OrderDate: "09-Mar-2031",
@@ -3760,28 +3760,28 @@ let patients = [
             },
             {
                 Date: "14-Mar-2031",
-                Desctiption: "	NM BONE-WB INJ",
+                Desctiption: "NM BONE-WB INJ",
                 Dcotor: "Doctor #1",
                 Location: "Location #2",
                 Duration: "10 min",
             },
             {
                 Date: "14-Mar-2031",
-                Desctiption: "	NM BONE-WB",
+                Desctiption: "NM BONE-WB",
                 Dcotor: "Doctor #1",
                 Location: "Location #2",
                 Duration: "45 min",
             },
             {
                 Date: "14-Mar-2031",
-                Desctiption: "	RA SKELETAL SURVEY ROUTINE",
+                Desctiption: "RA SKELETAL SURVEY ROUTINE",
                 Dcotor: "Doctor #2",
                 Location: "Location #3",
                 Duration: "60 min",
             },
             {
                 Date: "15-Mar-2031",
-                Desctiption: "	LB BONE MARROW",
+                Desctiption: "LB BONE MARROW",
                 Dcotor: "Doctor #3",
                 Location: "Location #4",
                 Duration: "60 min",
