@@ -25,7 +25,7 @@
             <p>Dietary Restrictions</p>
             <div v-for="restriction in patientDietaryRestrictions.slice(0,3)">
                 <p>{{restriction.key}}</p>
-                <p>{{restriction.value[0].ServiceDate}}</p>
+                <p>{{fromToday(restriction.value[0].ServiceDate)}}</p>
             </div>
             <p>Current Medications</p>
             <p>Allergies</p>
@@ -33,11 +33,13 @@
             <p>Notes</p>
         </div>
         <div class="main">
-            <category v-bind:type="0" v-bind:data="patientLaboratories"></category>
-            <category v-bind:type="1"></category>
-            <category v-bind:type="2"></category>
+            <div class="content">
+                <category v-bind:type="0" v-bind:data="patientLaboratories" v-bind:today="today"></category>
+                <category v-bind:type="1" v-bind:data="patientImaging" v-bind:today="today"></category>
+                <category v-bind:type="2" v-bind:data="patientOthers" v-bind:today="today"></category>
+            </div>
 
-            <div></div>
+            <div class="timeline"></div>
         </div>
     </div>
 
@@ -49,27 +51,41 @@
     <script src="fake_patient_data.js"></script>
 
     <script>
-        Vue.component('lab-card', {
-            template: '#lab-card-template',
+        Vue.mixin({
+            methods: {
+                momentParseDMY(date) {
+                    return moment(date, 'DD-MMMM-YYYY');
+                },
+                fromToday(date) {
+                    return this.momentParseDMY(date).from(this.today);
+                },
+            }
+        });
+    </script>
+
+    <script>
+        Vue.component('data-card', {
+            template: '#data-card-template',
             props: {
                 data: Object,
                 type: Number,
+                today: Object,
             },
             data() {
                 return {
                     ordersToShow: 20,
                 }
             },
-            computed: {
-            },
             methods: {
-
+                
             },
         });
     </script>
-    <template id="lab-card-template">
-        <div class="lab-card">
+    <template id="data-card-template">
+        <div class="data-card">
             <p>{{data.key}}</p>
+            <p>Last completed {{fromToday(data.value[0].ServiceDate)}}</p>
+            <p>{{data.value[0].Category}}</p>
         </div>
     </template>
 
@@ -79,6 +95,7 @@
             props: {
                 data: Array,
                 type: Number,
+                today: Object,
             },
             data() {
                 return {
@@ -105,9 +122,8 @@
             <p>{{title}}</p>
             <div class="category__cards-con">
                 <div class="category__scroll">
-                    <template v-if="type === 0">
-                        <lab-card v-for="item in data" v-bind:data="item"></lab-card>
-                    </template>
+                    <data-card v-for="(item, index) in data" v-bind:data="item" v-bind:key="index" v-bind:type="type"
+                        v-bind:today="today"></data-card>
                 </div>
             </div>
         </div>
@@ -143,7 +159,7 @@
                 patientInfo() {
 
                     let birthDate = this.momentParseDMY(this.patient.Info.Birthday);
-                    let age = moment().diff(birthDate, 'years');
+                    let age = this.today.diff(birthDate, 'years');
 
                     return {
                         firstName: this.patient.Info.FirstName,
@@ -185,13 +201,48 @@
                     });
 
                     return sorted;
-                }
-            },
-            methods: {
-                momentParseDMY(date) {
-                    return moment(date, 'DD-MMMM-YYYY');
                 },
-            }
+                patientImaging() {
+                    let filtered = this.patientOrderHistory.filter(d => {
+                        return (d.Category === 'Computed Tomography' || d.Category === 'Radiography');
+                    });
+
+                    let combined = d3.nest()
+                        .key(d => d.Procedure)
+                        .rollup(d => d)
+                        .entries(filtered);
+
+                    let sorted = combined.sort((a, b) => {
+                        let dateA = this.momentParseDMY(a.value[0].ServiceDate).format('x');
+                        let dateB = this.momentParseDMY(b.value[0].ServiceDate).format('x');
+                        return (dateB - dateA);
+                    });
+
+                    return sorted;
+                },
+                patientOthers() {
+                    let filtered = this.patientOrderHistory.filter(d => {
+                        return (
+                            d.Category !== 'Laboratory' &&
+                            d.Category !== 'Computed T' &&
+                            d.Category !== 'Radiography'
+                        )
+                    });
+
+                    let combined = d3.nest()
+                        .key(d => d.Procedure)
+                        .rollup(d => d)
+                        .entries(filtered);
+
+                    let sorted = combined.sort((a, b) => {
+                        let dateA = this.momentParseDMY(a.value[0].ServiceDate).format('x');
+                        let dateB = this.momentParseDMY(b.value[0].ServiceDate).format('x');
+                        return (dateB - dateA);
+                    });
+
+                    return sorted;
+                },
+            },
         })
     </script>
 </body>
