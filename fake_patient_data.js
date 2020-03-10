@@ -14,6 +14,7 @@ let patients = [
             Weight: "64.1",
             Height: "187",
             BloodType: "A+",
+            ID: "17772278",
         },
         MeditechEDM: {
             CTAS: "3",

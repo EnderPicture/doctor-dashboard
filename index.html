@@ -14,10 +14,31 @@
 
 <body>
     <div id="app">
-        <div class="top">
-            <p>{{doctor.firstName}} {{doctor.middleName}} {{doctor.lastName}} - {{doctor.type}}</p>
+        <div class="sidebar">
+            <p>{{patientInfo.lastName}}</p>
+            <p>{{patientInfo.firstName}} {{patientInfo.middleName}}</p>
+            <p>ID {{patientInfo.id}}</p>
+            <p>{{patientInfo.gender}}, Age {{patientInfo.age}}</p>
+            <div class="sidebar__line"></div>
+            <p>Chief Complaint</p>
+            <p>{{patient.MeditechEDM.ChiefComplaint}}</p>
+            <p>Dietary Restrictions</p>
+            <div v-for="restriction in patientDietaryRestrictions.slice(0,3)">
+                <p>{{restriction.key}}</p>
+                <p>{{restriction.value[0].ServiceDate}}</p>
+            </div>
+            <p>Current Medications</p>
+            <p>Allergies</p>
+            <div class="sidebar__line"></div>
+            <p>Notes</p>
         </div>
-        <patient-info v-bind:patient="patients[0]"></patient-info>
+        <div class="main">
+            <category v-bind:type="0" v-bind:data="patientLaboratories"></category>
+            <category v-bind:type="1"></category>
+            <category v-bind:type="2"></category>
+
+            <div></div>
+        </div>
     </div>
 
 
@@ -28,10 +49,11 @@
     <script src="fake_patient_data.js"></script>
 
     <script>
-        Vue.component('patient-info', {
-            template: '#patient-info-template',
+        Vue.component('lab-card', {
+            template: '#lab-card-template',
             props: {
-                patient: Object,
+                data: Object,
+                type: Number,
             },
             data() {
                 return {
@@ -39,96 +61,57 @@
                 }
             },
             computed: {
-                today() {
-                    return moment("2031 02 20", "YYYY MM DD");
-                },
-                sortedOrders() {
-                    return this.sortDate(this.patient.OrderEntry, "ServiceDate");
-                },
-                groupByDateOrders() {
-                    let d3Nest = d3.nest()
-                        .key(d => d.ServiceDate)
-                        .rollup(d => d)
-                        .entries(this.sortedOrders);
-
-                    let nice = d3Nest.map(d => {
-                        return {
-                            ServiceDate: d.key,
-                            Orders: d.value,
-                        }
-                    });
-                    return nice;
-                },
             },
             methods: {
-                sortDate(dataSet, valueToSort, descending = true) {
-                    return dataSet.sort((a, b) => {
-                        if (descending) {
-                            return this.readDate(b[valueToSort]).unix() - this.readDate(a[valueToSort]).unix();
-                        } else {
-                            return this.readDate(a[valueToSort]).unix() - this.readDate(b[valueToSort]).unix();
-                        }
-                    });
-                },
-                readDate(date) {
-                    return moment(date, 'DD-MMMM-YYYY');
-                },
-                timeWhenHuman(date) {
-                    return this.readDate(date).from(this.today);
-                },
-                timeHuman(date) {
-                    return this.readDate(date).format('MMMM Do, YYYY');
-                },
-                moreThanAMonthAgo(date) {
-                    let humanTime = this.timeWhenHuman(date);
-                    return (humanTime.includes('month ago') ||
-                        humanTime.includes('months ago') ||
-                        humanTime.includes('year ago') ||
-                        humanTime.includes('years ago'));
-                }
+
             },
         });
     </script>
-    <template id="patient-info-template">
-        <div class="patient-data">
-            <div class="side">
-                <div class="patient">
-                    <p class="patient__large-name">{{patient.Info.LastName}}</p>
-                    <p class="patient__small-name">{{patient.Info.FirstName}} {{patient.Info.MiddleName}}</p>
-                    <p>{{patient.Info.Gender}}</p>
-                </div>
-            </div>
-            <div class="main">
-                <div class="lab-tests">
-                    <div class="lab-tests__scroll">
-                        <article class="lab-tests__day" v-for="(orderDay, index) in groupByDateOrders">
-                            <div class="lab-tests__date-tag">
-                                <p class="lab-tests__when">
-                                    <template v-if="!moreThanAMonthAgo(orderDay.ServiceDate)">
-                                        {{timeWhenHuman(orderDay.ServiceDate)}}
-                                    </template>
-                                    <template v-else>
-                                        {{timeHuman(orderDay.ServiceDate)}}
-                                    </template>
-                                </p>
-                                <p class="lab-tests__date" v-if="!moreThanAMonthAgo(orderDay.ServiceDate)">
-                                    {{timeHuman(orderDay.ServiceDate)}}
-                                </p>
-                            </div>
+    <template id="lab-card-template">
+        <div class="lab-card">
+            <p>{{data.key}}</p>
+        </div>
+    </template>
 
-                            <div class="lab-tests__order" v-for="order in orderDay.Orders">
-                                <p class="lab-tests__order-procedure">{{order.Procedure}}</p>
-                                <p>{{order.Category}}</p>
+    <script>
+        Vue.component('category', {
+            template: '#category-template',
+            props: {
+                data: Array,
+                type: Number,
+            },
+            data() {
+                return {
+                    ordersToShow: 20,
+                }
+            },
+            computed: {
+                title() {
+                    let types = [
+                        'Laboratories',
+                        'Imaging',
+                        'Others',
+                    ]
+                    return types[this.type];
+                }
+            },
+            methods: {
 
-                            </div>
-                        </article>
-                        <!-- <button v-if="countAfterRecentOrders > 0">view {{countAfterRecentOrders}} more</button> -->
-                    </div>
+            },
+        });
+    </script>
+    <template id="category-template">
+        <div class="category">
+            <p>{{title}}</p>
+            <div class="category__cards-con">
+                <div class="category__scroll">
+                    <template v-if="type === 0">
+                        <lab-card v-for="item in data" v-bind:data="item"></lab-card>
+                    </template>
                 </div>
             </div>
         </div>
     </template>
-
 
     <script>
         new Vue({
@@ -143,6 +126,72 @@
                 },
                 patients: patients,
             },
+            computed: {
+                patient() {
+                    return patients[0];
+                },
+                today() {
+                    return moment("2031 02 20", "YYYY MM DD");
+                },
+                patientOrderHistory() {
+                    return this.patient.OrderEntry.sort((a, b) => {
+                        let dateA = this.momentParseDMY(a.ServiceDate).format('x');
+                        let dateB = this.momentParseDMY(b.ServiceDate).format('x');
+                        return (dateB - dateA);
+                    });
+                },
+                patientInfo() {
+
+                    let birthDate = this.momentParseDMY(this.patient.Info.Birthday);
+                    let age = moment().diff(birthDate, 'years');
+
+                    return {
+                        firstName: this.patient.Info.FirstName,
+                        middleName: this.patient.Info.MiddleName,
+                        lastName: this.patient.Info.LastName,
+                        id: this.patient.Info.ID,
+                        gender: this.patient.Info.Gender,
+                        age: age,
+                    }
+                },
+                patientDietaryRestrictions() {
+                    let filtered = this.patientOrderHistory.filter(d => d.Category === 'Dietary');
+
+                    let combined = d3.nest()
+                        .key(d => d.Procedure)
+                        .rollup(d => d)
+                        .entries(filtered);
+
+                    let sorted = combined.sort((a, b) => {
+                        let dateA = this.momentParseDMY(a.value[0].ServiceDate).format('x');
+                        let dateB = this.momentParseDMY(b.value[0].ServiceDate).format('x');
+                        return (dateB - dateA);
+                    });
+
+                    return sorted;
+                },
+                patientLaboratories() {
+                    let filtered = this.patientOrderHistory.filter(d => d.Category === 'Laboratory');
+
+                    let combined = d3.nest()
+                        .key(d => d.Procedure)
+                        .rollup(d => d)
+                        .entries(filtered);
+
+                    let sorted = combined.sort((a, b) => {
+                        let dateA = this.momentParseDMY(a.value[0].ServiceDate).format('x');
+                        let dateB = this.momentParseDMY(b.value[0].ServiceDate).format('x');
+                        return (dateB - dateA);
+                    });
+
+                    return sorted;
+                }
+            },
+            methods: {
+                momentParseDMY(date) {
+                    return moment(date, 'DD-MMMM-YYYY');
+                },
+            }
         })
     </script>
 </body>
