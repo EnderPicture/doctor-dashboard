@@ -227,6 +227,35 @@ let sample_tests = {
 
     ],
 
+    "Urine Protein Electrph Random": [
+        //https://www.healthline.com/health/protein-electrophoresis-urine#what-the-test-measures
+        {
+            testValue: "Albumin",
+            range: "0-5",
+            units: "mg/dL",
+            type: "number",
+        }
+
+    ],
+
+    "Alanine Aminotransferase": [
+        //https://www.healthline.com/health/alt#results
+        {
+            testValue: "males",
+            range: "29-33",
+            units: "IU/L",
+            type: "number",
+        },
+
+        {
+            testValue: "females",
+            range: "19-25",
+            units: "IU/L",
+            type: "number",
+        }
+
+    ],
+
     "Troponin I": [
         //https://www.medicalnewstoday.com/articles/325415
         {
