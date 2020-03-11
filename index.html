@@ -86,6 +86,8 @@
             <p>{{data.key}}</p>
             <p>Last completed {{fromToday(data.value[0].ServiceDate)}}</p>
             <p>{{data.value[0].Category}}</p>
+            <p v-if="data.value.length > 1">{{data.value.length}} more past results</p>
+            <p v-else>no more results</p>
         </div>
     </template>
 
