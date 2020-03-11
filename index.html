@@ -99,6 +99,8 @@
             },
             data() {
                 return {
+                    searchRaw: '',
+                    tagsSelected: [],
                 }
             },
             computed: {
@@ -118,19 +120,65 @@
                         });
 
                     });
-                    words = words.filter(d => d !== '');
+
+                    // remove blank words
+                    words = words.filter(d => d !== '' && d.length > 2);
+
+                    // words = words.map(d => d.toLowerCase());
 
                     let grouped = d3.nest()
                         .key(d => d)
                         .rollup(d => d.length)
                         .entries(words);
 
-                    grouped.sort((a, b) => b.value - a.value)
+                    grouped.sort((a, b) => b.value - a.value);
+
                     return grouped;
+                },
+                search() {
+                    return this.searchRaw.trim().toLowerCase();
+                },
+                filteredData() {
+                    let filtered = this.data.filter(d => {
+                        let tagMatched = false;
+                        this.tagsSelected.forEach(tag => {
+                            let lowerCase = tag.toLowerCase();
+                            if (d.key.toLowerCase().includes(lowerCase)) {
+                                tagMatched = true;
+                            }
+                            if (d.value[0].Category.toLowerCase().includes(lowerCase)) {
+                                tagMatched = true;
+                            }
+                        });
+
+                        
+                        let searched = false;
+                        if (d.key.toLowerCase().includes(this.search)) {
+                            searched = true;
+                        }
+                        if (d.value[0].Category.toLowerCase().includes(this.search)) {
+                            searched = true;
+                        }
+
+                        if (this.tagsSelected.length > 0) {
+                            return tagMatched && searched;
+                        } else {
+                            return searched;
+                        }
+                        
+                    });
+                    return filtered;
                 }
             },
             methods: {
-
+                toggleTag(tag) {
+                    let tagIndex = this.tagsSelected.indexOf(tag)
+                    if (tagIndex > -1) {
+                        delete this.tagsSelected.splice(tagIndex, 1);
+                    } else {
+                        this.tagsSelected.push(tag);
+                    }
+                }
             },
         });
     </script>
@@ -138,13 +186,14 @@
         <div class="category">
             <p>{{title}}</p>
             <div class="filter">
-                <input class="filter__input" placeholder="search">
-                <div class="filter__tags" v-for="tag in mostOftenWord.slice(0,10)">{{tag.key}}</div>
+                <input class="filter__input" placeholder="Search" v-model="searchRaw">
+                <div v-bind:class="[{'filter__tags' : true, 'filter__tags_selected' : tagsSelected.indexOf(tag.key) > -1}]"
+                    v-for="tag in mostOftenWord.slice(0,15)" v-on:click="toggleTag(tag.key)">{{tag.key}}</div>
             </div>
             <div class="category__cards-con">
                 <div class="category__scroll">
-                    <data-card v-for="(item, index) in data" v-bind:data="item" v-bind:key="index" v-bind:type="type"
-                        v-bind:today="today"></data-card>
+                    <data-card v-for="(item, index) in filteredData" v-bind:data="item" v-bind:key="item.key"
+                        v-bind:type="type" v-bind:today="today"></data-card>
                 </div>
             </div>
         </div>
