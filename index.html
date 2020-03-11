@@ -15,22 +15,22 @@
 <body>
     <div id="app">
         <div class="sidebar">
-            <p>{{patientInfo.lastName}}</p>
-            <p>{{patientInfo.firstName}} {{patientInfo.middleName}}</p>
-            <p>ID {{patientInfo.id}}</p>
-            <p>{{patientInfo.gender}}, Age {{patientInfo.age}}</p>
+            <p class="sidebar__name-large">{{patientInfo.lastName}}</p>
+            <p class="sidebar__name-small">{{patientInfo.firstName}} {{patientInfo.middleName}}</p>
+            <p class="sidebar__title">ID {{patientInfo.id}}</p>
+            <p class="sidebar__text">{{patientInfo.gender}}, Age {{patientInfo.age}}</p>
             <div class="sidebar__line"></div>
-            <p>Chief Complaint</p>
-            <p>{{patient.MeditechEDM.ChiefComplaint}}</p>
-            <p>Dietary Restrictions</p>
+            <p class="sidebar__title">Chief Complaint</p>
+            <p class="sidebar__text">{{patient.MeditechEDM.ChiefComplaint}}</p>
+            <p class="sidebar__title">Dietary Restrictions</p>
             <div v-for="restriction in patientDietaryRestrictions.slice(0,3)">
-                <p>{{restriction.key}}</p>
-                <p>{{fromToday(restriction.value[0].ServiceDate)}}</p>
+                <p class="sidebar__text">{{restriction.key}}</p>
+                <p class="sidebar__text">{{fromToday(restriction.value[0].ServiceDate)}}</p>
             </div>
-            <p>Current Medications</p>
-            <p>Allergies</p>
+            <p class="sidebar__title">Current Medications</p>
+            <p class="sidebar__title">Allergies</p>
             <div class="sidebar__line"></div>
-            <p>Notes</p>
+            <p class="sidebar__title">Notes</p>
         </div>
         <div class="main">
             <div class="content">
@@ -48,6 +48,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://momentjs.com/downloads/moment.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.6.1/fuse.min.js"></script>
     <script src="fake_patient_data.js"></script>
 
     <script>
@@ -138,37 +139,42 @@
                     return grouped;
                 },
                 search() {
-                    return this.searchRaw.trim().toLowerCase();
+                    return this.searchRaw.trim();
+                },
+                fuzz() {
+                    return new Fuse(this.data, {
+                        keys: ['key'],
+                        threshold: 0.5
+                    });
                 },
                 filteredData() {
-                    let filtered = this.data.filter(d => {
-                        let tagMatched = false;
-                        this.tagsSelected.forEach(tag => {
-                            let lowerCase = tag.toLowerCase();
-                            if (d.key.toLowerCase().includes(lowerCase)) {
-                                tagMatched = true;
-                            }
-                            if (d.value[0].Category.toLowerCase().includes(lowerCase)) {
-                                tagMatched = true;
-                            }
+
+                    let filtered = this.data;
+                    if (this.search.length > 0) {
+                        filtered = this.fuzz.search(this.search);
+                    }
+
+                    if (this.tagsSelected.length > 0) {
+                        filtered = filtered.filter(d => {
+                            let tagMatched = false;
+                            this.tagsSelected.forEach(tag => {
+                                let lowerCase = tag.toLowerCase();
+                                if (d.key.toLowerCase().includes(lowerCase)) {
+                                    tagMatched = true;
+                                }
+                                if (d.value[0].Category.toLowerCase().includes(lowerCase)) {
+                                    tagMatched = true;
+                                }
+                            });
+                            return tagMatched;
                         });
+                    }
 
-                        
-                        let searched = false;
-                        if (d.key.toLowerCase().includes(this.search)) {
-                            searched = true;
-                        }
-                        if (d.value[0].Category.toLowerCase().includes(this.search)) {
-                            searched = true;
-                        }
 
-                        if (this.tagsSelected.length > 0) {
-                            return tagMatched && searched;
-                        } else {
-                            return searched;
-                        }
-                        
-                    });
+                    
+
+                    
+
                     return filtered;
                 }
             },
@@ -193,10 +199,10 @@
                     v-for="tag in mostOftenWord.slice(0,15)" v-on:click="toggleTag(tag.key)">{{tag.key}}</div>
             </div>
             <div class="category__cards-con">
-                <div class="category__scroll">
+                <transition-group name="list" class="category__scroll">
                     <data-card v-for="(item, index) in filteredData" v-bind:data="item" v-bind:key="item.key"
                         v-bind:type="type" v-bind:today="today"></data-card>
-                </div>
+                </transition-group>
             </div>
         </div>
     </template>

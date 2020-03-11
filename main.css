@@ -6,13 +6,13 @@
 
 body {
   margin: 0;
-  color: #003049;
+  color: #1F1424;
 }
 
 #app {
   width: 100vw;
   height: 100vh;
-  background-color: #EDDDD4;
+  background-color: #E8DCD2;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: 300px auto;
@@ -24,17 +24,43 @@ body {
   -ms-grid-column: 1;
   -ms-grid-column-span: 1;
   grid-column: 1/2;
-  background-color: #003049;
+  background-color: #1F1424;
   width: 100%;
   height: 100%;
   padding: 20px;
-  color: #EDDDD4;
+  color: #E8DCD2;
 }
 
 .sidebar__line {
   width: 100%;
   height: 1px;
-  background-color: #EDDDD4;
+  margin: 20px 0;
+  background-color: #E8DCD2;
+}
+
+.sidebar__name-large {
+  font-size: 38.4px;
+  margin: 0;
+  font-weight: 900;
+}
+
+.sidebar__name-small {
+  font-size: 24px;
+  margin: 0;
+  font-weight: 900;
+}
+
+.sidebar__title {
+  font-size: 15px;
+  font-weight: 900;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.sidebar__text {
+  font-size: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .main {
@@ -85,14 +111,18 @@ body {
   left: 0;
   height: 100%;
   width: 100%;
-  display: -ms-grid;
-  display: grid;
-  gap: 10px;
 }
 
 .data-card {
   background-color: rgba(255, 255, 255, 0.5);
   padding: 10px;
+  -webkit-transition: .5s ease;
+  transition: .5s ease;
+  width: 100%;
+}
+
+.data-card:not(:last-child) {
+  margin-bottom: 10px;
 }
 
 .timeline {
@@ -136,5 +166,14 @@ body {
 
 .filter__tags {
   cursor: pointer;
+}
+
+.list-enter,
+.list-leave-to {
+  opacity: 0;
+}
+
+.list-leave-active {
+  position: absolute;
 }
 /*# sourceMappingURL=main.css.map */
