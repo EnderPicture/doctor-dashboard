@@ -15,6 +15,8 @@ let patients = [
             Height: "187",
             BloodType: "A+",
             ID: "17772278",
+            Allergies: "None",
+            CurrentMedication: "Acetaminophen 500mg"
         },
         MeditechEDM: {
             CTAS: "3",
@@ -500,6 +502,9 @@ let patients = [
             Weight: "90.8",
             Height: "183",
             BloodType: "A+",
+            ID: "84730238",
+            Allergies: "None",
+            CurrentMedication: "Morphine 10mg",
         },
 
         EDM:
@@ -773,6 +778,9 @@ let patients = [
             Weight: "40.8",
             Height: "154",
             BloodType: "O+",
+            ID: "23893874",
+            Allergies: "None",
+            CurrentMedication: "Acetaminophen 500mg",
         },
 
         EDM:

@@ -358,102 +358,113 @@ let sample_tests = {
 
     ],
 
-    Ultrasonography: [
+    "Chest Portable": [
         {
             //https://prod-images-static.radiopaedia.org/images/25099401/6aac3629afeb3f902dc08d23552960_big_gallery.jpeg
-            title: "Abdomen",
             link: "abdomenUltrasonography.jpg",
             type: "image",
         },
+    ],
 
+    "Dopp Low Extr Ven Bilat/scan": [
         {
             //https://i.ytimg.com/vi/UN4SN43I_6A/maxresdefault.jpg
-            title: "DoppLowExtrVenBilat/scan",
             link: "doppUltrasonography.jpg",
             type: "image",
         },
     ],
-    CT: [
+
+    "Abdomen Pelvis Contrast": [
+
 
         {
             //https://usercontent2.hubstatic.com/7980649_f1024.jpg
-            title: "AbdomenPelvisContrast",
             link: "AbdomenPelvisContrastCT.jpg",
             type: "image",
         },
+    ],
+    "Abdo Pelvis Renal Colic (KUB)": [
+
 
         {
             //https://prod-images-static.radiopaedia.org/images/2555541/485d8d8f4ddd22594b0c38f6311030_big_gallery.jpg
-            title: "AbdoPelvisRenalColic(KUB)",
             link: "KUBCT.jpg",
             type: "image",
         },
+    ],
+    "Angio Thorax Contrast (Pulm)": [
 
         {
             //https://www.researchgate.net/profile/Evan_Stein/publication/41111706/figure/fig2/AS:601807558549512@1520493511299/Pulmonary-CT-angiography-image-in-43-year-old-woman-shows-acute-pulmonary-embolism.png
-            title: "AngioThoraxContrast(Pulm)",
             link: "PulmCT.jpg",
             type: "image",
         },
 
+    ],
+    "Extremity Upper Lt": [
+
+
         {
             //https://www.researchgate.net/publication/276127752/figure/fig2/AS:622287246082054@1525376249540/A-Left-upper-extremity-CT-angiography-with-contrast-axial-view-The-PSA-as-seen-on.png
-            title: "ExtremityUpperLt",
             link: "ExtremityUpperLtCT.jpg",
             type: "image",
         },
 
-
-
-
     ],
 
-    Radiography: [
+    "Abdomen Multi Views": [
         {
             //https://prod-images-static.radiopaedia.org/images/12258306/04f95b7eb3af1bbaefacdfc084cc61_gallery.jpg
-            title: "AbdomenMultiViews",
             link: "AbdomenMultiViewsRadiography.jpg",
             type: "image",
         },
+    ],
+    "Chest Portable": [
 
         {
             //https://owqo93fpiuc4633lp1zthz57-wpengine.netdna-ssl.com/wp-content/uploads/sites/11/2018/12/123017orthodxfigure1_1349059-860x574.jpg
-            title: "Chest Portable",
             link: "ChestPortableRadiography.jpg",
             type: "image",
         },
+    ],
+    "Chest (CXR)": [
 
         {
             //https://prod-images-static.radiopaedia.org/images/157210/332aa0c67cb2e035e372c7cb3ceca2_jumbo.jpg
-            title: "Chest (CXR)",
             link: "CXRRadiography.jpg",
             type: "image",
         },
+    ],
+    "Skeletal Survey Routine": [
 
         {
             //https://prod-images-static.radiopaedia.org/images/157210/332aa0c67cb2e035e372c7cb3ceca2_jumbo.jpg
-            title: "Skeletal Survey Routine",
             link: "SkeletalSurveyRoutineRadiography.jpg",
             type: "image",
         },
+    ],
+
+    "Shoulder Lt": [
 
         {
             //https://prod-images-static.radiopaedia.org/images/133697/86c1f2821cf7b547d33ecd2f55f94e_jumbo.jpg
-            title: "Shoulder Lt",
             link: "ShoulderLtRadiography.jpg",
             type: "image",
         },
+    ],
+    "Humerus Lt": [
 
         {
             //https://upload.orthobullets.com/question/666/images/3parta.jpg
-            title: "Humerus Lt",
             link: "HumerusLtRadiography.jpg",
             type: "image",
         },
+    ],
+    "Fluoro Upper Ext Lt Specialist": [
+
 
         {
             //https://upload.orthobullets.com/question/666/images/3parta.jpg
-            title: "Fluoro Upper Ext Lt Specialist",
             link: "FluoroUpperExtLtSpecialistRadiography.jpg",
             type: "image",
         },
