@@ -208,7 +208,7 @@ let sample_tests = {
     "C-Reactive Protein (CRP)": [
         //https://www.healthline.com/health/amylase-and-lipase-tests#normal-amylase-and-lipase
         {
-            testValue: "C-Reactive Protein (CRP)",
+            testValue: "CRP",
             range: "0-2.0",
             units: "mg/L",
             type: "number",
@@ -219,7 +219,7 @@ let sample_tests = {
     "Ionized Calcium Profile": [
         //https://www.healthline.com/health/calcium-ionized
         {
-            testValue: "Ionized Calcium Profile",
+            testValue: "ICP",
             range: "4.64-5.28",
             units: "mg/dL",
             type: "number",

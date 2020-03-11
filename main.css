@@ -95,6 +95,12 @@ body {
           flex-direction: column;
 }
 
+.category__title {
+  font-size: 24px;
+  font-weight: 900;
+  margin: 0 0 10px 10px;
+}
+
 .category__cards-con {
   position: relative;
   -webkit-box-flex: 1;
@@ -195,6 +201,7 @@ body {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
+  min-width: 5px;
   background-color: #1F1424;
 }
 

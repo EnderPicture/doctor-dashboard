@@ -89,6 +89,12 @@ body {
     display: flex;
     flex-direction: column;
 
+    &__title {
+        font-size: 24px;
+        font-weight: 900;
+        margin: 0 0 10px 10px;
+    }
+
     &__cards-con {
         position: relative;
         flex: 1;
@@ -172,6 +178,7 @@ body {
     &__line {
         height: 1px;
         flex: 1;
+        min-width: 5px;
         background-color: $color-dark;
     }
 

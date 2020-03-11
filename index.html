@@ -87,7 +87,9 @@
                 },
             },
             methods: {
+                randomFromRange(range) {
 
+                }
             },
         });
     </script>
@@ -217,7 +219,7 @@
     </script>
     <template id="category-template">
         <div class="category">
-            <p>{{title}}</p>
+            <p class="category__title">{{title}}</p>
             <div class="filter">
                 <input class="filter__input" placeholder="Search" v-model="searchRaw">
                 <div v-bind:class="[{'filter__tags' : true, 'filter__tags_selected' : tagsSelected.indexOf(tag.key) > -1}]"
