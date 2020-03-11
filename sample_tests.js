@@ -38,7 +38,7 @@ let sample_tests = {
         },
         {
             testValue: "Platelets",
-            range: "150,000 to 450,000",
+            range: "150,000-450,000",
             units: "platelets/mcL",
             type: "number",
 
@@ -54,37 +54,37 @@ let sample_tests = {
         },
         {
             testValue: "CO2",
-            range: "20 to 29",
+            range: "20-29",
             units: "mmol/L",
             type: "number",
         },
         {
             testValue: "Creatinine",
-            range: "0.8 to 1.4",
+            range: "0.8-1.4",
             units: "mg/dL",
             type: "number",
         },
         {
             testValue: "Glucose",
-            range: "64 to 128",
+            range: "64-128",
             units: "mg/dL",
             type: "number",
         },
         {
             testValue: "Serum chloride",
-            range: "101 to 111",
+            range: "101-111",
             units: "mmol/L",
             type: "number",
         },
         {
             testValue: "Serum potassium",
-            range: "3.7 to 5.2",
+            range: "3.7-5.2",
             units: "mEq/L",
             type: "number",
         },
         {
             testValue: "Serum sodium",
-            range: "136 to 144",
+            range: "136-144",
             units: "mEq/L",
             type: "number",
         },
@@ -99,31 +99,31 @@ let sample_tests = {
         },
         {
             testValue: "CO2",
-            range: "20 to 29",
+            range: "20-29",
             units: "mmol/L",
             type: "number",
         },
         {
             testValue: "Glucose",
-            range: "64 to 128",
+            range: "64-128",
             units: "mg/dL",
             type: "number",
         },
         {
             testValue: "Serum chloride",
-            range: "101 to 111",
+            range: "101-111",
             units: "mmol/L",
             type: "number",
         },
         {
             testValue: "Serum potassium",
-            range: "3.7 to 5.2",
+            range: "3.7-5.2",
             units: "mEq/L",
             type: "number",
         },
         {
             testValue: "Serum sodium",
-            range: "136 to 144",
+            range: "136-144",
             units: "mEq/L",
             type: "number",
         },
@@ -177,7 +177,7 @@ let sample_tests = {
         //https://medlineplus.gov/ency/article/003487.htm
         {
             testValue: "Magnesium",
-            range: "1.7 to 2.2",
+            range: "1.7-2.2",
             units: "mg/dL",
             type: "number",
         }
@@ -187,7 +187,7 @@ let sample_tests = {
         //https://medlineplus.gov/ency/article/003487.htm
         {
             testValue: "Phosphorus",
-            range: "3.4 to 4.5",
+            range: "3.4-4.5",
             units: "mg/dl",
             type: "number",
         }
@@ -222,6 +222,77 @@ let sample_tests = {
             testValue: "ICP",
             range: "4.64-5.28",
             units: "mg/dL",
+            type: "number",
+        }
+
+    ],
+
+    "Urine Protein Electrph Random": [
+        //https://www.healthline.com/health/protein-electrophoresis-urine#what-the-test-measures
+        {
+            testValue: "Albumin",
+            range: "0-5",
+            units: "mg/dL",
+            type: "number",
+        }
+
+    ],
+
+    "Alkaline Phosphatase": [
+        //https://www.healthline.com/health/alp
+        {
+            testValue: "SerumALP",
+            range: "20-140",
+            units: "IU/L",
+            type: "number",
+        }
+
+    ],
+
+    "AST (SGOT)": [
+        //https://www.healthline.com/health/alt#results
+        {
+            range: "5-40",
+            units: "IU/L",
+            type: "number",
+        }
+
+    ],
+
+    
+    "Bilirubin, Total": [
+        //https://www.mayoclinic.org/tests-procedures/bilirubin/about/pac-20393041
+        {
+            range: "1.15-1.25",
+            units: "mg/dL",
+            type: "number",
+        }
+
+    ],
+
+    "Gamma Glutamyl Transferase": [
+        //https://www.mayoclinic.org/tests-procedures/bilirubin/about/pac-20393041
+        {
+            range: "1.15-1.25",
+            units: "mg/dL",
+            type: "number",
+        }
+
+    ],
+
+    "Alanine Aminotransferase": [
+        //https://www.healthline.com/health/alt#results
+        {
+            testValue: "males",
+            range: "29-33",
+            units: "IU/L",
+            type: "number",
+        },
+
+        {
+            testValue: "females",
+            range: "19-25",
+            units: "IU/L",
             type: "number",
         }
 
