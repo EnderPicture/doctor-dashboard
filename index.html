@@ -77,7 +77,7 @@
                 }
             },
             methods: {
-                
+
             },
         });
     </script>
@@ -99,7 +99,6 @@
             },
             data() {
                 return {
-                    ordersToShow: 20,
                 }
             },
             computed: {
@@ -110,6 +109,24 @@
                         'Others',
                     ]
                     return types[this.type];
+                },
+                mostOftenWord() {
+                    let words = [];
+                    this.data.forEach(d => {
+                        d.value.forEach(d => {
+                            words = words.concat(d.Procedure.split(/ |\(|\)|,|-/));
+                        });
+
+                    });
+                    words = words.filter(d => d !== '');
+
+                    let grouped = d3.nest()
+                        .key(d => d)
+                        .rollup(d => d.length)
+                        .entries(words);
+
+                    grouped.sort((a, b) => b.value - a.value)
+                    return grouped;
                 }
             },
             methods: {
@@ -120,6 +137,10 @@
     <template id="category-template">
         <div class="category">
             <p>{{title}}</p>
+            <div class="filter">
+                <input class="filter__input" placeholder="search">
+                <div class="filter__tags" v-for="tag in mostOftenWord.slice(0,10)">{{tag.key}}</div>
+            </div>
             <div class="category__cards-con">
                 <div class="category__scroll">
                     <data-card v-for="(item, index) in data" v-bind:data="item" v-bind:key="index" v-bind:type="type"
