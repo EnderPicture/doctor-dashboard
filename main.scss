@@ -72,7 +72,7 @@ body {
 .main {
     grid-column: 2/3;
     display: grid;
-    grid-template-rows: auto 40px;
+    grid-template-rows: auto 60px;
 }
 
 .content {
@@ -99,7 +99,7 @@ body {
 
     &__scroll {
         position: absolute;
-        overflow-y: auto;
+        overflow-y: scroll;
         top: 0;
         left: 0;
         height: 100%;
@@ -113,9 +113,93 @@ body {
     padding: 10px;
     transition: .5s ease;
     width: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px 0px 0px 10px;
+    display: flex;
+    flex-direction: column;
+
+    * {
+        font-family: $font-condensed;
+        font-size: 15px;
+    }
 
     &:not(:last-child) {
         margin-bottom: 10px;
+    }
+
+    &__flex {
+        display: flex;
+        align-items: baseline;
+    }
+
+    &__time {
+        margin: 0;
+        margin-top: 5px;
+    }
+
+    &__title {
+        font-size: 24px;
+        font-weight: 900;
+        margin: 0;
+    }
+
+    &__text {
+        margin: 0;
+    }
+
+    &__test-item {
+        margin: 10px 0;
+    }
+
+    &__more {
+        align-self: flex-end;
+        margin: 0;
+        padding: 5px 10px;
+        background-color: $color-dark;
+        color: $color-light;
+
+        &_faded {
+            background-color: rgba($color: $color-dark, $alpha: .7);
+        }
+    }
+
+    &__name-con {
+        display: flex;
+        align-items: center;
+    }
+
+    &__line {
+        height: 1px;
+        flex: 1;
+        background-color: $color-dark;
+    }
+
+    &__values {
+        gap: 0 10px;
+        display: grid;
+        grid-template-columns: auto 1fr auto auto;
+        margin: 20px 0;
+    }
+
+    &__value {
+        text-align: end;
+        margin: 5px 0;
+    }
+
+    &__value-name {
+        margin: 5px 0;
+        margin-right: 10px;
+    }
+
+    &__value-unit {
+        margin: 5px 0;
+    }
+
+
+
+    &__left {
+        flex: 1;
     }
 }
 
