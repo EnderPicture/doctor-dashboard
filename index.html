@@ -34,9 +34,11 @@
         </div>
         <div class="main">
             <div class="content">
-                <category :type="0" :data="patientLaboratories" :today="today"></category>
-                <category :type="1" :data="patientImaging" :today="today"></category>
-                <category :type="2" :data="patientOthers" :today="today"></category>
+                <div class="overview">
+                    <category class="category_lab" :type="0" :data="patientLaboratories" :today="today"></category>
+                    <category class="category_imaging" :type="1" :data="patientImaging" :today="today"></category>
+                    <category class="category_other" :type="2" :data="patientOthers" :today="today"></category>
+                </div>
             </div>
 
             <div class="timeline"></div>
@@ -195,8 +197,7 @@
                                 { field: "date", type: "temporal" },
                             ]
                         },
-                    },
-                    isMounted: false,
+                    }
                 }
             },
             computed: {
@@ -210,7 +211,7 @@
                     });
                     return max;
                 },
-                barData() {
+                graphData() {
                     let data = [];
                     this.latest.results.forEach((d, index) => {
                         let resultData = [];
@@ -228,21 +229,11 @@
                     });
                     return data;
                 },
-                vegaSize() {
-                    let size = [0, 0];
-                    if (this.isMounted) {
-                        size = [this.$refs.vegaCon[0].clientWidth, this.$refs.vegaCon[0].clientHeight];
-                    }
-                    return size;
-                },
-            },
-            mounted() {
-                this.isMounted = true;
             },
             methods: {
                 getVegaSpec(index) {
                     let newVegaSpec = JSON.parse(JSON.stringify(this.vega));
-                    newVegaSpec.data.values = this.barData[index];
+                    newVegaSpec.data.values = this.graphData[index];
                     return newVegaSpec;
                 }
             },
@@ -383,6 +374,7 @@
                     <data-card v-for="(item, index) in filteredData" :data="item" :key="item.key" :type="type"
                         :today="today"></data-card>
                 </transition-group>
+                <div class="category__shadow"></div>
             </div>
         </div>
     </template>
