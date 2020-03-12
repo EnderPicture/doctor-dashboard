@@ -18,7 +18,7 @@ let patients = [
             Allergies: "None",
             CurrentMedication: "Acetaminophen 500mg"
         },
-        MeditechEDM: {
+        EDM: {
             CTAS: "3",
             ChiefComplaint: "Abdo Pain,Mod,+/- Episod N&V",
             DepartDisposition: "Admitted",

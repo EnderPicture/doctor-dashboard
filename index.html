@@ -21,7 +21,7 @@
             <p class="sidebar__text">{{patientInfo.gender}}, Age {{patientInfo.age}}</p>
             <div class="sidebar__line"></div>
             <p class="sidebar__title">Chief Complaint</p>
-            <p class="sidebar__text">{{patient.MeditechEDM.ChiefComplaint}}</p>
+            <p class="sidebar__text">{{patient.EDM.ChiefComplaint}}</p>
             <p class="sidebar__title">Dietary Restrictions</p>
             <div v-for="restriction in patientDietaryRestrictions.slice(0,3)">
                 <p class="sidebar__text">{{restriction.key}}</p>
@@ -171,7 +171,14 @@
                         },
                         mark: {
                             type: "line",
-                            point: true,
+                            interpolate: "monotone",
+                            strokeWidth: 1,
+                            point: {
+                                filled:true,
+                                stroke: "white",
+                                strokeWidth: 1,
+                                size:20,
+                            },
                         },
                         data: { values: null },
                         width: 'container',
@@ -319,8 +326,8 @@
                 },
                 fuzz() {
                     return new Fuse(this.data, {
-                        keys: ['key'],
-                        threshold: 0.5
+                        keys: ['key', 'value.results.testValue'],
+                        threshold: 0.2
                     });
                 },
                 filteredData() {
@@ -391,10 +398,11 @@
                     id: "03578115",
                 },
                 patients: patients,
+                patientIndex: 0,
             },
             computed: {
                 patient() {
-                    return patients[0];
+                    return patients[this.patientIndex];
                 },
                 today() {
                     return moment("2031 02 20", "YYYY MM DD");
