@@ -38,7 +38,7 @@ let sample_tests = {
         },
         {
             testValue: "Platelets",
-            range: "150,000-450,000",
+            range: "150000-450000",
             units: "platelets/mcL",
             type: "number",
 
@@ -252,6 +252,7 @@ let sample_tests = {
     "AST (SGOT)": [
         //https://www.healthline.com/health/alt#results
         {
+            testValue: "AST (SGOT)",
             range: "5-40",
             units: "IU/L",
             type: "number",
@@ -259,10 +260,11 @@ let sample_tests = {
 
     ],
 
-    
+
     "Bilirubin, Total": [
         //https://www.mayoclinic.org/tests-procedures/bilirubin/about/pac-20393041
         {
+            testValue: "Bilirubin, Total",
             range: "1.15-1.25",
             units: "mg/dL",
             type: "number",
@@ -273,6 +275,7 @@ let sample_tests = {
     "Gamma Glutamyl Transferase": [
         //https://www.mayoclinic.org/tests-procedures/bilirubin/about/pac-20393041
         {
+            testValue: "Gamma Glutamyl Transferase",
             range: "1.15-1.25",
             units: "mg/dL",
             type: "number",
