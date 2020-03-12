@@ -322,25 +322,25 @@ let sample_tests = {
         },
 
         {
-            testValue: "Partial pressure of oxygen (PaO2)",
+            testValue: "PaO2",
             range: "75-100",
             units: "mmHg",
             type: "number",
         },
         {
-            testValue: "Partial pressure of carbon dioxide (PaCO2)",
+            testValue: "PaCO2",
             range: "35-45",
             units: "mmHg",
             type: "number",
         },
         {
-            testValue: "Bicarbonate (HCO3)",
+            testValue: "HCO3",
             range: "22-26",
             units: "mEq/L",
             type: "number",
         },
         {
-            testValue: "Oxygen saturation (O2 Sat)",
+            testValue: "O2 Sat",
             range: "94-100",
             units: "%",
             type: "number",

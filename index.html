@@ -59,6 +59,7 @@
     <script src="sample_tests.js"></script>
 
 
+
     <script>
         let randomFromRange = (range) => {
             let rangeValues = range.split('-');
@@ -112,6 +113,44 @@
     </script>
 
     <script>
+        Vue.component('vega', {
+            template: '#vega-template',
+            props: {
+                spec: Object,
+            },
+            data() {
+                return {
+                    graph: null,
+                }
+            },
+            watch: {
+                spec: {
+                    handler(newSpec, oldSpec) {
+                        this.vega(newSpec);
+                    },
+                    deep: true,
+                }
+            },
+            methods: {
+                vega(spec) {
+                    this.$refs.graph.innerHtml = "";
+                    vegaEmbed.embed(this.$refs.graph, spec, {
+                        actions: false,
+                        renderer: 'svg',
+                    });
+                }
+            },
+            mounted() {
+                this.vega(this.spec);
+            }
+        });
+    </script>
+    <template id="vega-template">
+        <div class="vega" ref="graph"></div>
+    </template>
+
+
+    <script>
         Vue.component('data-card', {
             template: '#data-card-template',
             props: {
@@ -122,14 +161,20 @@
             data() {
                 return {
                     vega: {
-                        mark: "area",
-                        autosize: {
-                            type: "fit",
-                            contains: "padding"
+                        background: 'transparent',
+                        config: {
+                            view: {
+                                stroke: "transparent"
+                            }
                         },
-                        padding: {
-                            left: -1, top: -1, right: 0, bottom: 0
+                        mark: {
+                            type: "line",
+                            point: true,
                         },
+                        data: { values: null },
+                        width: 'container',
+                        height: 'container',
+                        padding: 0,
                         encoding: {
                             x: {
                                 field: 'date',
@@ -137,13 +182,18 @@
                                 axis: null,
                             },
                             y: {
-                                field: 'value',
+                                field: 'delta',
                                 type: 'quantitative',
                                 axis: null,
                             },
                             color: {
                                 value: '#1F1424',
-                            }
+                            },
+                            tooltip: [
+                                { field: "value", type: "quantitative" },
+                                { field: "delta", type: "quantitative" },
+                                { field: "date", type: "temporal" },
+                            ]
                         },
                     },
                     isMounted: false,
@@ -169,7 +219,8 @@
                             let date = d.ServiceDate;
 
                             resultData.push({
-                                value: delta,
+                                delta: delta,
+                                value: d.results[index].value,
                                 date: date,
                             });
                         });
@@ -189,6 +240,11 @@
                 this.isMounted = true;
             },
             methods: {
+                getVegaSpec(index) {
+                    let newVegaSpec = JSON.parse(JSON.stringify(this.vega));
+                    newVegaSpec.data.values = this.barData[index];
+                    return newVegaSpec;
+                }
             },
         });
     </script>
@@ -209,11 +265,9 @@
                         <p class="data-card__value-name">{{result.testValue}}</p>
                         <div class="data-card__line"></div>
                     </div>
-                    <div class="data-card__bar-con" ref="vegaCon">
-                        <vega-lite :width="vegaSize[0]" :height="vegaSize[1]" :autosize="vega.autosize"
-                            :data="barData[index]" :mark="vega.mark" :encoding="vega.encoding" :padding="vega.padding">
-                        </vega-lite>
-                    </div>
+
+                    <vega class="data-card__bar-con" :spec="getVegaSpec(index)"></vega>
+
                     <p class="data-card__value">{{result.value}}</p>
                     <p class="data-card__value-unit">{{result.units}}</p>
                 </template>
