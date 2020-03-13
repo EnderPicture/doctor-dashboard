@@ -260,6 +260,83 @@ body {
 
 .timeline {
     background-color: rgba($color: #fff, $alpha: .5);
+    display: flex;
+    overflow-x: auto;
+    align-items: center;
+    padding: 0 20px;
+    
+    &__event {
+        padding: 5px 10px;
+        position: relative;
+        z-index: 0;
+        
+
+        &::before, &::after {
+            content: '';
+            width: 100%;
+            height: 50%;
+            left: 0;
+            position: absolute;
+            background-color: red;
+            border-right: solid 2px;
+            border-left: solid 2px;
+            z-index: -1;
+            
+        }
+        &::before {
+            top: -2px;
+            border-top: solid 2px;
+            transform: skewX(-30deg);
+        }
+        &::after {
+            bottom: -2px;
+            border-bottom: solid 2px;
+            transform: skewX(30deg);
+        }
+
+        &_EDM {
+            &::before, &::after {
+                background-color: adjust-hue($color-light, 45);
+                border-color: darken(adjust-hue($color-light, 45), $amount: 10);
+            }
+        }
+        &_ADM {
+            &::before, &::after {
+                background-color: adjust-hue($color-light, 90);
+                border-color: darken(adjust-hue($color-light, 90), $amount: 10);
+            }
+        }
+        &_OrderEntry {
+            &::before, &::after {
+                background-color: adjust-hue($color-light, 135);
+                border-color: darken(adjust-hue($color-light, 135), $amount: 10);
+            }
+        }
+        &_Appointments {
+            &::before, &::after {
+                background-color: adjust-hue($color-light, 180);
+                border-color: darken(adjust-hue($color-light, 180), $amount: 10);
+            }
+        }
+        &_EDMLocationHistory {
+            &::before, &::after {
+                background-color: adjust-hue($color-light, 225);
+                border-color: darken(adjust-hue($color-light, 225), $amount: 10);
+            }
+        }
+        &_ADMLocationHistory {
+            &::before, &::after {
+                background-color: adjust-hue($color-light, 270);
+                border-color: darken(adjust-hue($color-light, 270), $amount: 10);
+            }
+        }
+        &_Surgeries {
+            &::before, &::after {
+                background-color: adjust-hue($color-light, 315);
+                border-color: darken(adjust-hue($color-light, 315), $amount: 10);
+            }
+        }
+    }
 }
 
 .filter {

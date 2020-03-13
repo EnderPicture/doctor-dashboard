@@ -41,7 +41,7 @@
                 </div>
             </div>
 
-            <div class="timeline"></div>
+            <timeline :data="patient"></timeline>
         </div>
     </div>
 
@@ -104,6 +104,9 @@
                 momentParseDMY(date) {
                     return moment(date, 'DD-MMMM-YYYY');
                 },
+                momentParseDMYT(date) {
+                    return moment(date, 'DD-MMMM-YYYY HH:mm');
+                },
                 formatDate(date) {
                     return this.momentParseDMY(date).format("MMM Do, YYYY");
                 },
@@ -115,15 +118,112 @@
     </script>
 
     <script>
+        Vue.component('timeline', {
+            template: '#timeline-template',
+            props: {
+                data: Object,
+            },
+            computed: {
+                timeData() {
+                    let chronologicalData = [];
+                    let date = null;
+                    let index = 0;
+
+                    date = this.momentParseDMYT(this.data.EDM.ArrivalTime);
+                    index = chronologicalData.push(this.data.EDM) - 1;
+                    chronologicalData[index].parsedDate = date;
+                    chronologicalData[index].from = 'EDM';
+
+                    date = this.momentParseDMYT(this.data.ADM.AdmitTime);
+                    index = chronologicalData.push(this.data.ADM) - 1;
+                    chronologicalData[index].parsedDate = date;
+                    chronologicalData[index].from = 'ADM';
+
+                    this.data.OrderEntry.forEach(d => {
+                        let date = this.momentParseDMY(d.ServiceDate);
+                        let index = chronologicalData.push(d) - 1;
+                        chronologicalData[index].parsedDate = date;
+                        chronologicalData[index].from = 'OrderEntry';
+                    });
+                    this.data.Appointments.forEach(d => {
+                        let date = this.momentParseDMY(d.Date);
+                        let index = chronologicalData.push(d) - 1;
+                        chronologicalData[index].parsedDate = date;
+                        chronologicalData[index].from = 'Appointments';
+                    });
+                    this.data.EDMLocationHistory.forEach(d => {
+                        let date = this.momentParseDMYT(d.StartDate);
+                        let index = chronologicalData.push(d) - 1;
+                        chronologicalData[index].parsedDate = date;
+                        chronologicalData[index].from = 'EDMLocationHistory';
+                    });
+                    this.data.ADMLocationHistory.forEach(d => {
+                        let date = this.momentParseDMYT(d.StartDate);
+                        let index = chronologicalData.push(d) - 1;
+                        chronologicalData[index].parsedDate = date;
+                        chronologicalData[index].from = 'ADMLocationHistory';
+                    });
+                    this.data.Surgeries.forEach(d => {
+                        let date = this.momentParseDMYT(d.PatientInRoom);
+                        let index = chronologicalData.push(d) - 1;
+                        chronologicalData[index].parsedDate = date;
+                        chronologicalData[index].from = 'Surgeries';
+                    });
+
+                    chronologicalData.sort((a, b) => {
+                        return b.parsedDate.unix() - a.parsedDate.unix();
+                    });
+
+                    let bundledData = [];
+                    let bundleTemplate = {
+                        startDate: null,
+                        endDate: null,
+                        type: '',
+                        items: [],
+                    };
+                    let bundle = null;
+                    chronologicalData.forEach(d => {
+                        if (bundle === null || bundle.type !== d.from) {
+                            if (bundle !== null) {
+                                bundle.endDate = d.parsedDate;
+                                bundledData.push(bundle);
+                            }
+
+                            bundle = JSON.parse(JSON.stringify(bundleTemplate));
+
+                            bundle.type = d.from;
+                            bundle.startDate = d.parsedDate;
+                            bundle.items = [];
+                        }
+                        bundle.items.push(d);
+                    });
+
+                    return bundledData;
+                },
+            },
+            methods: {
+                eventClassGen(type) {
+                    let classObject = {};
+                    classObject['timeline__event'] = true;
+                    classObject['timeline__event_' + type] = true;
+                    return classObject;
+                }
+            }
+        });
+    </script>
+    <template id="timeline-template">
+        <div class="timeline">
+            <div :class="eventClassGen(event.type)" v-for="event in timeData">
+                {{event.type}}
+            </div>
+        </div>
+    </template>
+
+    <script>
         Vue.component('vega', {
             template: '#vega-template',
             props: {
                 spec: Object,
-            },
-            data() {
-                return {
-                    graph: null,
-                }
             },
             watch: {
                 spec: {
@@ -174,10 +274,10 @@
                             interpolate: "monotone",
                             strokeWidth: 1,
                             point: {
-                                filled:true,
+                                filled: true,
                                 stroke: "white",
                                 strokeWidth: 1,
-                                size:20,
+                                size: 20,
                             },
                         },
                         data: { values: null },
