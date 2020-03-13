@@ -311,20 +311,30 @@ body {
 
 .timeline {
   background-color: rgba(255, 255, 255, 0.5);
+  overflow-x: auto;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  overflow-x: auto;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+}
+
+.timeline__track {
+  display: -ms-grid;
+  display: grid;
+  grid-auto-flow: column;
+  -ms-grid-rows: auto;
+      grid-template-rows: auto;
   padding: 0 20px;
 }
 
 .timeline__event {
-  padding: 5px 10px;
+  padding: 2.5px 10px;
   position: relative;
   z-index: 0;
+  font-size: 15px;
+  white-space: nowrap;
 }
 
 .timeline__event::before, .timeline__event::after {
@@ -355,37 +365,37 @@ body {
 
 .timeline__event_EDM::before, .timeline__event_EDM::after {
   background-color: #e4e8d2;
-  border-color: #cfd7b0;
+  border-color: #a6b46d;
 }
 
 .timeline__event_ADM::before, .timeline__event_ADM::after {
   background-color: #d3e8d2;
-  border-color: #b2d7b0;
+  border-color: #70b46d;
 }
 
 .timeline__event_OrderEntry::before, .timeline__event_OrderEntry::after {
   background-color: #d2e8e2;
-  border-color: #b0d7cb;
+  border-color: #6db49f;
 }
 
 .timeline__event_Appointments::before, .timeline__event_Appointments::after {
   background-color: #d2dee8;
-  border-color: #b0c5d7;
+  border-color: #6d94b4;
 }
 
 .timeline__event_EDMLocationHistory::before, .timeline__event_EDMLocationHistory::after {
   background-color: #d7d2e8;
-  border-color: #b8b0d7;
+  border-color: #7b6db4;
 }
 
 .timeline__event_ADMLocationHistory::before, .timeline__event_ADMLocationHistory::after {
   background-color: #e7d2e8;
-  border-color: #d5b0d7;
+  border-color: #b16db4;
 }
 
 .timeline__event_Surgeries::before, .timeline__event_Surgeries::after {
   background-color: #e8d2d9;
-  border-color: #d7b0bc;
+  border-color: #b46d82;
 }
 
 .filter {

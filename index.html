@@ -179,8 +179,18 @@
                         startDate: null,
                         endDate: null,
                         type: '',
+                        niceName: '',
                         items: [],
                     };
+                    let nameMapping = {
+                        EDM: 'Emergency',
+                        ADM: 'Transfer to Hospital',
+                        OrderEntry: '',
+                        Appointments: 'Visited',
+                        EDMLocationHistory: 'Room Change',
+                        ADMLocationHistory: 'Room Change',
+                        Surgeries: 'Surgery',
+                    }
                     let bundle = null;
                     chronologicalData.forEach(d => {
                         if (bundle === null || bundle.type !== d.from) {
@@ -192,6 +202,7 @@
                             bundle = JSON.parse(JSON.stringify(bundleTemplate));
 
                             bundle.type = d.from;
+                            bundle.niceName = nameMapping[d.from];
                             bundle.startDate = d.parsedDate;
                             bundle.items = [];
                         }
@@ -213,8 +224,10 @@
     </script>
     <template id="timeline-template">
         <div class="timeline">
-            <div :class="eventClassGen(event.type)" v-for="event in timeData">
-                {{event.type}}
+            <div class="timeline__track">
+                <div :class="eventClassGen(event.type)" v-for="event in timeData">
+                    {{event.niceName}}
+                </div>
             </div>
         </div>
     </template>

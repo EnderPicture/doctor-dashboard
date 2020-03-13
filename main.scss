@@ -102,10 +102,12 @@ body {
         grid-column: 1/2;
         grid-row: 1/3;
     }
+
     &_imaging {
         grid-column: 2/3;
         grid-row: 1/2;
     }
+
     &_other {
         grid-column: 2/3;
         grid-row: 2/3;
@@ -141,7 +143,7 @@ body {
         left: 0;
         height: 50px;
         width: 100%;
-        background: linear-gradient(rgba(lighten($color-light, 5),0), rgba(lighten($color-light, 5),1));
+        background: linear-gradient(rgba(lighten($color-light, 5), 0), rgba(lighten($color-light, 5), 1));
         pointer-events: none;
     }
 }
@@ -260,18 +262,26 @@ body {
 
 .timeline {
     background-color: rgba($color: #fff, $alpha: .5);
-    display: flex;
     overflow-x: auto;
+    display: flex;
     align-items: center;
-    padding: 0 20px;
     
+    &__track {
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-rows: auto;
+        padding: 0 20px;
+    }
+
     &__event {
-        padding: 5px 10px;
+        padding: 2.5px 10px;
         position: relative;
         z-index: 0;
-        
+        font-size: 15px;
+        white-space: nowrap;
 
-        &::before, &::after {
+        &::before,
+        &::after {
             content: '';
             width: 100%;
             height: 50%;
@@ -281,13 +291,15 @@ body {
             border-right: solid 2px;
             border-left: solid 2px;
             z-index: -1;
-            
+
         }
+
         &::before {
             top: -2px;
             border-top: solid 2px;
             transform: skewX(-30deg);
         }
+
         &::after {
             bottom: -2px;
             border-bottom: solid 2px;
@@ -295,45 +307,65 @@ body {
         }
 
         &_EDM {
-            &::before, &::after {
+
+            &::before,
+            &::after {
                 background-color: adjust-hue($color-light, 45);
-                border-color: darken(adjust-hue($color-light, 45), $amount: 10);
+                border-color: darken(adjust-hue($color-light, 45), $amount: 30);
             }
         }
+
         &_ADM {
-            &::before, &::after {
+
+            &::before,
+            &::after {
                 background-color: adjust-hue($color-light, 90);
-                border-color: darken(adjust-hue($color-light, 90), $amount: 10);
+                border-color: darken(adjust-hue($color-light, 90), $amount: 30);
             }
         }
+
         &_OrderEntry {
-            &::before, &::after {
+
+            &::before,
+            &::after {
                 background-color: adjust-hue($color-light, 135);
-                border-color: darken(adjust-hue($color-light, 135), $amount: 10);
+                border-color: darken(adjust-hue($color-light, 135), $amount: 30);
             }
         }
+
         &_Appointments {
-            &::before, &::after {
+
+            &::before,
+            &::after {
                 background-color: adjust-hue($color-light, 180);
-                border-color: darken(adjust-hue($color-light, 180), $amount: 10);
+                border-color: darken(adjust-hue($color-light, 180), $amount: 30);
             }
         }
+
         &_EDMLocationHistory {
-            &::before, &::after {
+
+            &::before,
+            &::after {
                 background-color: adjust-hue($color-light, 225);
-                border-color: darken(adjust-hue($color-light, 225), $amount: 10);
+                border-color: darken(adjust-hue($color-light, 225), $amount: 30);
             }
         }
+
         &_ADMLocationHistory {
-            &::before, &::after {
+
+            &::before,
+            &::after {
                 background-color: adjust-hue($color-light, 270);
-                border-color: darken(adjust-hue($color-light, 270), $amount: 10);
+                border-color: darken(adjust-hue($color-light, 270), $amount: 30);
             }
         }
+
         &_Surgeries {
-            &::before, &::after {
+
+            &::before,
+            &::after {
                 background-color: adjust-hue($color-light, 315);
-                border-color: darken(adjust-hue($color-light, 315), $amount: 10);
+                border-color: darken(adjust-hue($color-light, 315), $amount: 30);
             }
         }
     }
