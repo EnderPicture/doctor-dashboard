@@ -380,7 +380,7 @@ let sample_tests = {
             type: "image",
             foundReport: "no",
             //https://www.memorialcare.org/services/diagnostic/venous-duplex-scan
-            notes: "Venous duplex scan is a painless exam that uses high-frequency sound waves (ultrasound) to capture images of internal views of veins that return blood to the heart. During an upper extremity venous duplex scan, the veins in your neck, shoulders, arms and wrists are viewed. During a lower extremity venous duplex scan, the veins in the legs and ankles are viewed.
+            notes: "Venous duplex scan is a painless exam that uses high-frequency sound waves (ultrasound) to capture images of internal views of veins that return blood to the heart. During an upper extremity venous duplex scan, the veins in your neck, shoulders, arms and wrists are viewed. During a lower extremity venous duplex scan, the veins in the legs and ankles are viewed."
           
         },
     ],
