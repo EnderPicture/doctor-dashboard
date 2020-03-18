@@ -171,7 +171,7 @@
                     });
 
                     chronologicalData.sort((a, b) => {
-                        return b.parsedDate.unix() - a.parsedDate.unix();
+                        return a.parsedDate.unix() - b.parsedDate.unix();
                     });
 
                     let bundledData = [];
@@ -219,11 +219,14 @@
                     classObject['timeline__event_' + type] = true;
                     return classObject;
                 }
+            },
+            mounted() {
+                this.$refs.line.scrollLeft = this.$refs.line.scrollWidth;
             }
         });
     </script>
     <template id="timeline-template">
-        <div class="timeline">
+        <div class="timeline" ref="line">
             <div class="timeline__track">
                 <div :class="eventClassGen(event.type)" v-for="event in timeData">
                     {{event.niceName}}

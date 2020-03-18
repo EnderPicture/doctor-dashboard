@@ -352,15 +352,15 @@ body {
 .timeline__event::before {
   top: -2px;
   border-top: solid 2px;
-  -webkit-transform: skewX(-30deg);
-          transform: skewX(-30deg);
+  -webkit-transform: skewX(30deg);
+          transform: skewX(30deg);
 }
 
 .timeline__event::after {
   bottom: -2px;
   border-bottom: solid 2px;
-  -webkit-transform: skewX(30deg);
-          transform: skewX(30deg);
+  -webkit-transform: skewX(-30deg);
+          transform: skewX(-30deg);
 }
 
 .timeline__event_EDM::before, .timeline__event_EDM::after {

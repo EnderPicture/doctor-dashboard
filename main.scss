@@ -297,13 +297,13 @@ body {
         &::before {
             top: -2px;
             border-top: solid 2px;
-            transform: skewX(-30deg);
+            transform: skewX(30deg);
         }
 
         &::after {
             bottom: -2px;
             border-bottom: solid 2px;
-            transform: skewX(30deg);
+            transform: skewX(-30deg);
         }
 
         &_EDM {
