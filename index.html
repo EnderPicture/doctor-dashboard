@@ -39,7 +39,7 @@
                         @click="tabIndex = index">
                         {{tab}}</div>
                 </div>
-                <div class="overview" v-if="tabIndex === 0">
+                <div class="overview" v-show="tabIndex === 0">
                     <category class="category_lab" :type="0" :data="patientLaboratories" :today="today"></category>
                     <category class="category_imaging" :type="1" :data="patientImaging" :today="today"></category>
                     <category class="category_other" :type="2" :data="patientOthers" :today="today"></category>
@@ -117,7 +117,7 @@
                             let range = '1-10';
                             let value = randomFromRange(range);
                             let result = {
-                                testValue: 'fake value',
+                                testValue: 'fake value '+c,
                                 range: range,
                                 units: 'mL/s',
                                 value: value.toFixed(2),
@@ -504,10 +504,11 @@
         <div :class="{'data-card': true, 'data-card_mini': collapsed}" @click="collapsed = !collapsed">
             <div class="data-card__flex">
                 <p class="data-card__title data-card__left">{{data.key}}</p>
-                <p class="data-card__text" v-if="latest.Category !== 'Laboratory'">{{latest.Category}}</p>
+                <p class="data-card__text" v-if="!collapsed">{{latest.Category}}</p>
             </div>
             <div class="data-card__flex">
-                <p class="data-card__time-main data-card__left">Last completed {{fromToday(latest.ServiceDate)}}
+                <p v-if="!collapsed" class="data-card__time-main data-card__left">Last completed {{fromToday(latest.ServiceDate)}}
+                <p v-else class="data-card__time-main data-card__left">{{fromToday(latest.ServiceDate)}}
                 </p>
                 <p class="data-card__time">{{formatDate(latest.ServiceDate)}}</p>
             </div>
