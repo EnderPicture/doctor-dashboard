@@ -74,25 +74,52 @@
         // data cleaning
         patients.forEach(patient => {
             patient.OrderEntry.forEach(entry => {
-                if (entry.Category === 'Laboratory') {
+                if (entry.Category === 'Laboratory' ||
+                    entry.Category === 'Computed Tomography' ||
+                    entry.Category === 'Radiography' ||
+                    entry.Category === 'Ultrasonography') {
+
                     let results = [];
 
                     let prams = sample_tests[entry.Procedure];
                     if (prams !== undefined) {
                         prams.forEach(pram => {
-                            let value = randomFromRange(pram.range);
+                            let result = null;
 
+                            if (pram.type === 'number') {
+                                let value = randomFromRange(pram.range);
+                                result = {
+                                    testValue: pram.testValue,
+                                    range: pram.range,
+                                    units: pram.units,
+                                    value: value.toFixed(2),
+                                    type: pram.type,
+                                };
+                            } else if (pram.type === 'image') {
+                                result = {
+                                    link: pram.link,
+                                    notes: pram.notes,
+                                    type: pram.type,
+                                };
+                            }
 
-
+                            if (result !== null) {
+                                results.push(result)
+                            }
+                        });
+                    } else if (entry.Category === 'Laboratory') {
+                        for (let c = 0; c < 4; c++) {
+                            let range = '1-10';
+                            let value = randomFromRange(range);
                             let result = {
-                                testValue: pram.testValue,
-                                range: pram.range,
-                                units: pram.units,
-                                type: pram.type,
+                                testValue: 'fake value',
+                                range: range,
+                                units: 'mL/s',
                                 value: value.toFixed(2),
+                                type: 'number',
                             };
                             results.push(result)
-                        });
+                        }
                     }
 
                     entry.results = results;
@@ -316,11 +343,17 @@
                 data: Object,
                 type: Number,
                 today: Object,
+                index: Number,
             },
             data() {
                 return {
                     collapsed: true,
                 }
+            },
+            watch: {
+                index(newIndex) {
+                    this.checkIndex();
+                },
             },
             computed: {
                 dateMin() {
@@ -335,7 +368,7 @@
                     }).length;
                 },
                 numNotShowing() {
-                    return this.data.value.length - this.numIsShowing;
+                    return (this.data.value.length) - this.numIsShowing;
                 },
                 vegaSpec() {
 
@@ -389,6 +422,9 @@
                                 field: 'delta',
                                 type: 'quantitative',
                                 axis: null,
+                                scale: {
+                                    padding: 2,
+                                }
                             },
                             color: {
                                 value: '#1F1424',
@@ -428,15 +464,25 @@
                     let newVegaSpec = JSON.parse(JSON.stringify(this.vegaSpec));
                     newVegaSpec.data.values = this.graphData[index];
                     return newVegaSpec;
+                },
+                checkIndex() {
+                    if (this.index < 4) {
+                        this.collapsed = false;
+                    } else {
+                        this.collapsed = true;
+                    }
                 }
+            },
+            mounted() {
+                this.checkIndex();
             },
         });
     </script>
     <template id="data-card-template">
-        <div class="data-card" @click="collapsed = !collapsed">
+        <div :class="{'data-card': true, 'data-card_mini': collapsed}" @click="collapsed = !collapsed">
             <div class="data-card__flex">
                 <p class="data-card__title data-card__left">{{data.key}}</p>
-                <p class="data-card__text">{{latest.Category}}</p>
+                <p class="data-card__text" v-if="latest.Category !== 'Laboratory'">{{latest.Category}}</p>
             </div>
             <div class="data-card__flex">
                 <p class="data-card__time-main data-card__left">Last completed {{fromToday(latest.ServiceDate)}}
@@ -445,20 +491,33 @@
             </div>
             <div class="data-card__values" v-if="!collapsed">
                 <template class="data-card__test-item" v-for="(result, index) in latest.results">
-                    <div class="data-card__name-con">
-                        <p class="data-card__value-name">{{result.testValue}}</p>
-                        <div class="data-card__line"></div>
-                    </div>
+                    <template v-if="result.type === 'number'">
+                        <div class="data-card__name-con">
+                            <p class="data-card__value-name">{{result.testValue}}</p>
+                            <div class="data-card__line"></div>
+                        </div>
+                        <!-- <div></div> -->
+                        <vega class="data-card__bar-con" :spec="getVegaSpec(index)"></vega>
 
-                    <vega class="data-card__bar-con" :spec="getVegaSpec(index)"></vega>
-
-                    <p class="data-card__value">{{result.value}}</p>
-                    <p class="data-card__value-unit">{{result.units}}</p>
+                        <p class="data-card__value">{{result.value}}</p>
+                        <p class="data-card__value-unit">{{result.units}}</p>
+                    </template>
+                    <template v-if="result.type === 'image'">
+                        <div class="data-card__image-con">
+                            <p class="data-card__notes">{{result.notes}}</p>
+                            <div class="data-card__image">
+                                <img :src="'scanTests/'+result.link" alt="">
+                            </div>
+                        </div>
+                    </template>
                 </template>
             </div>
             <template v-if="!collapsed">
-                <p class="data-card__more" v-if="numNotShowing > 1">{{numNotShowing}} past results not displayed</p>
-                <p class="data-card__more data-card__more_faded" v-else>showing all results</p>
+                <p class="data-card__more" v-if="numNotShowing > 0">{{numNotShowing}} past results not displayed</p>
+                <template v-else>
+                    <p class="data-card__more data-card__more_faded" v-if="numIsShowing > 1">showing all {{numIsShowing}} results</p>
+                    <p class="data-card__more data-card__more_faded" v-else>showing the only result</p>
+                </template>
             </template>
         </div>
     </template>
@@ -565,10 +624,12 @@
                     v-for="tag in mostOftenWord.slice(0,10)" v-on:click="toggleTag(tag.key)">{{tag.key}}</div>
             </div>
             <div class="category__cards-con">
-                <transition-group name="list" class="category__scroll">
-                    <data-card v-for="(item, index) in filteredData" :data="item" :key="item.key" :type="type"
-                        :today="today"></data-card>
-                </transition-group>
+                <div class="category__cards-track">
+                    <transition-group name="list" class="category__scroll">
+                        <data-card v-for="(item, index) in filteredData" :data="item" :key="item.key" :type="type"
+                            :today="today" :index="index"></data-card>
+                    </transition-group>
+                </div>
                 <div class="category__shadow"></div>
             </div>
         </div>
@@ -655,7 +716,7 @@
                 },
                 patientImaging() {
                     let filtered = this.patientOrderHistory.filter(d => {
-                        return (d.Category === 'Computed Tomography' || d.Category === 'Radiography');
+                        return (d.Category === 'Computed Tomography' || d.Category === 'Radiography' || d.Category === 'Ultrasonography');
                     });
 
                     let combined = d3.nest()
@@ -675,8 +736,9 @@
                     let filtered = this.patientOrderHistory.filter(d => {
                         return (
                             d.Category !== 'Laboratory' &&
-                            d.Category !== 'Computed T' &&
+                            d.Category !== 'Computed Tomography' &&
                             d.Category !== 'Radiography' &&
+                            d.Category !== 'Ultrasonography' &&
                             d.Category !== 'Dietary'
                         )
                     });
