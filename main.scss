@@ -76,9 +76,8 @@ body {
 }
 
 .content {
-    gap: 20px;
     display: grid;
-    grid-template-rows: 20px auto;
+    grid-template-rows: 30px auto;
 }
 
 .overview {
@@ -126,6 +125,7 @@ body {
         border-radius: 10px;
 
     }
+
     &__cards-track {
         position: absolute;
         overflow-y: scroll;
@@ -135,6 +135,7 @@ body {
         height: 100%;
         width: 100%;
     }
+
     &__scroll {
         transform: translateZ(0);
         display: grid;
@@ -166,17 +167,24 @@ body {
     flex-direction: column;
     grid-column: span 3;
     align-self: start;
-    
+
+    &:hover {
+        box-shadow: inset 0 0 0 2px $color-dark;
+    }
+
     &_mini {
         grid-column: span 2;
         padding: 2.5px 10px;
+
         .data-card {
             &__title {
                 font-size: 15px;
             }
+
             &__time-main {
                 font-weight: 100;
             }
+
             &__time {
                 display: none;
             }
@@ -188,6 +196,7 @@ body {
         font-family: $font-condensed;
         font-size: 15px;
     }
+
     &__flex {
         display: flex;
         align-items: baseline;
@@ -280,12 +289,15 @@ body {
         grid-template-columns: 5fr 1fr;
         gap: 10px;
     }
+
     &__image {
         grid-column: -2/-1;
-        > img {
+
+        >img {
             width: 100%;
         }
     }
+
     &__notes {
         max-height: 100px;
         overflow: hidden;
@@ -306,7 +318,7 @@ body {
     display: grid;
     position: relative;
     align-self: start;
-    
+
     &__main {
         padding: 10px 0;
         background-color: rgba($color: #fff, $alpha: .5);
@@ -336,6 +348,19 @@ body {
         color: $color-light;
         padding: 20px;
         border-radius: 10px;
+
+        >* {
+            margin: 0;
+            margin-top: 5px;
+
+            &:first-child {
+                margin: 0;
+            }
+        }
+
+        .title {
+            font-weight: 900;
+        }
     }
 
     &__event {
@@ -345,7 +370,7 @@ body {
         font-size: 15px;
         white-space: nowrap;
 
-        
+
         * {
             pointer-events: none;
         }
@@ -353,7 +378,7 @@ body {
         &:hover {
             cursor: pointer;
         }
-        
+
         &::before,
         &::after {
             content: '';
@@ -449,6 +474,7 @@ body {
         color: $color-light;
         padding: 5px 20px;
         font-size: 15px;
+
         &:hover {
             cursor: pointer;
         }
@@ -471,13 +497,13 @@ body {
         border-radius: 10px;
         font-size: 15px;
 
-        box-shadow: 0 0 0 0px rgba($color: #000, $alpha: 0);
+        box-shadow: 0 0 0 0px $color-dark;
         transition: .15s ease;
 
         &:focus,
         &:hover {
             outline: none;
-            box-shadow: 0 0 0 2px rgba($color: #000, $alpha: .5);
+            box-shadow: 0 0 0 2px $color-dark;
         }
 
         &_selected {
@@ -488,6 +514,26 @@ body {
 
     &__tags {
         cursor: pointer;
+    }
+}
+
+.tabs {
+    background-color: $color-dark;
+    display: flex;
+
+
+    &__button {
+        background-color: $color-light;
+        padding: 5px 10px;
+        width: 200px;
+        border-radius: 10px 10px 0 0;
+        font-size: 15px;
+        font-weight: 900;
+        opacity: .5;
+
+        &_selected {
+            opacity: 1;
+        }
     }
 }
 

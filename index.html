@@ -34,7 +34,12 @@
         </div>
         <div class="main">
             <div class="content">
-                <div class="overview">
+                <div class="tabs">
+                    <div v-for="(tab, index) in tabs" :class="{'tabs__button':true, 'tabs__button_selected':tabIndex === index}"
+                        @click="tabIndex = index">
+                        {{tab}}</div>
+                </div>
+                <div class="overview" v-if="tabIndex === 0">
                     <category class="category_lab" :type="0" :data="patientLaboratories" :today="today"></category>
                     <category class="category_imaging" :type="1" :data="patientImaging" :today="today"></category>
                     <category class="category_other" :type="2" :data="patientOthers" :today="today"></category>
@@ -219,6 +224,8 @@
                         endDate: null,
                         type: '',
                         niceName: '',
+                        tileName: '',
+                        deltaDays: 0,
                         items: [],
                     };
                     let nameMapping = {
@@ -229,12 +236,26 @@
                         EDMLocationHistory: 'Room Change',
                         ADMLocationHistory: 'Room Change',
                         Surgeries: 'Surgery',
-                    }
+                    };
+                    let titleNameMapping = {
+                        EDM: 'Emergency Room Entry',
+                        ADM: 'Hospital Entry',
+                        OrderEntry: '',
+                        Appointments: 'Visited by Doctor',
+                        EDMLocationHistory: 'Emergency Room Change',
+                        ADMLocationHistory: 'Hospital Room Change',
+                        Surgeries: 'Surgery',
+                    };
                     let bundle = null;
                     chronologicalData.forEach(d => {
                         if (bundle === null || bundle.type !== d.from) {
                             if (bundle !== null) {
                                 bundle.endDate = d.parsedDate;
+                                bundle.deltaDays = bundle.endDate.diff(bundle.startDate, 'days');
+                                if (bundle.type === 'OrderEntry') {
+                                    bundle.niceName = bundle.deltaDays + 'd';
+                                    bundle.tileName = bundle.deltaDays + ' day gap';
+                                }
                                 bundledData.push(bundle);
                             }
 
@@ -242,6 +263,7 @@
 
                             bundle.type = d.from;
                             bundle.niceName = nameMapping[d.from];
+                            bundle.tileName = titleNameMapping[d.from];
                             bundle.startDate = d.parsedDate;
                             bundle.items = [];
                         }
@@ -280,10 +302,10 @@
                 <div class="timeline__hover" v-if="hovering !== null" ref="hoverBox"
                     :style="{transform: 'translate3d('+screenX+'px, '+screenY+'px, 0px)'}">
                     <div class="timeline__hover-content">
-                        <div>{{hovering.niceName}}</div>
-                        <div>{{this.formatDate(hovering.startDate)}} - {{this.formatDate(hovering.endDate)}}</div>
-                        <div>events: {{hovering.items.length}}</div>
-                        <div>from: {{hovering.type}}</div>
+                        <p class="title">{{hovering.tileName}}</p>
+                        <p>{{this.formatDate(hovering.startDate)}} - {{this.formatDate(hovering.endDate)}}</p>
+                        <p>events: {{hovering.items.length}}</p>
+                        <p>from: {{hovering.type}}</p>
                     </div>
                 </div>
             </transition>
@@ -515,7 +537,8 @@
             <template v-if="!collapsed">
                 <p class="data-card__more" v-if="numNotShowing > 0">{{numNotShowing}} past results not displayed</p>
                 <template v-else>
-                    <p class="data-card__more data-card__more_faded" v-if="numIsShowing > 1">showing all {{numIsShowing}} results</p>
+                    <p class="data-card__more data-card__more_faded" v-if="numIsShowing > 1">showing all
+                        {{numIsShowing}} results</p>
                     <p class="data-card__more data-card__more_faded" v-else>showing the only result</p>
                 </template>
             </template>
@@ -650,6 +673,14 @@
                 patientIndex: 0,
                 now: moment("2031 02 20", "YYYY MM DD"),
                 today: moment("2031 02 20", "YYYY MM DD"),
+
+                tabIndex: 0,
+
+                tabs: [
+                    'Overview',
+                    'Clinical Documents',
+                    'Clip Board',
+                ]
             },
             computed: {
                 realTime() {
