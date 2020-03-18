@@ -16,7 +16,29 @@ let patients = [
             BloodType: "A+",
             ID: "17772278",
             Allergies: "None",
-            CurrentMedication: "Acetaminophen 500mg"
+            CurrentMedication: [
+                //https://tmsforacure.org/wp-content/uploads/SAMPLE-Forms-2-1.pdf
+                {name: "Acetaminophen",
+                dosage: "500mg",
+                howOften: "2x daily",
+                reason: "pain relieve"},
+                {name: "Gastrocrom",
+                dosage: "200mg, 2 ampules",
+                howOften: "4x daily 30 min before meals",
+                reason: "Stabilize mast cells in GI tract; Brain fog"},
+                {name: "Zyrtec",
+                dosage: "10mg",
+                howOften: "1 tablet 2x daily",
+                reason: "H1 Blocker for itching and for mast cell symptoms"},
+                {name: "Prilosec",
+                dosage: "40mg",
+                howOften: "1 tablet 2x daily",
+                reason: "Control GERD/acid reflux"},
+                {name: "Hydroxyzine",
+                dosage: "25mg, 2 tablets",
+                howOften: "2 tablets 3x daily",
+                reason: "H1 blocker to control itching/flushing "},
+            ]
         },
         EDM: {
             CTAS: "3",
