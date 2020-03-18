@@ -369,7 +369,7 @@ let sample_tests = {
             foundReport: "no",
             //https://medlineplus.gov/ency/article/003777.htm
             notes: "Abdominal ultrasound is a type of imaging test. It is used to look at organs in the abdomen, including the liver, gallbladder, spleen, pancreas, and kidneys. The blood vessels that lead to some of these organs, such as the inferior vena cava and aorta, can also be examined with ultrasound."
-           
+
         },
     ],
 
@@ -381,7 +381,7 @@ let sample_tests = {
             foundReport: "no",
             //https://www.memorialcare.org/services/diagnostic/venous-duplex-scan
             notes: "Venous duplex scan is a painless exam that uses high-frequency sound waves (ultrasound) to capture images of internal views of veins that return blood to the heart. During an upper extremity venous duplex scan, the veins in your neck, shoulders, arms and wrists are viewed. During a lower extremity venous duplex scan, the veins in the legs and ankles are viewed."
-          
+
         },
     ],
 
@@ -392,9 +392,9 @@ let sample_tests = {
             //https://usercontent2.hubstatic.com/7980649_f1024.jpg
             link: "AbdomenPelvisContrastCT.jpg",
             type: "image",
-             //https://usarad.com/pdf/CT/CT%20ABDOMEN%20AND%20PELVIS%20W%20CONTRAST.pdf
-             foundReport: "yes",
-             notes: "There is evidence of diffuse hepatic hypoattenuation compatible with fatty infiltration. There is no intra or extrahepatic biliary ductal dilatation. The patient is status post cholecystectomy. The spleen is normal. The pancreas is of normal contour and attenuation characteristics. There is no evidence of adrenal mass. Moderate sized fat containing supraumbilical hernia is present. The kidneys are normal in size, shape and configuration. No renal or ureteral calculi are identified. There is no hydroureter or hydronephrosis. There is no evidence for appendicitis. Several fluid-filled loops of small bowel are present compatible with mild enteritis. There is no bowel wall thickening. No evidence for small or large bowel obstruction. There is no evidence of abdominal ascites or lymphadenopathy. There is no evidence of intrinsic or extrinsic bladder mass. There is no pelvic ascites or lymphadenopathy."
+            //https://usarad.com/pdf/CT/CT%20ABDOMEN%20AND%20PELVIS%20W%20CONTRAST.pdf
+            foundReport: "yes",
+            notes: "There is evidence of diffuse hepatic hypoattenuation compatible with fatty infiltration. There is no intra or extrahepatic biliary ductal dilatation. The patient is status post cholecystectomy. The spleen is normal. The pancreas is of normal contour and attenuation characteristics. There is no evidence of adrenal mass. Moderate sized fat containing supraumbilical hernia is present. The kidneys are normal in size, shape and configuration. No renal or ureteral calculi are identified. There is no hydroureter or hydronephrosis. There is no evidence for appendicitis. Several fluid-filled loops of small bowel are present compatible with mild enteritis. There is no bowel wall thickening. No evidence for small or large bowel obstruction. There is no evidence of abdominal ascites or lymphadenopathy. There is no evidence of intrinsic or extrinsic bladder mass. There is no pelvic ascites or lymphadenopathy."
 
         },
     ],
@@ -407,7 +407,7 @@ let sample_tests = {
             type: "image",
             foundReport: "no",
             //https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5443345/
-            notes:"Kidney stone imaging is an important diagnostic tool and initial step in deciding which therapeutic options to use for the management of kidney stones. Guidelines provided by the American College of Radiology, American Urological Association, and European Association of Urology differ regarding the optimal initial imaging modality to use to evaluate patients with suspected obstructive nephrolithiasis. Noncontrast CT of the abdomen and pelvis consistently provides the most accurate diagnosis but also exposes patients to ionizing radiation. Traditionally, ultrasonography has a lower sensitivity and specificity than CT, but does not require use of radiation. However, when these imaging modalities were compared in a randomized controlled trial they were found to have equivalent diagnostic accuracy within the emergency department. Both modalities have advantages and disadvantages. Kidney, ureter, bladder (KUB) plain film radiography is most helpful in evaluating for interval stone growth in patients with known stone disease, and is less useful in the setting of acute stones. MRI provides the possibility of 3D imaging without exposure to radiation, but it is costly and currently stones are difficult to visualize. Further developments are expected to enhance each imaging modality for the evaluation and treatment of kidney stones in the near future. A proposed algorithm for imaging patients with acute stones in light of the current guidelines and a randomized controlled trial could aid clinicians."
+            notes: "Kidney stone imaging is an important diagnostic tool and initial step in deciding which therapeutic options to use for the management of kidney stones. Guidelines provided by the American College of Radiology, American Urological Association, and European Association of Urology differ regarding the optimal initial imaging modality to use to evaluate patients with suspected obstructive nephrolithiasis. Noncontrast CT of the abdomen and pelvis consistently provides the most accurate diagnosis but also exposes patients to ionizing radiation. Traditionally, ultrasonography has a lower sensitivity and specificity than CT, but does not require use of radiation. However, when these imaging modalities were compared in a randomized controlled trial they were found to have equivalent diagnostic accuracy within the emergency department. Both modalities have advantages and disadvantages. Kidney, ureter, bladder (KUB) plain film radiography is most helpful in evaluating for interval stone growth in patients with known stone disease, and is less useful in the setting of acute stones. MRI provides the possibility of 3D imaging without exposure to radiation, but it is costly and currently stones are difficult to visualize. Further developments are expected to enhance each imaging modality for the evaluation and treatment of kidney stones in the near future. A proposed algorithm for imaging patients with acute stones in light of the current guidelines and a randomized controlled trial could aid clinicians."
 
 
         },
@@ -446,7 +446,7 @@ let sample_tests = {
             type: "image",
             foundReport: "no",
             //https://www.hopkinsmedicine.org/health/treatment-tests-and-therapies/abdominal-x-ray
-            notes:"Abdominal X-rays may be used to diagnose causes of abdominal pain. These can include things such as masses, holes in the intestine, or blockages. Abdominal X-rays may be done before other tests that look at the GI tract or urinary tract. These include an abdominal CT scan and renal or kidney tests."
+            notes: "Abdominal X-rays may be used to diagnose causes of abdominal pain. These can include things such as masses, holes in the intestine, or blockages. Abdominal X-rays may be done before other tests that look at the GI tract or urinary tract. These include an abdominal CT scan and renal or kidney tests."
 
         },
     ],
@@ -456,10 +456,10 @@ let sample_tests = {
             //https://owqo93fpiuc4633lp1zthz57-wpengine.netdna-ssl.com/wp-content/uploads/sites/11/2018/12/123017orthodxfigure1_1349059-860x574.jpg
             link: "ChestPortableRadiography.jpg",
             type: "image",
-             //https://www.ajronline.org/doi/10.2214/AJR.09.7170
-             foundReport: "yes",
-             notes: "The initial chest radiograph showed slight widening of the mediastinum. A subsequent chest radiograph showed progressive widening of the mediastinum, worsening interstitial edema, and increased pleural effusions. Chest CT revealed a high-attenuation collection in the mediastinum located to the right of the ascending aortic graft."
-            
+            //https://www.ajronline.org/doi/10.2214/AJR.09.7170
+            foundReport: "yes",
+            notes: "The initial chest radiograph showed slight widening of the mediastinum. A subsequent chest radiograph showed progressive widening of the mediastinum, worsening interstitial edema, and increased pleural effusions. Chest CT revealed a high-attenuation collection in the mediastinum located to the right of the ascending aortic graft."
+
         },
     ],
     "Chest (CXR)": [
