@@ -72,7 +72,7 @@ body {
 .main {
     grid-column: 2/3;
     display: grid;
-    grid-template-rows: auto 60px;
+    grid-template-rows: 1fr auto;
 }
 
 .content {
@@ -265,8 +265,10 @@ body {
 .timeline {
     display: grid;
     position: relative;
-
+    align-self: start;
+    
     &__main {
+        padding: 10px 0;
         background-color: rgba($color: #fff, $alpha: .5);
         overflow-x: auto;
         display: flex;
@@ -306,6 +308,10 @@ body {
         
         * {
             pointer-events: none;
+        }
+
+        &:hover {
+            cursor: pointer;
         }
         
         &::before,
@@ -395,6 +401,16 @@ body {
                 background-color: adjust-hue($color-light, 315);
                 border-color: darken(adjust-hue($color-light, 315), $amount: 30);
             }
+        }
+    }
+
+    &__warning {
+        background-color: $color-bad;
+        color: $color-light;
+        padding: 5px 20px;
+        font-size: 15px;
+        &:hover {
+            cursor: pointer;
         }
     }
 }

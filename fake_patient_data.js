@@ -18,26 +18,36 @@ let patients = [
             Allergies: "None",
             CurrentMedication: [
                 //https://tmsforacure.org/wp-content/uploads/SAMPLE-Forms-2-1.pdf
-                {name: "Acetaminophen",
-                dosage: "500mg",
-                howOften: "2x daily",
-                reason: "pain relieve"},
-                {name: "Gastrocrom",
-                dosage: "200mg, 2 ampules",
-                howOften: "4x daily 30 min before meals",
-                reason: "Stabilize mast cells in GI tract; Brain fog"},
-                {name: "Zyrtec",
-                dosage: "10mg",
-                howOften: "1 tablet 2x daily",
-                reason: "H1 Blocker for itching and for mast cell symptoms"},
-                {name: "Prilosec",
-                dosage: "40mg",
-                howOften: "1 tablet 2x daily",
-                reason: "Control GERD/acid reflux"},
-                {name: "Hydroxyzine",
-                dosage: "25mg, 2 tablets",
-                howOften: "2 tablets 3x daily",
-                reason: "H1 blocker to control itching/flushing "},
+                {
+                    name: "Acetaminophen",
+                    dosage: "500mg",
+                    howOften: "2x daily",
+                    reason: "pain relieve"
+                },
+                {
+                    name: "Gastrocrom",
+                    dosage: "200mg, 2 ampules",
+                    howOften: "4x daily 30 min before meals",
+                    reason: "Stabilize mast cells in GI tract; Brain fog"
+                },
+                {
+                    name: "Zyrtec",
+                    dosage: "10mg",
+                    howOften: "1 tablet 2x daily",
+                    reason: "H1 Blocker for itching and for mast cell symptoms"
+                },
+                {
+                    name: "Prilosec",
+                    dosage: "40mg",
+                    howOften: "1 tablet 2x daily",
+                    reason: "Control GERD/acid reflux"
+                },
+                {
+                    name: "Hydroxyzine",
+                    dosage: "25mg, 2 tablets",
+                    howOften: "2 tablets 3x daily",
+                    reason: "H1 blocker to control itching/flushing "
+                },
             ]
         },
         EDM: {
@@ -720,14 +730,16 @@ let patients = [
             },
         ],
 
-        EDMLocationHistory:
-        {
-            StartDate: "09-Mar-2031 10:01",
-            EndDate: "10-Mar-2031 08:09",
-            From: "Emergency Room #1",
-            To: "Emergency Room #2",
-            Duration: "22.1 days",
-        },
+        EDMLocationHistory: [
+            {
+                StartDate: "09-Mar-2031 10:01",
+                EndDate: "10-Mar-2031 08:09",
+                From: "Emergency Room #1",
+                To: "Emergency Room #2",
+                Duration: "22.1 days",
+            },
+
+        ],
 
         ADMLocationHistory: [
             {
@@ -1098,21 +1110,24 @@ let patients = [
                 Duration: "22.5 days",
             },
         ],
-        Surgeries:
-        {
-            SurgeryRoom: "Room #1",
-            Surgeon: "Surgeon #1",
-            SurgeonSpecialty: "Otolaryngology",
-            Anaesthetist: "Anaesthetist #1",
-            ProcedureDescription: "Tracheostomy (#6 DCT TRACHEOSTOMY TUBE",
-            Status: "Urgent",
-            PatientInRoom: "29-Dec-2030 17:00",
-            ProcedureStart: "29-Dec-2030 17:19",
-            TimeOpen: "29-Dec-2030 17:24",
-            TimeClose: "29-Dec-2030 17:41",
-            ProcedureEnds: "29-Dec-2030 17:50",
-            PatientOutRoom: "29-Dec-2030 17:55",
-        },
+        Surgeries: [
+            {
+                SurgeryRoom: "Room #1",
+                Surgeon: "Surgeon #1",
+                SurgeonSpecialty: "Otolaryngology",
+                Anaesthetist: "Anaesthetist #1",
+                ProcedureDescription: "Tracheostomy (#6 DCT TRACHEOSTOMY TUBE",
+                Status: "Urgent",
+                PatientInRoom: "29-Dec-2030 17:00",
+                ProcedureStart: "29-Dec-2030 17:19",
+                TimeOpen: "29-Dec-2030 17:24",
+                TimeClose: "29-Dec-2030 17:41",
+                ProcedureEnds: "29-Dec-2030 17:50",
+                PatientOutRoom: "29-Dec-2030 17:55",
+            },
+        ],
+
+        Appointments: [],
 
 
     },

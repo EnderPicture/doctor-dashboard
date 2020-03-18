@@ -69,8 +69,8 @@ body {
   grid-column: 2/3;
   display: -ms-grid;
   display: grid;
-  -ms-grid-rows: auto 60px;
-      grid-template-rows: auto 60px;
+  -ms-grid-rows: 1fr auto;
+      grid-template-rows: 1fr auto;
 }
 
 .content {
@@ -315,9 +315,12 @@ body {
   display: -ms-grid;
   display: grid;
   position: relative;
+  -ms-grid-row-align: start;
+      align-self: start;
 }
 
 .timeline__main {
+  padding: 10px 0;
   background-color: rgba(255, 255, 255, 0.5);
   overflow-x: auto;
   display: -webkit-box;
@@ -364,6 +367,10 @@ body {
 
 .timeline__event * {
   pointer-events: none;
+}
+
+.timeline__event:hover {
+  cursor: pointer;
 }
 
 .timeline__event::before, .timeline__event::after {
@@ -425,6 +432,17 @@ body {
 .timeline__event_Surgeries::before, .timeline__event_Surgeries::after {
   background-color: #e8d2d9;
   border-color: #b46d82;
+}
+
+.timeline__warning {
+  background-color: #C44536;
+  color: #E8DCD2;
+  padding: 5px 20px;
+  font-size: 15px;
+}
+
+.timeline__warning:hover {
+  cursor: pointer;
 }
 
 .filter {

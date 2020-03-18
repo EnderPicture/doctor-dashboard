@@ -41,7 +41,8 @@
                 </div>
             </div>
 
-            <timeline :data="patient"></timeline>
+            <timeline :data="patient" @chose-date="changeDate" :real-time="realTime" :today="today"
+                @reset-date="today = now"></timeline>
         </div>
     </div>
 
@@ -80,6 +81,8 @@
                     if (prams !== undefined) {
                         prams.forEach(pram => {
                             let value = randomFromRange(pram.range);
+
+
 
                             let result = {
                                 testValue: pram.testValue,
@@ -121,7 +124,9 @@
         Vue.component('timeline', {
             template: '#timeline-template',
             props: {
+                today: Object,
                 data: Object,
+                realTime: Boolean,
             },
             data() {
                 return {
@@ -229,6 +234,12 @@
                 hover(e) {
                     this.screenX = e.clientX;
                     this.screenY = e.clientY - 10;
+                },
+                eventClicked(event) {
+                    this.$emit('chose-date', event.endDate);
+                },
+                resetToNow() {
+                    this.$emit('reset-date');
                 }
             },
             mounted() {
@@ -249,10 +260,15 @@
                     </div>
                 </div>
             </transition>
+
+            <div class="timeline__warning" v-if="!realTime" @click="resetToNow">
+                Showing Items Before <strong>{{formatDate(today)}}</strong>. Click to reset
+            </div>
+
             <div class="timeline__main" ref="line">
                 <div class="timeline__track">
                     <div :class="eventClassGen(event.type)" v-for="event in timeData" @mouseover="hovering = event"
-                        @mouseout="hovering = null" @mousemove="hover">
+                        @mouseout="hovering = null" @mousemove="hover" @click="eventClicked(event)">
                         <div>{{event.niceName}}</div>
                     </div>
                 </div>
@@ -441,7 +457,7 @@
                 </template>
             </div>
             <template v-if="!collapsed">
-                <p class="data-card__more" v-if="data.value.length > 1">{{numNotShowing}} past results not displayed</p>
+                <p class="data-card__more" v-if="numNotShowing > 1">{{numNotShowing}} past results not displayed</p>
                 <p class="data-card__more data-card__more_faded" v-else>showing all results</p>
             </template>
         </div>
@@ -571,16 +587,21 @@
                 },
                 patients: patients,
                 patientIndex: 0,
+                now: moment("2031 02 20", "YYYY MM DD"),
+                today: moment("2031 02 20", "YYYY MM DD"),
             },
             computed: {
+                realTime() {
+                    return this.now.diff(this.today, 'days', true) === 0;
+                },
                 patient() {
                     return patients[this.patientIndex];
                 },
-                today() {
-                    return moment("2031 02 20", "YYYY MM DD");
-                },
                 patientOrderHistory() {
-                    return this.patient.OrderEntry.sort((a, b) => {
+                    let filtered = this.patient.OrderEntry.filter(d => {
+                        return this.momentParseDMY(d.ServiceDate).format('x') < this.today.format('x');
+                    });
+                    return filtered.sort((a, b) => {
                         let dateA = this.momentParseDMY(a.ServiceDate).format('x');
                         let dateB = this.momentParseDMY(b.ServiceDate).format('x');
                         return (dateB - dateA);
@@ -674,6 +695,23 @@
                     return sorted;
                 },
             },
+            methods: {
+                changeDate(date) {
+                    this.today = date;
+                },
+                keyDownManager(event) {
+                    if (event.keyCode === 49) {
+                        this.patientIndex = 0;
+                    } else if (event.keyCode === 50) {
+                        this.patientIndex = 1;
+                    } else if (event.keyCode === 51) {
+                        this.patientIndex = 2;
+                    }
+                }
+            },
+            mounted() {
+                window.addEventListener('keydown', this.keyDownManager);
+            }
         })
     </script>
 </body>
