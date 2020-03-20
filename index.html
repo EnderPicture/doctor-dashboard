@@ -35,7 +35,8 @@
         <div class="main">
             <div class="content">
                 <div class="tabs">
-                    <div v-for="(tab, index) in tabs" :class="{'tabs__button':true, 'tabs__button_selected':tabIndex === index}"
+                    <div v-for="(tab, index) in tabs"
+                        :class="{'tabs__button':true, 'tabs__button_selected':tabIndex === index}"
                         @click="tabIndex = index">
                         {{tab}}</div>
                 </div>
@@ -117,7 +118,7 @@
                             let range = '1-10';
                             let value = randomFromRange(range);
                             let result = {
-                                testValue: 'fake value '+c,
+                                testValue: 'fake value ' + c,
                                 range: range,
                                 units: 'mL/s',
                                 value: value.toFixed(2),
@@ -408,6 +409,7 @@
                             type: "line",
                             interpolate: "monotone",
                             strokeWidth: .75,
+                            stroke: '#1F1424',
                             clip: true,
                             point: {
                                 filled: true,
@@ -450,6 +452,10 @@
                             },
                             color: {
                                 value: '#1F1424',
+                                condition: {
+                                    test: 'datum["outOfRange"]',
+                                    value: '#C44536',
+                                }
                             },
                             tooltip: [
                                 { field: "value", type: "quantitative" },
@@ -464,22 +470,56 @@
                 },
                 graphData() {
                     let data = [];
-                    this.latest.results.forEach((d, index) => {
-                        let resultData = [];
-                        this.data.value.forEach(d => {
-                            let delta = this.latest.results[index].value - d.results[index].value;
-                            let date = d.ServiceDate;
+                    if (this.latest.results !== undefined) {
+                        this.latest.results.forEach((d, index) => {
+                            let resultData = [];
+                            this.data.value.forEach(d => {
 
-                            resultData.push({
-                                delta: delta,
-                                value: d.results[index].value,
-                                date: date,
+                                let result = d.results[index];
+                                if (result.type === 'number') {
+
+                                    let delta = this.latest.results[index].value - result.value;
+
+                                    let range = result.range.split('-');
+                                    let min = Math.min(range[0], range[1]);
+                                    let max = Math.max(range[0], range[1]);
+                                    let maxDelta = (max - min) / 30;
+
+                                    resultData.push({
+                                        delta: delta,
+                                        value: result.value,
+                                        date: d.ServiceDate,
+                                        outOfRange: result.value < min + maxDelta || result.value > max - maxDelta,
+                                    });
+                                }
                             });
+                            data.push(resultData);
                         });
-                        data.push(resultData);
-                    });
+
+
+                    }
                     return data;
                 },
+                warnValues() {
+                    return this.graphData.map(d => {
+                        return d.reduce((acc, datum) => {
+                            if (this.momentParseDMY(datum.date).isBetween(this.dateMin, this.dateMax)) {
+                                return acc + (datum.outOfRange ? 1 : 0);
+                            } else {
+                                return acc;
+                            }
+                        }, 0);
+                    });
+                },
+                warn() {
+                    return this.warnValues.reduce((a, d) => {
+                        if (d > 0) {
+                            return true;
+                        } else {
+                            return a;
+                        }
+                    }, false);
+                }
             },
             methods: {
                 getVegaSpec(index) {
@@ -501,21 +541,23 @@
         });
     </script>
     <template id="data-card-template">
-        <div :class="{'data-card': true, 'data-card_mini': collapsed}" @click="collapsed = !collapsed">
+        <div :class="{'data-card': true, 'data-card_mini': collapsed, 'data-card_warn':warn}"
+            @click="collapsed = !collapsed">
             <div class="data-card__flex">
                 <p class="data-card__title data-card__left">{{data.key}}</p>
                 <p class="data-card__text" v-if="!collapsed">{{latest.Category}}</p>
             </div>
             <div class="data-card__flex">
-                <p v-if="!collapsed" class="data-card__time-main data-card__left">Last completed {{fromToday(latest.ServiceDate)}}
-                <p v-else class="data-card__time-main data-card__left">{{fromToday(latest.ServiceDate)}}
-                </p>
-                <p class="data-card__time">{{formatDate(latest.ServiceDate)}}</p>
+                <p v-if="!collapsed" class="data-card__time-main data-card__left">Last completed
+                    {{fromToday(latest.ServiceDate)}}
+                    <p v-else class="data-card__time-main data-card__left">{{fromToday(latest.ServiceDate)}}
+                    </p>
+                    <p class="data-card__time">{{formatDate(latest.ServiceDate)}}</p>
             </div>
             <div class="data-card__values" v-if="!collapsed">
-                <template class="data-card__test-item" v-for="(result, index) in latest.results">
+                <template v-for="(result, index) in latest.results">
                     <template v-if="result.type === 'number'">
-                        <div class="data-card__name-con">
+                        <div :class="{'data-card__name-con': true, 'warn': warnValues[index] > 0} ">
                             <p class="data-card__value-name">{{result.testValue}}</p>
                             <div class="data-card__line"></div>
                         </div>

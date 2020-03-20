@@ -210,6 +210,10 @@ body {
   cursor: pointer;
 }
 
+.data-card_warn {
+  border-left: solid 5px #C44536;
+}
+
 .data-card_mini {
   grid-column: span 1;
   grid-row: span 1;
@@ -265,10 +269,6 @@ body {
   margin: 0;
 }
 
-.data-card__test-item {
-  margin: 10px 0;
-}
-
 .data-card__more {
   -ms-flex-item-align: end;
       align-self: flex-end;
@@ -289,6 +289,10 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+}
+
+.data-card .warn {
+  color: #C44536;
 }
 
 .data-card__line {
