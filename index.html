@@ -31,6 +31,9 @@
             <p class="sidebar__title">Allergies</p>
             <div class="sidebar__line"></div>
             <p class="sidebar__title">Notes</p>
+            <input v-model="notesInput" type="text">
+            <button @click="notes.push(notesInput)">save</button>
+            <p v-for="note in notes">{{note}}</p>
         </div>
         <div class="main">
             <div class="content">
@@ -502,18 +505,17 @@
                 },
                 warnValues() {
                     return this.graphData.map(d => {
-                        return d.reduce((acc, datum) => {
-                            if (this.momentParseDMY(datum.date).isBetween(this.dateMin, this.dateMax)) {
-                                return acc + (datum.outOfRange ? 1 : 0);
-                            } else {
-                                return acc;
-                            }
-                        }, 0);
+                        let latest = d[0];
+                        if (latest.outOfRange !== undefined) {
+                            return (latest.outOfRange ? true : false);
+                        } else {
+                            return false;
+                        }
                     });
                 },
                 warn() {
                     return this.warnValues.reduce((a, d) => {
-                        if (d > 0) {
+                        if (d) {
                             return true;
                         } else {
                             return a;
@@ -557,15 +559,15 @@
             <div class="data-card__values" v-if="!collapsed">
                 <template v-for="(result, index) in latest.results">
                     <template v-if="result.type === 'number'">
-                        <div :class="{'data-card__name-con': true, 'warn': warnValues[index] > 0} ">
+                        <div :class="{'data-card__name-con': true, 'warn': warnValues[index]} ">
                             <p class="data-card__value-name">{{result.testValue}}</p>
                             <div class="data-card__line"></div>
                         </div>
                         <!-- <div></div> -->
                         <vega class="data-card__bar-con" :spec="getVegaSpec(index)"></vega>
 
-                        <p class="data-card__value">{{result.value}}</p>
-                        <p class="data-card__value-unit">{{result.units}}</p>
+                        <p :class="{'data-card__value': true, 'warn': warnValues[index]}">{{result.value}}</p>
+                        <p :class="{'data-card__value-unit': true, 'warn': warnValues[index]}">{{result.units}}</p>
                     </template>
                     <template v-if="result.type === 'image'">
                         <div class="data-card__image-con">
@@ -723,7 +725,9 @@
                     'Overview',
                     'Clinical Documents',
                     'Clip Board',
-                ]
+                ],
+                notesInput: "",
+                notes: [],
             },
             computed: {
                 realTime() {

@@ -310,6 +310,17 @@ body {
         max-height: 100px;
         overflow: hidden;
         grid-column: 1/2;
+        margin: 0;
+        position: relative;
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 20px;
+            width: 100%;
+            background: linear-gradient(rgba(lighten($color-light, 10), 0), rgba(lighten($color-light, 10), 1));
+        }
     }
 
     &__bar {

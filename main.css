@@ -361,6 +361,19 @@ body {
   -ms-grid-column: 1;
   -ms-grid-column-span: 1;
   grid-column: 1/2;
+  margin: 0;
+  position: relative;
+}
+
+.data-card__notes::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 20px;
+  width: 100%;
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(249, 246, 244, 0)), to(#f9f6f4));
+  background: linear-gradient(rgba(249, 246, 244, 0), #f9f6f4);
 }
 
 .data-card__bar {
