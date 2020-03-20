@@ -201,7 +201,9 @@ body {
       -ms-flex-direction: column;
           flex-direction: column;
   grid-column: span 2;
-  grid-row: span 3;
+  grid-row: span 4;
+  border-left: solid 0px #C44536;
+  border-right: solid 0px #1F1424;
 }
 
 .data-card:hover {
@@ -214,10 +216,14 @@ body {
   border-left: solid 5px #C44536;
 }
 
+.data-card_flag {
+  border-right: solid 5px #1F1424;
+}
+
 .data-card_mini {
   grid-column: span 1;
   grid-row: span 1;
-  padding: 2.5px 10px;
+  padding: 10px 10px;
 }
 
 .data-card_mini .data-card__title {
@@ -230,6 +236,10 @@ body {
 
 .data-card_mini .data-card__time {
   display: none;
+}
+
+.data-card_mini .data-card__buttons {
+  margin-top: 5px;
 }
 
 .data-card * {
@@ -270,12 +280,11 @@ body {
 }
 
 .data-card__more {
-  -ms-flex-item-align: end;
-      align-self: flex-end;
   margin: 0;
   padding: 2.5px 10px;
   background-color: #1F1424;
   color: #E8DCD2;
+  border: none;
 }
 
 .data-card__more_faded {
@@ -309,7 +318,8 @@ body {
   display: grid;
   -ms-grid-columns: auto 1fr auto auto;
       grid-template-columns: auto 1fr auto auto;
-  margin: 10px 0;
+  margin: 0;
+  margin-top: 10px;
   gap: 1px 10px;
 }
 
@@ -387,6 +397,16 @@ body {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
+}
+
+.data-card__buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-top: 10px;
 }
 
 .timeline {

@@ -167,8 +167,11 @@ body {
     justify-content: center;
     flex-direction: column;
     grid-column: span 2;
-    grid-row: span 3;
+    grid-row: span 4;
     // align-self: start;
+
+    border-left: solid 0px $color-bad;
+    border-right: solid 0px $color-dark;
 
     &:hover {
         box-shadow: inset 0 0 0 2px $color-dark;
@@ -178,11 +181,14 @@ body {
     &_warn {
         border-left: solid 5px $color-bad;
     }
+    &_flag {
+        border-right: solid 5px $color-dark;
+    }
 
     &_mini {
         grid-column: span 1;
         grid-row: span 1;
-        padding: 2.5px 10px;
+        padding: 10px 10px;
 
         .data-card {
             &__title {
@@ -195,6 +201,9 @@ body {
 
             &__time {
                 display: none;
+            }
+            &__buttons {
+                margin-top: 5px;
             }
         }
     }
@@ -232,12 +241,11 @@ body {
     }
 
     &__more {
-        align-self: flex-end;
         margin: 0;
         padding: 2.5px 10px;
         background-color: $color-dark;
         color: $color-light;
-
+        border: none;
         &_faded {
             background-color: rgba($color: $color-dark, $alpha: .7);
         }
@@ -262,7 +270,8 @@ body {
     &__values {
         display: grid;
         grid-template-columns: auto 1fr auto auto;
-        margin: 10px 0;
+        margin: 0;
+        margin-top: 10px;
         gap: 1px 10px;
     }
 
@@ -330,6 +339,12 @@ body {
 
     &__left {
         flex: 1;
+    }
+
+    &__buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
     }
 }
 

@@ -32,8 +32,8 @@
             <div class="sidebar__line"></div>
             <p class="sidebar__title">Notes</p>
             <input v-model="notesInput" type="text">
-            <button @click="notes.push(notesInput)">save</button>
-            <p v-for="note in notes">{{note}}</p>
+            <button @click="patients[patientIndex].notes.push(notesInput)">save</button>
+            <p v-for="note in patients[patientIndex].notes">{{note}}</p>
         </div>
         <div class="main">
             <div class="content">
@@ -44,9 +44,15 @@
                         {{tab}}</div>
                 </div>
                 <div class="overview" v-show="tabIndex === 0">
-                    <category class="category_lab" :type="0" :data="patientLaboratories" :today="today"></category>
-                    <category class="category_imaging" :type="1" :data="patientImaging" :today="today"></category>
-                    <category class="category_other" :type="2" :data="patientOthers" :today="today"></category>
+                    <category class="category_lab" :type="0" :data="patientLaboratories" :today="today"
+                        :patient-index="patientIndex" :others="others">
+                    </category>
+                    <category class="category_imaging" :type="1" :data="patientImaging" :today="today"
+                        :patient-index="patientIndex" :others="others">
+                    </category>
+                    <category class="category_other" :type="2" :data="patientOthers" :today="today"
+                        :patient-index="patientIndex" :others="others">
+                    </category>
                 </div>
             </div>
 
@@ -78,6 +84,13 @@
             let min = Math.min(rangeValues[0], rangeValues[1]);
             let max = Math.max(rangeValues[0], rangeValues[1]);
             return ((Math.random() * (max - min)) + min);
+        }
+
+        let others = {
+            pins: [],
+            oldPins: [],
+            flags: [],
+            oldFlags: [],
         }
 
         // data cleaning
@@ -134,7 +147,15 @@
                     entry.results = results;
                 }
             });
+
+            patient.notes = [];
+
+            others.pins.push([]);
+            others.oldPins.push([]);
+            others.flags.push([]);
+            others.oldFlags.push([]);
         });
+
 
         Vue.use(VueVega.default);
 
@@ -336,12 +357,12 @@
                 spec: Object,
             },
             watch: {
-                spec: {
-                    handler(newSpec, oldSpec) {
-                        this.vega(newSpec);
-                    },
-                    deep: true,
-                }
+                // spec: {
+                //     handler(newSpec, oldSpec) {
+                //         this.vega(newSpec);
+                //     },
+                //     deep: true,
+                // }
             },
             methods: {
                 vega(spec) {
@@ -370,6 +391,8 @@
                 type: Number,
                 today: Object,
                 index: Number,
+                patientIndex: Number,
+                others: Object,
             },
             data() {
                 return {
@@ -395,6 +418,9 @@
                 },
                 numNotShowing() {
                     return (this.data.value.length) - this.numIsShowing;
+                },
+                name() {
+                    return this.data.key;
                 },
                 vegaSpec() {
 
@@ -506,7 +532,7 @@
                 warnValues() {
                     return this.graphData.map(d => {
                         let latest = d[0];
-                        if (latest.outOfRange !== undefined) {
+                        if (latest !== undefined && latest.outOfRange !== undefined) {
                             return (latest.outOfRange ? true : false);
                         } else {
                             return false;
@@ -521,6 +547,12 @@
                             return a;
                         }
                     }, false);
+                },
+                pined() {
+                    return this.others.pins[this.patientIndex].indexOf(this.name) > -1;
+                },
+                flagged() {
+                    return this.others.flags[this.patientIndex].indexOf(this.name) > -1;
                 }
             },
             methods: {
@@ -535,6 +567,20 @@
                     } else {
                         this.collapsed = true;
                     }
+                },
+                pin() {
+                    this.arrayToggle(this.others.pins[this.patientIndex], this.name)
+                },
+                flag() {
+                    this.arrayToggle(this.others.flags[this.patientIndex], this.name)
+                },
+                arrayToggle(array, value) {
+                    let index = array.indexOf(value);
+                    if (array.indexOf(value) < 0) {
+                        array.push(value);
+                    } else {
+                        array.splice(index, 1);
+                    }
                 }
             },
             mounted() {
@@ -543,10 +589,10 @@
         });
     </script>
     <template id="data-card-template">
-        <div :class="{'data-card': true, 'data-card_mini': collapsed, 'data-card_warn':warn}"
+        <div :class="{'data-card': true, 'data-card_mini': collapsed, 'data-card_warn':warn, 'data-card_flag': flagged}"
             @click="collapsed = !collapsed">
             <div class="data-card__flex">
-                <p class="data-card__title data-card__left">{{data.key}}</p>
+                <p class="data-card__title data-card__left">{{name}}</p>
                 <p class="data-card__text" v-if="!collapsed">{{latest.Category}}</p>
             </div>
             <div class="data-card__flex">
@@ -579,14 +625,18 @@
                     </template>
                 </template>
             </div>
-            <template v-if="!collapsed">
+            <div class="data-card__buttons" v-if="!collapsed">
+                <button class="data-card__more" v-if="pined" @click.stop="pin">Unpin</button>
+                <button class="data-card__more" v-else @click.stop="pin">Pin</button>
+                <button class="data-card__more" v-if="flagged" @click.stop="flag">Unflag</button>
+                <button class="data-card__more" v-else @click.stop="flag">Flag</button>
                 <p class="data-card__more" v-if="numNotShowing > 0">{{numNotShowing}} past results not displayed</p>
                 <template v-else>
                     <p class="data-card__more data-card__more_faded" v-if="numIsShowing > 1">showing all
                         {{numIsShowing}} results</p>
                     <p class="data-card__more data-card__more_faded" v-else>showing the only result</p>
                 </template>
-            </template>
+            </div>
         </div>
     </template>
 
@@ -597,6 +647,8 @@
                 data: Array,
                 type: Number,
                 today: Object,
+                patientIndex: Number,
+                others: Object,
             },
             data() {
                 return {
@@ -679,6 +731,9 @@
                     } else {
                         this.tagsSelected.push(tag);
                     }
+                },
+                pin(item) {
+                    this.$emit('pin', item);
                 }
             },
         });
@@ -695,7 +750,7 @@
                 <div class="category__cards-track">
                     <transition-group name="list" class="category__scroll">
                         <data-card v-for="(item, index) in filteredData" :data="item" :key="item.key" :type="type"
-                            :today="today" :index="index"></data-card>
+                            :today="today" :index="index" :patient-index="patientIndex" :others="others"></data-card>
                     </transition-group>
                 </div>
                 <div class="category__shadow"></div>
@@ -727,7 +782,8 @@
                     'Clip Board',
                 ],
                 notesInput: "",
-                notes: [],
+
+                others: others,
             },
             computed: {
                 realTime() {
@@ -840,14 +896,16 @@
                     this.today = date;
                 },
                 keyDownManager(event) {
-                    if (event.keyCode === 49) {
-                        this.patientIndex = 0;
-                    } else if (event.keyCode === 50) {
-                        this.patientIndex = 1;
-                    } else if (event.keyCode === 51) {
-                        this.patientIndex = 2;
+                    if (event.altKey) {
+                        if (event.keyCode === 49) {
+                            this.patientIndex = 0;
+                        } else if (event.keyCode === 50) {
+                            this.patientIndex = 1;
+                        } else if (event.keyCode === 51) {
+                            this.patientIndex = 2;
+                        }
                     }
-                }
+                },
             },
             mounted() {
                 window.addEventListener('keydown', this.keyDownManager);
