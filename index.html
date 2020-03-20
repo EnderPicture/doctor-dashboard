@@ -357,12 +357,12 @@
                 spec: Object,
             },
             watch: {
-                // spec: {
-                //     handler(newSpec, oldSpec) {
-                //         this.vega(newSpec);
-                //     },
-                //     deep: true,
-                // }
+                spec: {
+                    handler(newSpec, oldSpec) {
+                        this.vega(newSpec);
+                    },
+                    deep: true,
+                }
             },
             methods: {
                 vega(spec) {
