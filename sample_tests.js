@@ -1,4 +1,29 @@
 let sample_tests = {
+    "Notes": [
+        {
+            //https://labtestsonline.org/sites/aacc-lto.us/files/inline-files/CBC%20sample%20report%20with%20notes.pdf
+            testValue: "high",
+            text: "is high and is reported to Dr. J Smith for further examination",
+        },
+        {
+            testValue: "low",
+            text: "is low and is reported to Dr. J Smith for further examination",
+        },
+        {
+            testValue: "highs",
+            text: "are high and are reported to Dr. J Smith for further examination",
+        },
+        {
+            testValue: "lows",
+            text: "are low and arereported to Dr. J Smith for further examination",
+        },
+        {
+            //https://mcmasterpa.weebly.com/uploads/1/2/7/3/12737575/8528653_orig.png?1
+            testValue: "abnormal",
+            testType: "Complete Blood Count (CBC)",
+            text: "recommend Serum Ferritin, Hemoglobin Electrophoresis",
+        },
+    ],
     "Complete Blood Count (CBC)": [
         //https://www.mayoclinic.org/tests-procedures/complete-blood-count/about/pac-20384919
         {
@@ -44,6 +69,8 @@ let sample_tests = {
 
         },
     ],
+
+    
     "Chem 7 - Glu R,Urea,Crea,Lytes": [
         //https://www.ucsfbenioffchildrens.org/tests/003462.html
         {
