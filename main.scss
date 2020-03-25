@@ -72,13 +72,12 @@ body {
 .main {
     grid-column: 2/3;
     display: grid;
-    grid-template-rows: auto 60px;
+    grid-template-rows: 1fr auto;
 }
 
 .content {
-    gap: 20px;
     display: grid;
-    grid-template-rows: 20px auto;
+    grid-template-rows: 30px auto;
 }
 
 .overview {
@@ -86,7 +85,7 @@ body {
     margin: 10px;
     display: grid;
     grid-row: 2/3;
-    grid-template-columns: 2fr 3fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: 3fr 2fr;
 
 }
@@ -127,14 +126,22 @@ body {
 
     }
 
-    &__scroll {
+    &__cards-track {
         position: absolute;
         overflow-y: scroll;
+        overflow-x: hidden;
         top: 0;
         left: 0;
         height: 100%;
         width: 100%;
+    }
+
+    &__scroll {
         transform: translateZ(0);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-flow: row dense;
+        grid-gap: 5px;
     }
 
     &__shadow {
@@ -151,21 +158,60 @@ body {
 .data-card {
     background-color: lighten($color-light, 10);
     padding: 10px;
-    transition: .5s ease;
+    transition: .25s ease;
     width: 100%;
     position: relative;
     overflow: hidden;
-    border-radius: 10px 0px 0px 10px;
+    border-radius: 10px;
     display: flex;
+    justify-content: center;
     flex-direction: column;
+    grid-column: span 2;
+    grid-row: span 4;
+    // align-self: start;
 
-    * {
-        font-family: $font-condensed;
-        font-size: 15px;
+    border-left: solid 0px $color-bad;
+    border-right: solid 0px $color-dark;
+
+    &:hover {
+        box-shadow: inset 0 0 0 2px $color-dark;
+        cursor: pointer;
     }
 
-    &:not(:last-child) {
-        margin-bottom: 10px;
+    &_warn {
+        border-left: solid 5px $color-bad;
+    }
+    &_flag {
+        border-right: solid 5px $color-dark;
+    }
+
+    &_mini {
+        grid-column: span 1;
+        grid-row: span 1;
+        padding: 2px 10px;
+
+        .data-card {
+            &__title {
+                font-size: 15px;
+            }
+
+            &__time-main {
+                font-weight: 100;
+            }
+
+            &__time {
+                display: none;
+            }
+            &__buttons {
+                margin-top: 5px;
+            }
+        }
+    }
+
+    * {
+        transition: .2s;
+        font-family: $font-condensed;
+        font-size: 15px;
     }
 
     &__flex {
@@ -175,13 +221,13 @@ body {
 
     &__time-main {
         margin: 0;
-        margin-top: 5px;
+        margin-top: 2px;
         font-weight: 900;
     }
 
     &__time {
         margin: 0;
-        margin-top: 5px;
+        margin-top: 2px;
     }
 
     &__title {
@@ -194,17 +240,12 @@ body {
         margin: 0;
     }
 
-    &__test-item {
-        margin: 10px 0;
-    }
-
     &__more {
-        align-self: flex-end;
         margin: 0;
-        padding: 5px 10px;
+        padding: 2px 10px;
         background-color: $color-dark;
         color: $color-light;
-
+        border: none;
         &_faded {
             background-color: rgba($color: $color-dark, $alpha: .7);
         }
@@ -213,6 +254,10 @@ body {
     &__name-con {
         display: flex;
         align-items: center;
+    }
+
+    .warn {
+        color: $color-bad;
     }
 
     &__line {
@@ -225,8 +270,9 @@ body {
     &__values {
         display: grid;
         grid-template-columns: auto 1fr auto auto;
-        margin: 10px 0;
-        gap: 2px 10px;
+        margin: 0;
+        margin-top: 10px;
+        gap: 1px 10px;
     }
 
     &__value {
@@ -237,6 +283,7 @@ body {
     &__value-name {
         margin: 0;
         margin-right: 10px;
+        // white-space: nowrap;
     }
 
     &__value-unit {
@@ -244,12 +291,45 @@ body {
     }
 
     &__bar-con {
-        overflow: hidden;
+        // overflow: hidden;
         display: flex;
-        height: 20px;
+        height: 18px;
         width: 100%;
+        min-width: 75px;
         border-right: solid 1px $color-dark;
         border-left: solid 1px $color-dark;
+    }
+
+    &__image-con {
+        grid-column: 1/-1;
+        display: grid;
+        grid-template-columns: 5fr 1fr;
+        gap: 10px;
+    }
+
+    &__image {
+        grid-column: -2/-1;
+
+        >img {
+            width: 100%;
+        }
+    }
+
+    &__notes {
+        max-height: 100px;
+        overflow: hidden;
+        grid-column: 1/2;
+        margin: 0;
+        position: relative;
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 20px;
+            width: 100%;
+            background: linear-gradient(rgba(lighten($color-light, 10), 0), rgba(lighten($color-light, 10), 1));
+        }
     }
 
     &__bar {
@@ -260,13 +340,21 @@ body {
     &__left {
         flex: 1;
     }
+
+    &__buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
 }
 
 .timeline {
     display: grid;
     position: relative;
+    align-self: start;
 
     &__main {
+        padding: 10px 0;
         background-color: rgba($color: #fff, $alpha: .5);
         overflow-x: auto;
         display: flex;
@@ -294,20 +382,37 @@ body {
         color: $color-light;
         padding: 20px;
         border-radius: 10px;
+
+        >* {
+            margin: 0;
+            margin-top: 5px;
+
+            &:first-child {
+                margin: 0;
+            }
+        }
+
+        .title {
+            font-weight: 900;
+        }
     }
 
     &__event {
-        padding: 2.5px 10px;
+        padding: 2px 10px;
         position: relative;
         z-index: 0;
         font-size: 15px;
         white-space: nowrap;
 
-        
+
         * {
             pointer-events: none;
         }
-        
+
+        &:hover {
+            cursor: pointer;
+        }
+
         &::before,
         &::after {
             content: '';
@@ -397,6 +502,17 @@ body {
             }
         }
     }
+
+    &__warning {
+        background-color: $color-bad;
+        color: $color-light;
+        padding: 5px 20px;
+        font-size: 15px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
 }
 
 .filter {
@@ -408,20 +524,20 @@ body {
     &__tags,
     &__input {
         margin: 0;
-        padding: 2.5px 10px;
-        margin: 2.5px;
+        padding: 2px 10px;
+        margin: 2px;
         border: none;
         background-color: lighten($color-light, 10);
         border-radius: 10px;
         font-size: 15px;
 
-        box-shadow: 0 0 0 0px rgba($color: #000, $alpha: 0);
+        box-shadow: 0 0 0 0px $color-dark;
         transition: .2s ease;
 
         &:focus,
         &:hover {
             outline: none;
-            box-shadow: 0 0 0 2px rgba($color: #000, $alpha: .5);
+            box-shadow: 0 0 0 2px $color-dark;
         }
 
         &_selected {
@@ -432,6 +548,26 @@ body {
 
     &__tags {
         cursor: pointer;
+    }
+}
+
+.tabs {
+    background-color: $color-dark;
+    display: flex;
+
+
+    &__button {
+        background-color: $color-light;
+        padding: 5px 10px;
+        width: 200px;
+        border-radius: 10px 10px 0 0;
+        font-size: 15px;
+        font-weight: 900;
+        opacity: .5;
+
+        &_selected {
+            opacity: 1;
+        }
     }
 }
 

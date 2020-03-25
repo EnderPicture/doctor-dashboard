@@ -313,19 +313,11 @@ let sample_tests = {
     "Alanine Aminotransferase": [
         //https://www.healthline.com/health/alt#results
         {
-            testValue: "males",
+            testValue: "Alanine Aminotransferase",
             range: "29-33",
             units: "IU/L",
             type: "number",
         },
-
-        {
-            testValue: "females",
-            range: "19-25",
-            units: "IU/L",
-            type: "number",
-        }
-
     ],
 
     "Troponin I": [
