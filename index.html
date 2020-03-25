@@ -32,7 +32,7 @@
                 <p class="sidebar__title">Allergies</p>
                 <div class="sidebar__line"></div>
             </div>
-            <notes :selected="selected" :data="patients[this.patientIndex]" :today="today" :now="now"></notes>
+            <notes :selected="selected" :data="patients[patientIndex]" :today="today" :now="now"></notes>
 
 
         </div>
@@ -45,18 +45,18 @@
                         {{tab}}</div>
                 </div>
                 <div class="overview" v-show="tabIndex === 0">
-                    <category class="category_lab" :type="0" :raw-data="patients[this.patientIndex]"
+                    <category class="category_lab" :type="0" :raw-data="patients[patientIndex]"
                         :data="patientLaboratories" :today="today" :patient-index="patientIndex" :others="others">
                     </category>
-                    <category class="category_imaging" :type="1" :raw-data="patients[this.patientIndex]"
+                    <category class="category_imaging" :type="1" :raw-data="patients[patientIndex]"
                         :data="patientImaging" :today="today" :patient-index="patientIndex" :others="others">
                     </category>
-                    <category class="category_other" :type="2" :raw-data="patients[this.patientIndex]"
+                    <category class="category_other" :type="2" :raw-data="patients[patientIndex]"
                         :data="patientOthers" :today="today" :patient-index="patientIndex" :others="others">
                     </category>
                 </div>
                 <div class="work-space" v-show="tabIndex === 1">
-                    <category class="detail" :type="3" :raw-data="patients[this.patientIndex]" :data="patientDetails"
+                    <category class="detail" :type="3" :raw-data="patients[patientIndex]" :data="patientDetails"
                         :today="today" :patient-index="patientIndex" :others="others">
                     </category>
                 </div>
@@ -73,7 +73,6 @@
     <script src="https://momentjs.com/downloads/moment.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.6.1/fuse.min.js"></script>
-    <script src="https://unpkg.com/vue-vega"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
@@ -215,8 +214,6 @@
         });
 
 
-        Vue.use(VueVega.default);
-
         Vue.mixin({
             methods: {
                 momentParseDMY(date) {
@@ -231,10 +228,14 @@
                 fromToday(date) {
                     return this.momentParseDMY(date).from(this.today);
                 },
-                filterNotes(data, filter, raw = false) {
+                filterNotes(data, filter, dateFilter = null, raw = false) {
                     let notes = [];
                     let rawNotes = data.filter(d => {
-                        return d.Procedure === filter;
+                        if (dateFilter !== null) {
+                            return d.Procedure === filter && dateFilter.unix() >= d.parsedDate.unix();
+                        } else {
+                            return d.Procedure === filter;
+                        }
                     }).map(d => d.notes);
 
                     if (raw) {
@@ -449,7 +450,7 @@
                 getNotes(raw = false) {
                     notes = [];
                     if (this.selected !== undefined) {
-                        notes = this.filterNotes(this.data.OrderEntry,this.selected, raw);
+                        notes = this.filterNotes(this.data.OrderEntry, this.selected, this.today, raw);
                     } else {
                         notes = this.data.notes;
                     }
@@ -714,11 +715,14 @@
                 },
                 flagged() {
                     return this.others.flags[this.patientIndex].indexOf(this.name) > -1;
-                }
+                },
+                notes() {
+                    return this.getNotes();
+                },
             },
             methods: {
                 getNotes() {
-                    return this.filterNotes(this.rawData.OrderEntry,this.name);
+                    return this.filterNotes(this.rawData.OrderEntry, this.name, this.today);
                 },
                 getVegaSpec(index) {
                     let newVegaSpec = JSON.parse(JSON.stringify(this.vegaSpec));
@@ -810,9 +814,11 @@
                 </div>
                 <div class="data-card__notes-con" v-if="largeMode">
                     <p class="data-card__notes-con-title">Notes</p>
-                    <div v-for="note in getNotes()">
-                        <p class="data-card__note-history">{{note.note}}</p>
-                        <p class="data-card__note-text">{{formatDate(note.date)}}</p>
+                    <div v-for="note in notes">
+                        <template v-if="note !== undefined">
+                            <p class="data-card__note-history">{{note.note}}</p>
+                            <p class="data-card__note-text">{{formatDate(note.date)}}</p>
+                        </template>
                     </div>
                 </div>
                 <div class="data-card__buttons" v-if="!collapsed">
@@ -944,8 +950,8 @@
                 <div class="category__cards-track">
                     <transition-group name="list" class="category__scroll">
                         <data-card v-for="(item, index) in filteredData" :data="item" :key="item.key" :type="type"
-                            :today="today" :index="index" :patient-index="patientIndex" :others="others" :raw-data="rawData"
-                            :expand-index="expandIndex"></data-card>
+                            :today="today" :index="index" :patient-index="patientIndex" :others="others"
+                            :raw-data="rawData" :expand-index="expandIndex"></data-card>
                     </transition-group>
                 </div>
                 <div class="category__shadow"></div>
