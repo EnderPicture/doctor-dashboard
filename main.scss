@@ -248,6 +248,8 @@ body {
         display: flex;
         height: 20px;
         width: 100%;
+        border-right: solid 1px $color-dark;
+        border-left: solid 1px $color-dark;
     }
 
     &__bar {
@@ -261,16 +263,37 @@ body {
 }
 
 .timeline {
-    background-color: rgba($color: #fff, $alpha: .5);
-    overflow-x: auto;
-    display: flex;
-    align-items: center;
-    
+    display: grid;
+    position: relative;
+
+    &__main {
+        background-color: rgba($color: #fff, $alpha: .5);
+        overflow-x: auto;
+        display: flex;
+        align-items: center;
+    }
+
     &__track {
         display: grid;
         grid-auto-flow: column;
         grid-template-rows: auto;
         padding: 0 20px;
+    }
+
+    &__hover {
+        pointer-events: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+    }
+
+    &__hover-content {
+        background-color: lighten($color-dark, 10);
+        transform: translate(-50%, -100%);
+        color: $color-light;
+        padding: 20px;
+        border-radius: 10px;
     }
 
     &__event {
@@ -280,6 +303,11 @@ body {
         font-size: 15px;
         white-space: nowrap;
 
+        
+        * {
+            pointer-events: none;
+        }
+        
         &::before,
         &::after {
             content: '';
@@ -397,7 +425,8 @@ body {
         }
 
         &_selected {
-            box-shadow: 0 0 0 2px rgba($color: #000, $alpha: .25);
+            color: lighten($color-light, 10);
+            background-color: $color-dark;
         }
     }
 
@@ -413,4 +442,15 @@ body {
 
 .list-leave-active {
     position: absolute;
+}
+
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .2s;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
 }
