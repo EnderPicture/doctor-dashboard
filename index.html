@@ -817,14 +817,16 @@
                     <div v-for="note in notes">
                         <template v-if="note !== undefined">
                             <p class="data-card__note-history">{{note.note}}</p>
-                            <p class="data-card__note-text">{{formatDate(note.date)}}</p>
+                            <p class="data-card__note-text">- {{fromToday(note.date)}} - {{formatDate(note.date)}}</p>
                         </template>
                     </div>
                 </div>
                 <div class="data-card__buttons" v-if="!collapsed">
                     <button class="data-card__more" v-if="flagged" @click.stop="flag">Unflag</button>
                     <button class="data-card__more" v-else @click.stop="flag">Flag</button>
-                    <p class="data-card__more" v-if="numNotShowing > 0">{{numNotShowing}} past results not displayed</p>
+                    <div class="data-card__more" v-if="notes.length > 0">{{notes.length}} notes</div>
+                    <div class="data-card__more" v-else>no notes</div>
+                    <p class="data-card__more data-card__more_faded" v-if="numNotShowing > 0">{{numNotShowing}} results not shown</p>
                     <template v-else>
                         <p class="data-card__more data-card__more_faded" v-if="numIsShowing > 1">showing all
                             {{numIsShowing}} results</p>
