@@ -113,6 +113,20 @@ body {
       grid-template-rows: 3fr 2fr;
 }
 
+.work-space {
+  gap: 10px;
+  margin: 10px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-row: 2;
+  -ms-grid-row-span: 1;
+  grid-row: 2/3;
+  -ms-grid-columns: 1fr;
+      grid-template-columns: 1fr;
+  -ms-grid-rows: 1fr;
+      grid-template-rows: 1fr;
+}
+
 .category {
   background-color: #f1e9e3;
   border-radius: 20px;
@@ -206,8 +220,10 @@ body {
 }
 
 .data-card {
-  -webkit-transition: .7s ease;
-  transition: .7s ease;
+  -webkit-transition: -webkit-transform .7s ease;
+  transition: -webkit-transform .7s ease;
+  transition: transform .7s ease;
+  transition: transform .7s ease, -webkit-transform .7s ease;
   width: 100%;
   grid-column: span 2;
   grid-row: span 4;
@@ -481,6 +497,35 @@ body {
   margin-top: 10px;
 }
 
+.data-card__notes-con-title {
+  font-weight: 900;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.data-card__notes-con {
+  margin-top: 10px;
+}
+
+.data-card__note-history {
+  margin: 0;
+  margin-bottom: 2px;
+}
+
+.data-card__note-text {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.detail {
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1/2;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1/2;
+}
+
 .timeline {
   display: -ms-grid;
   display: grid;
@@ -704,14 +749,13 @@ body {
 }
 
 .notes__con {
-  width: 100%;
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
   position: relative;
-  border-radius: 10px;
   overflow: hidden;
   background-color: #2d1d34;
+  margin: 0 -10px -10px -10px;
 }
 
 .notes__scroll {
@@ -721,7 +765,15 @@ body {
   top: 0;
   left: 0;
   overflow-y: scroll;
-  padding: 2.5px 5px;
+  padding: 10px;
+}
+
+.notes__note-text {
+  margin-bottom: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 70px;
+  overflow: hidden;
 }
 
 .notes__input {
@@ -752,6 +804,13 @@ body {
 .list-enter,
 .list-leave-to {
   opacity: 0;
+}
+
+.list-enter-active {
+  -webkit-transition: opacity .7s ease, -webkit-transform .7s ease;
+  transition: opacity .7s ease, -webkit-transform .7s ease;
+  transition: opacity .7s ease, transform .7s ease;
+  transition: opacity .7s ease, transform .7s ease, -webkit-transform .7s ease;
 }
 
 .list-leave-active {
