@@ -96,6 +96,7 @@ body {
     padding: 10px;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 
     &_lab {
         grid-column: 1/2;
@@ -122,10 +123,10 @@ body {
         position: relative;
         flex: 1;
         overflow: hidden;
-        border-radius: 10px;
-
+        border-radius: 10px 0 0 10px;
+        margin-right: -10px;
     }
-
+    
     &__cards-track {
         position: absolute;
         overflow-y: scroll;
@@ -135,9 +136,10 @@ body {
         height: 100%;
         width: 100%;
     }
-
+    
     &__scroll {
         transform: translateZ(0);
+        margin-right: 10px;
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         grid-auto-flow: row dense;
@@ -161,7 +163,7 @@ body {
     width: 100%;
     grid-column: span 2;
     grid-row: span 4;
-    // align-self: start;
+    position: relative;
     
     * {
         font-family: $font-condensed;
@@ -191,10 +193,33 @@ body {
                 transition: .1s ease;
                 box-shadow: 0 5px 0 0 darken($color-light, 5);
                 transform: translate3d(0,-5px,0);
-                z-index: 100;
             }
         }
         cursor: pointer;
+    }
+    
+    &__selected {
+        position: absolute;
+        background-color: $color-dark;
+        color: $color-light;
+        margin: 0;
+        border-radius: 10px;
+        top: 0;
+        right: 0;
+        opacity: 0;
+        visibility: hidden;
+        padding: 5px 10px;
+
+        transition: .8s ease;
+
+        transform: translate3d(0, -100%, 0);
+        
+        &_show {
+            transform: translate3d(0, 0, 0);
+            transition: .1s ease;
+            opacity: .5;
+            visibility: visible;
+        }
     }
 
     &_warn {

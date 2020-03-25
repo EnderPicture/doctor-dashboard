@@ -105,6 +105,7 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  overflow: hidden;
 }
 
 .category_lab {
@@ -146,7 +147,8 @@ body {
       -ms-flex: 1;
           flex: 1;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 10px 0 0 10px;
+  margin-right: -10px;
 }
 
 .category__cards-track {
@@ -162,6 +164,7 @@ body {
 .category__scroll {
   -webkit-transform: translateZ(0);
           transform: translateZ(0);
+  margin-right: 10px;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (1fr)[4];
@@ -190,6 +193,7 @@ body {
   width: 100%;
   grid-column: span 2;
   grid-row: span 4;
+  position: relative;
 }
 
 .data-card * {
@@ -236,7 +240,32 @@ body {
           box-shadow: 0 5px 0 0 #dfcfc1;
   -webkit-transform: translate3d(0, -5px, 0);
           transform: translate3d(0, -5px, 0);
-  z-index: 100;
+}
+
+.data-card__selected {
+  position: absolute;
+  background-color: #1F1424;
+  color: #E8DCD2;
+  margin: 0;
+  border-radius: 10px;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  visibility: hidden;
+  padding: 5px 10px;
+  -webkit-transition: .8s ease;
+  transition: .8s ease;
+  -webkit-transform: translate3d(0, -100%, 0);
+          transform: translate3d(0, -100%, 0);
+}
+
+.data-card__selected_show {
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+  -webkit-transition: .1s ease;
+  transition: .1s ease;
+  opacity: .5;
+  visibility: visible;
 }
 
 .data-card_warn {

@@ -87,8 +87,8 @@
         }
 
         let others = {
-            pins: [],
-            oldPins: [],
+            selection: [],
+            oldSelection: [],
             flags: [],
             oldFlags: [],
         }
@@ -150,8 +150,8 @@
 
             patient.notes = [];
 
-            others.pins.push([]);
-            others.oldPins.push([]);
+            others.selection.push([]);
+            others.oldSelection.push([]);
             others.flags.push([]);
             others.oldFlags.push([]);
         });
@@ -546,8 +546,8 @@
                         }
                     }, false);
                 },
-                pined() {
-                    return this.others.pins[this.patientIndex].indexOf(this.name) > -1;
+                selected() {
+                    return this.others.selection[this.patientIndex].indexOf(this.name) > -1;
                 },
                 flagged() {
                     return this.others.flags[this.patientIndex].indexOf(this.name) > -1;
@@ -566,8 +566,15 @@
                         this.collapsed = true;
                     }
                 },
-                pin() {
-                    this.arrayToggle(this.others.pins[this.patientIndex], this.name)
+                select() {
+                    let array = this.others.selection[this.patientIndex];
+                    let index = array.indexOf(this.name);
+
+                    array.splice(0, array.length);
+                    if (index < 0) {
+                        array.push(this.name)
+                    }
+                    
                 },
                 flag() {
                     this.arrayToggle(this.others.flags[this.patientIndex], this.name)
@@ -588,8 +595,10 @@
     </script>
     <template id="data-card-template">
         <div :class="{'data-card': true, 'data-card_mini': collapsed}" @click.left="collapsed = !collapsed"
-            @click.right.prevent="flag">
+            @click.right.prevent="select">
             <div :class="{'data-card__con': true, 'data-card_warn':warn, 'data-card_flag': flagged}">
+                
+                <p :class="{'data-card__selected': true, 'data-card__selected_show': selected}">selected</p>
 
                 <div class="data-card__flex">
                     <p class="data-card__title data-card__left">{{name}}</p>
