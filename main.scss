@@ -35,11 +35,22 @@ body {
     height: 100%;
     padding: 20px;
     color: $color-light;
+    display: flex;
+    flex-direction: column;
+
+    .no-bottom-margin {
+        margin-bottom: 0;
+    }
+
+    &__top {
+        flex: 1;
+        flex-shrink: 0;
+    }
 
     &__line {
         width: 100%;
         height: 1px;
-        margin: 20px 0;
+        margin-top: 20px;
         background-color: $color-light;
     }
 
@@ -59,12 +70,12 @@ body {
         font-size: 15px;
         font-weight: 900;
         margin-top: 20px;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
     }
 
     &__text {
         font-size: 15px;
-        margin-top: 10px;
+        margin: 0;
         margin-bottom: 10px;
     }
 }
@@ -126,7 +137,7 @@ body {
         border-radius: 10px 0 0 10px;
         margin-right: -10px;
     }
-    
+
     &__cards-track {
         position: absolute;
         overflow-y: scroll;
@@ -136,7 +147,7 @@ body {
         height: 100%;
         width: 100%;
     }
-    
+
     &__scroll {
         transform: translateZ(0);
         margin-right: 10px;
@@ -145,6 +156,7 @@ body {
         grid-auto-flow: row dense;
         gap: 5px;
         padding-top: 5px;
+        padding-bottom: 100px;
     }
 
     &__shadow {
@@ -159,17 +171,17 @@ body {
 }
 
 .data-card {
-    transition: transform .7s ease;
+    transition: .7s ease;
     width: 100%;
     grid-column: span 2;
     grid-row: span 4;
     position: relative;
-    
+
     * {
         font-family: $font-condensed;
         font-size: 15px;
     }
-    
+
     &__con {
         position: relative;
         justify-content: center;
@@ -182,22 +194,24 @@ body {
         height: 100%;
         padding: 10px;
         box-shadow: 0 0 0 0 darken($color-light, 5);
-        transform: translate3d(0,0,0);
+        transform: translate3d(0, 0, 0);
         transition: .8s ease;
         border-right: solid 0px $color-dark;
     }
+
     &:hover {
         .data-card {
-            
+
             &__con {
                 transition: .1s ease;
                 box-shadow: 0 5px 0 0 darken($color-light, 5);
-                transform: translate3d(0,-5px,0);
+                transform: translate3d(0, -5px, 0);
             }
         }
+
         cursor: pointer;
     }
-    
+
     &__selected {
         position: absolute;
         background-color: $color-dark;
@@ -213,7 +227,7 @@ body {
         transition: .8s ease;
 
         transform: translate3d(0, -100%, 0);
-        
+
         &_show {
             transform: translate3d(0, 0, 0);
             transition: .1s ease;
@@ -225,6 +239,7 @@ body {
     &_warn {
         border-left: solid 5px $color-bad;
     }
+
     &_flag {
         transition: .1s ease;
         border-right: solid 5px $color-dark;
@@ -233,11 +248,12 @@ body {
     &_mini {
         grid-column: span 1;
         grid-row: span 1;
-        
+
         .data-card {
             &__con {
                 padding: 2px 10px;
             }
+
             &__title {
                 font-size: 15px;
             }
@@ -249,13 +265,14 @@ body {
             &__time {
                 display: none;
             }
+
             &__buttons {
                 margin-top: 5px;
             }
         }
     }
 
-    
+
 
     &__flex {
         display: flex;
@@ -289,6 +306,7 @@ body {
         background-color: $color-dark;
         color: $color-light;
         border: none;
+
         &_faded {
             background-color: rgba($color: $color-dark, $alpha: .7);
         }
@@ -364,6 +382,7 @@ body {
         grid-column: 1/2;
         margin: 0;
         position: relative;
+
         &::after {
             content: '';
             position: absolute;
@@ -609,6 +628,61 @@ body {
 
         &_selected {
             opacity: 1;
+        }
+    }
+}
+
+.notes {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    * {
+        font-size: 15px;
+    }
+
+    &__con {
+        width: 100%;
+        flex: 1;
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: lighten($color-dark, 5);
+    }
+
+    &__scroll {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        overflow-y: scroll;
+        padding: 2.5px 5px;
+    }
+
+    &__input {
+        height: 60px;
+    }
+    &__save {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    &__input,
+    &__save {
+        margin-bottom: 5px;
+        padding: 2.5px 5px;
+        border-radius: 10px;
+        background-color: $color-light;
+        resize: none;
+        transition: .2s ease;
+        border: none;
+
+        &:focus,
+        &:hover {
+            outline: none;
+            box-shadow: 0 0 0 5px darken(($color-light), 20);
         }
     }
 }

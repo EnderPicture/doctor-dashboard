@@ -29,12 +29,31 @@ body {
   height: 100%;
   padding: 20px;
   color: #E8DCD2;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.sidebar .no-bottom-margin {
+  margin-bottom: 0;
+}
+
+.sidebar__top {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
 }
 
 .sidebar__line {
   width: 100%;
   height: 1px;
-  margin: 20px 0;
+  margin-top: 20px;
   background-color: #E8DCD2;
 }
 
@@ -54,12 +73,12 @@ body {
   font-size: 15px;
   font-weight: 900;
   margin-top: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .sidebar__text {
   font-size: 15px;
-  margin-top: 10px;
+  margin: 0;
   margin-bottom: 10px;
 }
 
@@ -172,6 +191,7 @@ body {
   grid-auto-flow: row dense;
   gap: 5px;
   padding-top: 5px;
+  padding-bottom: 100px;
 }
 
 .category__shadow {
@@ -186,10 +206,8 @@ body {
 }
 
 .data-card {
-  -webkit-transition: -webkit-transform .7s ease;
-  transition: -webkit-transform .7s ease;
-  transition: transform .7s ease;
-  transition: transform .7s ease, -webkit-transform .7s ease;
+  -webkit-transition: .7s ease;
+  transition: .7s ease;
   width: 100%;
   grid-column: span 2;
   grid-row: span 4;
@@ -667,6 +685,68 @@ body {
 
 .tabs__button_selected {
   opacity: 1;
+}
+
+.notes {
+  height: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.notes * {
+  font-size: 15px;
+}
+
+.notes__con {
+  width: 100%;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #2d1d34;
+}
+
+.notes__scroll {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  overflow-y: scroll;
+  padding: 2.5px 5px;
+}
+
+.notes__input {
+  height: 60px;
+}
+
+.notes__save:hover {
+  cursor: pointer;
+}
+
+.notes__input, .notes__save {
+  margin-bottom: 5px;
+  padding: 2.5px 5px;
+  border-radius: 10px;
+  background-color: #E8DCD2;
+  resize: none;
+  -webkit-transition: .2s ease;
+  transition: .2s ease;
+  border: none;
+}
+
+.notes__input:focus, .notes__input:hover, .notes__save:focus, .notes__save:hover {
+  outline: none;
+  -webkit-box-shadow: 0 0 0 5px #c6a88f;
+          box-shadow: 0 0 0 5px #c6a88f;
 }
 
 .list-enter,

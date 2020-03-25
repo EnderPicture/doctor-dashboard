@@ -15,25 +15,26 @@
 <body>
     <div id="app">
         <div class="sidebar">
-            <p class="sidebar__name-large">{{patientInfo.lastName}}</p>
-            <p class="sidebar__name-small">{{patientInfo.firstName}} {{patientInfo.middleName}}</p>
-            <p class="sidebar__title">ID {{patientInfo.id}}</p>
-            <p class="sidebar__text">{{patientInfo.gender}}, Age {{patientInfo.age}}</p>
-            <div class="sidebar__line"></div>
-            <p class="sidebar__title">Chief Complaint</p>
-            <p class="sidebar__text">{{patient.EDM.ChiefComplaint}}</p>
-            <p class="sidebar__title">Dietary Restrictions</p>
-            <div v-for="restriction in patientDietaryRestrictions.slice(0,3)">
-                <p class="sidebar__text">{{restriction.key}}</p>
-                <p class="sidebar__text">{{fromToday(restriction.value[0].ServiceDate)}}</p>
+            <div class="sidebar__top">
+                <p class="sidebar__name-large">{{patientInfo.lastName}}</p>
+                <p class="sidebar__name-small">{{patientInfo.firstName}} {{patientInfo.middleName}}</p>
+                <p class="sidebar__title">ID {{patientInfo.id}}</p>
+                <p class="sidebar__text">{{patientInfo.gender}}, Age {{patientInfo.age}}</p>
+                <div class="sidebar__line"></div>
+                <p class="sidebar__title">Chief Complaint</p>
+                <p class="sidebar__text">{{patient.EDM.ChiefComplaint}}</p>
+                <p class="sidebar__title">Dietary Restrictions</p>
+                <div v-for="restriction in patientDietaryRestrictions.slice(0,2)">
+                    <p class="sidebar__text no-bottom-margin">{{restriction.key}}</p>
+                    <p class="sidebar__text">{{fromToday(restriction.value[0].ServiceDate)}}</p>
+                </div>
+                <p class="sidebar__title">Current Medications</p>
+                <p class="sidebar__title">Allergies</p>
+                <div class="sidebar__line"></div>
             </div>
-            <p class="sidebar__title">Current Medications</p>
-            <p class="sidebar__title">Allergies</p>
-            <div class="sidebar__line"></div>
-            <p class="sidebar__title">Notes</p>
-            <input v-model="notesInput" type="text">
-            <button @click="patients[patientIndex].notes.push(notesInput)">save</button>
-            <p v-for="note in patients[patientIndex].notes">{{note}}</p>
+            <notes :selected="selected" :data="patients[this.patientIndex]" :today="today" :now="now"></notes>
+
+
         </div>
         <div class="main">
             <div class="content">
@@ -85,6 +86,13 @@
             let max = Math.max(rangeValues[0], rangeValues[1]);
             return ((Math.random() * (max - min)) + min);
         }
+        let outOfRange = (range, value) => {
+            let rangeValues = range.split('-');
+            let min = Math.min(rangeValues[0], rangeValues[1]);
+            let max = Math.max(rangeValues[0], rangeValues[1]);
+            let maxDelta = (max - min) / 30;
+            return value < min + maxDelta || value > max - maxDelta;
+        }
 
         let others = {
             selection: [],
@@ -110,12 +118,14 @@
 
                             if (pram.type === 'number') {
                                 let value = randomFromRange(pram.range);
+
                                 result = {
                                     testValue: pram.testValue,
                                     range: pram.range,
                                     units: pram.units,
                                     value: value.toFixed(2),
                                     type: pram.type,
+                                    outOfRange: outOfRange(pram.range, value),
                                 };
                             } else if (pram.type === 'image') {
                                 result = {
@@ -139,12 +149,45 @@
                                 units: 'mL/s',
                                 value: value.toFixed(2),
                                 type: 'number',
+                                outOfRange: outOfRange(range, value),
                             };
                             results.push(result)
                         }
                     }
 
                     entry.results = results;
+
+                    let notes = [];
+                    let badValues = [];
+                    results.forEach(d => {
+                        if (d.outOfRange !== undefined) {
+                            if (d.outOfRange) {
+                                badValues.push(d.testValue);
+                            }
+                        }
+                    });
+                    note = '';
+                    badValues.forEach((val, key, arr) => {
+                        note += val;
+                        if (key < arr.length - 1) {
+                            note += ' and ';
+                        }
+                        if (key < arr.length - 2) {
+                            note += ', ';
+                        }
+                    });
+                    if (badValues.length > 1) {
+                        note += ' are bad';
+                    } else {
+                        note += ' is bad';
+                    }
+                    if (badValues.length > 0) {
+                        notes.push({
+                            date: moment(entry.ServiceDate, 'DD-MMMM-YYYY'),
+                            note: note,
+                        });
+                    }
+                    entry.notes = notes;
                 }
             });
 
@@ -351,6 +394,79 @@
     </template>
 
     <script>
+        Vue.component('notes', {
+            template: '#notes-template',
+            props: {
+                data: Object,
+                today: Object,
+                now: Object,
+                selected: String,
+            },
+            data() {
+                return {
+                    notesInput: '',
+                }
+            },
+            computed: {
+                notes() {
+                    let notes = [];
+                    if (this.selected !== undefined) {
+                        let rawNotes = this.data.OrderEntry.filter(d => {
+                            return d.Procedure === this.selected;
+                        }).map(d => d.notes);
+
+
+                        rawNotes.forEach(d => {
+                            notes = notes.concat(d);
+                        })
+                        notes = notes.sort((a, b) => {
+                            return a.date.unix() - b.date.unix();
+                        });
+                    } else {
+                        notes = this.data.notes;
+                    }
+                    return notes;
+                },
+            },
+            methods: {
+                saveNote() {
+                    this.notesInput = this.notesInput.trim();
+                    if (this.notesInput !== '') {
+                        if (this.selected !== undefined) {
+
+                        } else {
+                            this.data.notes.push({
+                                note: this.notesInput,
+                                date: this.now.clone(),
+                            });
+                            this.notesInput = '';
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    <template id="notes-template">
+        <div class="notes">
+            <p class="sidebar__title" v-if="selected !== undefined">{{selected}} Notes</p>
+            <p class="sidebar__title" v-else>Patient Notes</p>
+            <textarea class="notes__input" v-model="notesInput" type="text" @keydown.enter.shift.exact.prevent="saveNote">
+            </textarea>
+            <button class="notes__save" @click="saveNote" v-if="selected !== undefined">add to {{selected}} notes</button>
+            <button class="notes__save" @click="saveNote" v-else>add to patient notes</button>
+            <div class="notes__con">
+                <div class="notes__scroll">
+                    <p class="sidebar__text no-bottom-margin" v-if="notes.length === 0">no notes for this patient</p>
+                    <div v-for="note in notes">
+                        <pre class="sidebar__text no-bottom-margin">{{note.note}}</pre>
+                        <p class="sidebar__text">{{formatDate(note.date)}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script>
         Vue.component('vega', {
             template: '#vega-template',
             props: {
@@ -507,16 +623,11 @@
 
                                     let delta = this.latest.results[index].value - result.value;
 
-                                    let range = result.range.split('-');
-                                    let min = Math.min(range[0], range[1]);
-                                    let max = Math.max(range[0], range[1]);
-                                    let maxDelta = (max - min) / 30;
-
                                     resultData.push({
                                         delta: delta,
                                         value: result.value,
                                         date: d.ServiceDate,
-                                        outOfRange: result.value < min + maxDelta || result.value > max - maxDelta,
+                                        outOfRange: result.outOfRange,
                                     });
                                 }
                             });
@@ -574,7 +685,7 @@
                     if (index < 0) {
                         array.push(this.name)
                     }
-                    
+
                 },
                 flag() {
                     this.arrayToggle(this.others.flags[this.patientIndex], this.name)
@@ -597,7 +708,7 @@
         <div :class="{'data-card': true, 'data-card_mini': collapsed}" @click.left="collapsed = !collapsed"
             @click.right.prevent="select">
             <div :class="{'data-card__con': true, 'data-card_warn':warn, 'data-card_flag': flagged}">
-                
+
                 <p :class="{'data-card__selected': true, 'data-card__selected_show': selected}">selected</p>
 
                 <div class="data-card__flex">
@@ -786,7 +897,8 @@
 
                 tabs: [
                     'Overview',
-                    'Clip Board',
+                    'Detailed',
+                    'Work Space',
                     'Clinical Documents',
                 ],
                 notesInput: "",
@@ -794,6 +906,9 @@
                 others: others,
             },
             computed: {
+                selected() {
+                    return this.others.selection[this.patientIndex][0];
+                },
                 realTime() {
                     return this.now.diff(this.today, 'days', true) === 0;
                 },
