@@ -307,8 +307,6 @@ body {
 }
 
 .data-card_flag {
-  -webkit-transition: .1s ease;
-  transition: .1s ease;
   border-right: solid 5px #1F1424;
 }
 
