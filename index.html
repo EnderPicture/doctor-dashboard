@@ -492,7 +492,7 @@
                     <p class="sidebar__text no-bottom-margin" v-if="notes.length === 0">no notes for this patient</p>
                     <div v-for="note in notes">
                         <pre class="sidebar__text notes__note-text">{{note.note}}</pre>
-                        <p class="sidebar__text">- {{formatDate(note.date)}}</p>
+                        <p class="sidebar__text">- {{fromToday(note.date)}}</p>
                     </div>
                 </div>
             </div>
@@ -824,8 +824,8 @@
                 <div class="data-card__buttons" v-if="!collapsed">
                     <button class="data-card__more" v-if="flagged" @click.stop="flag">Unflag</button>
                     <button class="data-card__more" v-else @click.stop="flag">Flag</button>
-                    <div class="data-card__more" v-if="notes.length > 0">{{notes.length}} notes</div>
-                    <div class="data-card__more" v-else>no notes</div>
+                    <div class="data-card__more" @click.stop="select" v-if="notes.length > 0">{{notes.length}} notes</div>
+                    <div class="data-card__more" @click.stop="select" v-else>no notes</div>
                     <p class="data-card__more data-card__more_faded" v-if="numNotShowing > 0">{{numNotShowing}} results not shown</p>
                     <template v-else>
                         <p class="data-card__more data-card__more_faded" v-if="numIsShowing > 1">showing all
