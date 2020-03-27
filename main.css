@@ -625,10 +625,22 @@ body {
   background-color: #1F1424;
   color: #E8DCD2;
   border: none;
+  -webkit-transition: .2s ease;
+  transition: .2s ease;
+}
+
+.data-card__more:hover {
+  cursor: pointer;
+  opacity: .5;
 }
 
 .data-card__more_faded {
   background-color: rgba(31, 20, 36, 0.7);
+}
+
+.data-card__more_faded:hover {
+  cursor: initial;
+  opacity: 1;
 }
 
 .data-card__name-con {

@@ -525,9 +525,18 @@ body {
         background-color: $color-dark;
         color: $color-light;
         border: none;
-
+        transition: .2s ease;
+        &:hover {
+            cursor: pointer;
+            opacity: .5;
+        }
+        
         &_faded {
             background-color: rgba($color: $color-dark, $alpha: .7);
+            &:hover {
+                cursor: initial;
+                opacity: 1;
+            }
         }
     }
 

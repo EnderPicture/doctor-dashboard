@@ -792,7 +792,7 @@
                     return this.others.tabIndex;
                 },
                 largeMode() {
-                    return this.tabIndex === 2 || this.tabIndex === 1;
+                    return this.tabIndex === 2;
                 },
                 dateMin() {
                     return this.today.clone().subtract(2, 'month');
@@ -966,12 +966,15 @@
                 select() {
                     let array = this.others.selection[this.patientIndex];
                     let index = array.indexOf(this.name);
-
                     array.splice(0, array.length);
                     if (index < 0) {
-                        array.push(this.name)
+                        array.push(this.name);
                     }
-
+                },
+                selectForce() {
+                    let array = this.others.selection[this.patientIndex];
+                    array.splice(0, array.length);
+                    array.push(this.name);
                 },
                 flag() {
                     this.arrayToggle(this.others.flags[this.patientIndex], this.name)
@@ -1022,9 +1025,10 @@
                                 <!-- <div></div> -->
                                 <vega class="data-card__bar-con" :spec="getVegaSpec(index)" :date-max="dateMax"
                                     :others="others"></vega>
-    
+
                                 <p :class="{'data-card__value': true, 'warn': warnValues[index]}">{{result.value}}</p>
-                                <p :class="{'data-card__value-unit': true, 'warn': warnValues[index]}">{{result.units}}</p>
+                                <p :class="{'data-card__value-unit': true, 'warn': warnValues[index]}">{{result.units}}
+                                </p>
                             </template>
                             <template v-if="result.type === 'image'">
                                 <div class="data-card__image-con">
@@ -1049,15 +1053,17 @@
                 <div class="data-card__buttons" v-if="!collapsed">
                     <button class="data-card__more" v-if="flagged" @click.stop="flag">Unflag</button>
                     <button class="data-card__more" v-else @click.stop="flag">Flag</button>
-                    <div class="data-card__more" @click.stop="select" v-if="notes.length > 0">{{notes.length}} notes
+                    <div class="data-card__more" @click.stop="selectForce" v-if="notes.length > 0">{{notes.length}} notes
                     </div>
-                    <div class="data-card__more" @click.stop="select" v-else>no notes</div>
-                    <p class="data-card__more data-card__more_faded" v-if="numNotShowing > 0">{{numNotShowing}} results
+                    <div class="data-card__more" @click.stop="selectForce" v-else>no notes</div>
+                    <button class="data-card__more" @click.stop="selectForce(); others.tabIndex = 1">Details</button>
+                    <p class="data-card__more" @click.stop="selectForce(); others.tabIndex = 1" v-if="numNotShowing > 0">
+                        {{numNotShowing}} results
                         not shown</p>
                     <template v-else>
-                        <p class="data-card__more data-card__more_faded" v-if="numIsShowing > 1">showing all
+                        <p class="data-card__more data-card__more_faded" @click.stop v-if="numIsShowing > 1">showing all
                             {{numIsShowing}} results</p>
-                        <p class="data-card__more data-card__more_faded" v-else>showing the only result</p>
+                        <p class="data-card__more data-card__more_faded" @click.stop v-else>showing the only result</p>
                     </template>
                 </div>
             </div>
@@ -1220,9 +1226,15 @@
             watch: {
                 tabIndex(newIndex) {
                     this.others.tabIndex = newIndex;
+                },
+                othersTabIndex(newIndex) {
+                    this.tabIndex = newIndex;
                 }
             },
             computed: {
+                othersTabIndex() {
+                    return this.others.tabIndex;
+                },
                 currentLocation() {
                     let locationHistory = this.patient.EDMLocationHistory.concat(this.patient.ADMLocationHistory);
                     locationHistory = locationHistory.filter(d => this.momentParseDMYT(d.EndDate).unix() < this.today.unix());
