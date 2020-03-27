@@ -51,15 +51,30 @@
                     <category class="category_imaging" :type="1" :raw-data="patients[patientIndex]"
                         :data="patientImaging" :today="today" :patient-index="patientIndex" :others="others">
                     </category>
-                    <category class="category_other" :type="2" :raw-data="patients[patientIndex]"
-                        :data="patientOthers" :today="today" :patient-index="patientIndex" :others="others">
-                    </category>
-                </div>
-                <div class="work-space" v-show="tabIndex === 1">
-                    <category class="detail" :type="3" :raw-data="patients[patientIndex]" :data="patientDetails"
+                    <category class="category_other" :type="2" :raw-data="patients[patientIndex]" :data="patientOthers"
                         :today="today" :patient-index="patientIndex" :others="others">
                     </category>
                 </div>
+                <div class="work-space" v-show="tabIndex === 1">
+                    <expanded v-if="patientDetails[0] !== undefined" :data="patientDetails[0]" :type="3" :today="today"
+                        :index="0" :patient-index="patientIndex" :others="others"
+                        :raw-data="patients[patientIndex].OrderEntry" :expand-index="-1"></expanded>
+                    <div class="explain" v-else>
+                        <p class="explain__title">Nothing Selected</p>
+                        <p class="explain__instruction">Select a card from the Overview tab by right clicking</p>
+                    </div>
+                </div>
+                <div class="work-space" v-show="tabIndex === 2">
+                    <category v-if="patientWorkSpace.length > 0" class="category_detail" :type="3"
+                        :raw-data="patients[patientIndex]" :data="patientWorkSpace" :today="today"
+                        :patient-index="patientIndex" :others="others">
+                    </category>
+                    <div class="explain" v-else>
+                        <p class="explain__title">Nothing Flagged</p>
+                        <p class="explain__instruction">Select a card from the Overview tab by control clicking</p>
+                    </div>
+                </div>
+
             </div>
 
             <timeline :data="patient" @chose-date="changeDate" :real-time="realTime" :today="today"
@@ -253,6 +268,94 @@
             }
         });
     </script>
+
+    <script>
+        Vue.component('expanded', {
+            template: '#expanded-template',
+            props: {
+                data: Object,
+                rawData: Array,
+                today: Object,
+            },
+            methods: {
+                getRawTestResult() {
+                    return this.rawData.filter(d => d.Procedure === this.data.key &&
+                        d.parsedDate.unix() < this.today.unix());
+                }
+            }
+        });
+    </script>
+    <template id="expanded-template">
+        <div class="expanded">
+            <p class="category__title">{{data.key}}</p>
+            <div class="expanded__cards-con">
+                <div class="expanded__cards-track">
+                    <div class="expanded__tests">
+                        <test-data v-for="(value, index) in getRawTestResult()" :data="data.value[index]"
+                            :raw-data="value" :key="index" :today="today"></test-data>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        Vue.component('test-data', {
+            template: '#test-data-template',
+            props: {
+                data: Object,
+                rawData: Object,
+                today: Object,
+            },
+            computed: {
+                orderDate() {
+                    return this.momentParseDMY(this.data.OrderDate);
+                },
+                serviceDate() {
+                    return this.momentParseDMY(this.data.ServiceDate);
+                }
+            }
+        });
+    </script>
+    <template id="test-data-template">
+        <div class="test-data">
+            <p class="test-data__title">{{formatDate(serviceDate)}}</p>
+            <p class="test-data__subtitle">{{fromToday(serviceDate)}} - Ordered {{formatDate(orderDate)}} -
+                {{data.Category}}
+            </p>
+            <div class="test-data__data-con">
+                <p class="test-data__small-title">Results</p>
+                <p class="test-data__small-title">Notes</p>
+                
+                <div class="test-data__result">
+                    <template v-for="result in data.results">
+                        <template v-if="result.type === 'number'">
+                            <p class="test-data__row test-data__row_title">{{result.testValue}}</p>
+                            <p class="test-data__row test-data__row_value">{{result.value}}</p>
+                            <p class="test-data__row">{{result.units}}</p>
+                        </template>
+                        <template v-if="result.type === 'image'">
+                            <div class="test-data__image">
+                                <img :src="'scanTests/'+result.link" alt="">
+                            </div>
+                        </template>
+                    </template>
+                </div>
+                
+                <div class="test-data__notes">
+                    <div class="test-data__note-inputs">
+                        <input type="text" placeholder="New note">
+                        <button>works well</button>
+                    </div>
+                    <p class="test-data__note" v-if="data.notes.length === 0">no notes for this test</p>
+                    <div v-for="note in data.notes">
+                        <p class="test-data__note">{{note.note}}</p>
+                        <p class="test-data__note test-data__note-date">{{fromToday(note.date)}} - {{formatDate(note.date)}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
 
     <script>
         Vue.component('timeline', {
@@ -492,7 +595,7 @@
                     <p class="sidebar__text no-bottom-margin" v-if="notes.length === 0">no notes for this patient</p>
                     <div v-for="note in notes">
                         <pre class="sidebar__text notes__note-text">{{note.note}}</pre>
-                        <p class="sidebar__text">- {{fromToday(note.date)}}</p>
+                        <p class="sidebar__text">- {{formatDate(note.date)}}</p>
                     </div>
                 </div>
             </div>
@@ -570,7 +673,7 @@
                     return this.others.tabIndex;
                 },
                 largeMode() {
-                    return this.tabIndex === 1;
+                    return this.tabIndex === 2 || this.tabIndex === 1;
                 },
                 dateMin() {
                     return this.today.clone().subtract(2, 'month');
@@ -824,9 +927,11 @@
                 <div class="data-card__buttons" v-if="!collapsed">
                     <button class="data-card__more" v-if="flagged" @click.stop="flag">Unflag</button>
                     <button class="data-card__more" v-else @click.stop="flag">Flag</button>
-                    <div class="data-card__more" @click.stop="select" v-if="notes.length > 0">{{notes.length}} notes</div>
+                    <div class="data-card__more" @click.stop="select" v-if="notes.length > 0">{{notes.length}} notes
+                    </div>
                     <div class="data-card__more" @click.stop="select" v-else>no notes</div>
-                    <p class="data-card__more data-card__more_faded" v-if="numNotShowing > 0">{{numNotShowing}} results not shown</p>
+                    <p class="data-card__more data-card__more_faded" v-if="numNotShowing > 0">{{numNotShowing}} results
+                        not shown</p>
                     <template v-else>
                         <p class="data-card__more data-card__more_faded" v-if="numIsShowing > 1">showing all
                             {{numIsShowing}} results</p>
@@ -981,6 +1086,7 @@
 
                 tabsName: [
                     'Overview',
+                    'Details',
                     'Work Space',
                     'Clinical Documents',
                 ],
@@ -996,7 +1102,12 @@
             computed: {
                 tabs() {
                     let tabs = JSON.parse(JSON.stringify(this.tabsName));
-                    tabs[1] += ' (' + this.others.flags[this.patientIndex].length + ' flagged)';
+                    if (this.patientDetails[0] !== undefined) {
+                        tabs[1] += ' (' + this.patientDetails[0].key + ')';
+                    } else {
+                        tabs[1] += ' (empty)';
+                    }
+                    tabs[2] += ' (' + this.others.flags[this.patientIndex].length + ' flagged)';
                     return tabs;
                 },
                 selected() {
@@ -1104,7 +1215,25 @@
                 },
                 patientDetails() {
                     let filtered = this.patientOrderHistory.filter(d => {
-                        return d.Procedure === this.selected || this.others.flags[this.patientIndex].indexOf(d.Procedure) > -1;
+                        return this.others.selection[this.patientIndex].indexOf(d.Procedure) > -1;
+                    });
+
+                    let combined = d3.nest()
+                        .key(d => d.Procedure)
+                        .rollup(d => d)
+                        .entries(filtered);
+
+                    let sorted = combined.sort((a, b) => {
+                        let dateA = this.momentParseDMY(a.value[0].ServiceDate).format('x');
+                        let dateB = this.momentParseDMY(b.value[0].ServiceDate).format('x');
+                        return (dateB - dateA);
+                    });
+
+                    return sorted;
+                },
+                patientWorkSpace() {
+                    let filtered = this.patientOrderHistory.filter(d => {
+                        return this.others.flags[this.patientIndex].indexOf(d.Procedure) > -1;
                     });
 
                     let combined = d3.nest()
