@@ -643,6 +643,8 @@ body {
 .data-card__more_faded:hover {
   cursor: initial;
   opacity: 1;
+  -webkit-transform: scale(1);
+          transform: scale(1);
 }
 
 .data-card__name-con {
