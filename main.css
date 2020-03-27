@@ -524,6 +524,12 @@ body {
           transform: translate3d(0, -5px, 0);
 }
 
+.data-card__expand {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
 .data-card__selected {
   position: absolute;
   background-color: #1F1424;

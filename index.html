@@ -1010,29 +1010,32 @@
                         </p>
                         <p class="data-card__time">{{formatDate(latest.ServiceDate)}}</p>
                 </div>
-                <div class="data-card__values" v-if="!collapsed">
-                    <template v-for="(result, index) in latest.results">
-                        <template v-if="result.type === 'number'">
-                            <div :class="{'data-card__name-con': true, 'warn': warnValues[index]} ">
-                                <p class="data-card__value-name">{{result.testValue}}</p>
-                                <div class="data-card__line"></div>
-                            </div>
-                            <!-- <div></div> -->
-                            <vega class="data-card__bar-con" :spec="getVegaSpec(index)" :date-max="dateMax"
-                                :others="others"></vega>
+                <div class="data-card__expand">
 
-                            <p :class="{'data-card__value': true, 'warn': warnValues[index]}">{{result.value}}</p>
-                            <p :class="{'data-card__value-unit': true, 'warn': warnValues[index]}">{{result.units}}</p>
-                        </template>
-                        <template v-if="result.type === 'image'">
-                            <div class="data-card__image-con">
-                                <p class="data-card__notes">{{result.notes}}</p>
-                                <div class="data-card__image">
-                                    <img :src="'scanTests/'+result.link" alt="">
+                    <div class="data-card__values" v-if="!collapsed">
+                        <template v-for="(result, index) in latest.results">
+                            <template v-if="result.type === 'number'">
+                                <div :class="{'data-card__name-con': true, 'warn': warnValues[index]} ">
+                                    <p class="data-card__value-name">{{result.testValue}}</p>
+                                    <div class="data-card__line"></div>
                                 </div>
-                            </div>
+                                <!-- <div></div> -->
+                                <vega class="data-card__bar-con" :spec="getVegaSpec(index)" :date-max="dateMax"
+                                    :others="others"></vega>
+    
+                                <p :class="{'data-card__value': true, 'warn': warnValues[index]}">{{result.value}}</p>
+                                <p :class="{'data-card__value-unit': true, 'warn': warnValues[index]}">{{result.units}}</p>
+                            </template>
+                            <template v-if="result.type === 'image'">
+                                <div class="data-card__image-con">
+                                    <p class="data-card__notes">{{result.notes}}</p>
+                                    <div class="data-card__image">
+                                        <img :src="'scanTests/'+result.link" alt="">
+                                    </div>
+                                </div>
+                            </template>
                         </template>
-                    </template>
+                    </div>
                 </div>
                 <div class="data-card__notes-con" v-if="largeMode">
                     <p class="data-card__notes-con-title">Notes</p>

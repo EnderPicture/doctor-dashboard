@@ -428,6 +428,9 @@ body {
 
         cursor: pointer;
     }
+    &__expand {
+        flex: 1;
+    }
 
     &__selected {
         position: absolute;
