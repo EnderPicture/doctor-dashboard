@@ -1,22 +1,22 @@
 let clinical_documents = {
     "24HourComplexCareRecord": {
-        fileName: "24HourComplexCareRecord.pdf",
+        filePath: "clinicalDocuments/24HourComplexCareRecord.pdf",
         type: "image",
     },
     "AnaestheticRecord.pdf": {
-        fileName: "AnaestheticRecord.pdf",
+        filePath: "clinicalDocuments/AnaestheticRecord.pdf",
         type: "image",
     },
     "PreopChecklist.pdf": {
-        fileName: "PreopChecklist.pdf",
+        filePath: "clinicalDocuments/PreopChecklist.pdf",
         type: "image",
     },
     "PreopRiskScreening.pdf": {
-        fileName: "PreopRiskScreening.pdf",
+        filePath: "clinicalDocuments/PreopRiskScreening.pdf",
         type: "image",
     },
     "ScannedChartsOnMeditechEMR.pdf": {
-        fileName: "ScannedChartsOnMeditechEMR.pdf",
+        filePath: "clinicalDocuments/ScannedChartsOnMeditechEMR.pdf",
         type: "image",
     }
 }

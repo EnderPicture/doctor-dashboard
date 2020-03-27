@@ -61,7 +61,7 @@
                         :raw-data="patients[patientIndex].OrderEntry" :expand-index="-1"></expanded>
                     <div class="explain" v-else>
                         <p class="explain__title">Nothing Selected</p>
-                        <p class="explain__instruction">Select a card from the Overview tab by right clicking</p>
+                        <p class="explain__instruction">Select a card from the Overview tab by <Strong>right clicking</Strong></p>
                     </div>
                 </div>
                 <div class="work-space" v-show="tabIndex === 2">
@@ -71,7 +71,7 @@
                     </category>
                     <div class="explain" v-else>
                         <p class="explain__title">Nothing Flagged</p>
-                        <p class="explain__instruction">Select a card from the Overview tab by control clicking</p>
+                        <p class="explain__instruction">Select a card from the Overview tab by <strong>control clicking</strong></p>
                     </div>
                 </div>
 
@@ -95,6 +95,7 @@
 
     <script src="fake_patient_data.js"></script>
     <script src="sample_tests.js"></script>
+    <script src="clinical_documents.js"></script>
 
 
 
@@ -125,15 +126,16 @@
         patients.forEach(patient => {
             patient.OrderEntry.forEach(entry => {
                 entry.parsedDate = moment(entry.ServiceDate, 'DD-MMMM-YYYY');
+                let results = [];
+
+                let notes = [];
+
                 if (entry.Category === 'Laboratory' ||
                     entry.Category === 'Computed Tomography' ||
                     entry.Category === 'Radiography' ||
                     entry.Category === 'Ultrasonography') {
 
 
-                    let results = [];
-
-                    let notes = [];
 
                     let prams = sampleTests[entry.Procedure];
                     if (prams !== undefined) {
@@ -185,34 +187,34 @@
 
                     entry.results = results;
 
-                    let badValues = [];
-                    results.forEach(d => {
-                        if (d.outOfRange !== undefined) {
-                            if (d.outOfRange) {
-                                badValues.push(d.testValue);
-                            }
-                        }
-                    });
-                    note = '';
-                    badValues.forEach((val, key, arr) => {
-                        note += val;
-                        if (key < arr.length - 1) {
-                            note += ', ';
-                        }
-                    });
-                    if (badValues.length > 1) {
-                        note += ' are out of range and is reported to Dr. J Smith for further examination';
-                    } else {
-                        note += ' is out of range and is reported to Dr. J Smith for further examination';
-                    }
-                    if (badValues.length > 0) {
-                        notes.push({
-                            date: entry.parsedDate,
-                            note: note,
-                        });
-                    }
-                    entry.notes = notes;
                 }
+                let badValues = [];
+                results.forEach(d => {
+                    if (d.outOfRange !== undefined) {
+                        if (d.outOfRange) {
+                            badValues.push(d.testValue);
+                        }
+                    }
+                });
+                note = '';
+                badValues.forEach((val, key, arr) => {
+                    note += val;
+                    if (key < arr.length - 1) {
+                        note += ', ';
+                    }
+                });
+                if (badValues.length > 1) {
+                    note += ' are out of range and is reported to Dr. J Smith for further examination';
+                } else {
+                    note += ' is out of range and is reported to Dr. J Smith for further examination';
+                }
+                if (badValues.length > 0) {
+                    notes.push({
+                        date: entry.parsedDate,
+                        note: note,
+                    });
+                }
+                entry.notes = notes;
             });
 
             patient.OrderEntry.sort((a, b) => {
@@ -307,12 +309,36 @@
                 rawData: Object,
                 today: Object,
             },
+            data() {
+                return {
+                    workingNote: '',
+                }
+            },
             computed: {
+                newNote() {
+                    return this.workingNote.trim();
+                },
                 orderDate() {
                     return this.momentParseDMY(this.data.OrderDate);
                 },
                 serviceDate() {
                     return this.momentParseDMY(this.data.ServiceDate);
+                },
+                notes() {
+                    return this.data.notes.sort((a,b) => {
+                        return b.date.unix() - a.date.unix();
+                    })
+                }
+            },
+            methods: {
+                saveNote() {
+                    if (this.newNote !== '') {
+                        this.rawData.notes.push({
+                            note: this.newNote,
+                            date: this.today.clone(),
+                        });
+                    }
+                    this.workingNote = '';
                 }
             }
         });
@@ -326,12 +352,15 @@
             <div class="test-data__data-con">
                 <p class="test-data__small-title">Results</p>
                 <p class="test-data__small-title">Notes</p>
-                
+
                 <div class="test-data__result">
                     <template v-for="result in data.results">
                         <template v-if="result.type === 'number'">
-                            <p class="test-data__row test-data__row_title">{{result.testValue}}</p>
-                            <p class="test-data__row test-data__row_value">{{result.value}}</p>
+                            <div :class="{'test-data__test-con':true, 'test-data__test-con_warn':result.outOfRange}">
+                                <p class="test-data__row test-data__row_title">{{result.testValue}}</p>
+                                <div class="test-data__line"></div>
+                                <p class="test-data__row test-data__row_value">{{result.value}}</p>
+                            </div>
                             <p class="test-data__row">{{result.units}}</p>
                         </template>
                         <template v-if="result.type === 'image'">
@@ -341,16 +370,17 @@
                         </template>
                     </template>
                 </div>
-                
+
                 <div class="test-data__notes">
                     <div class="test-data__note-inputs">
-                        <input type="text" placeholder="New note">
-                        <button>works well</button>
+                        <input v-model="workingNote" type="text" @keydown.enter="saveNote" placeholder="New note">
+                        <button @click.stop="saveNote">save note</button>
                     </div>
                     <p class="test-data__note" v-if="data.notes.length === 0">no notes for this test</p>
-                    <div v-for="note in data.notes">
+                    <div v-for="note in notes">
                         <p class="test-data__note">{{note.note}}</p>
-                        <p class="test-data__note test-data__note-date">{{fromToday(note.date)}} - {{formatDate(note.date)}}</p>
+                        <p class="test-data__note test-data__note-date">{{fromToday(note.date)}} -
+                            {{formatDate(note.date)}}</p>
                     </div>
                 </div>
             </div>
@@ -1051,7 +1081,7 @@
             <div class="filter">
                 <input class="filter__input" placeholder="Search" v-model="searchRaw">
                 <div :class="[{'filter__tags' : true, 'filter__tags_selected' : tagsSelected.indexOf(tag.key) > -1}]"
-                    v-for="tag in mostOftenWord.slice(0,10)" v-on:click="toggleTag(tag.key)">{{tag.key}}</div>
+                    v-for="tag in mostOftenWord.slice(0,15)" v-on:click="toggleTag(tag.key)">{{tag.key}}</div>
             </div>
             <div class="category__cards-con">
                 <div class="category__cards-track">
@@ -1105,7 +1135,7 @@
                     if (this.patientDetails[0] !== undefined) {
                         tabs[1] += ' (' + this.patientDetails[0].key + ')';
                     } else {
-                        tabs[1] += ' (empty)';
+                        tabs[1] += ' (nothing selected)';
                     }
                     tabs[2] += ' (' + this.others.flags[this.patientIndex].length + ' flagged)';
                     return tabs;

@@ -185,27 +185,36 @@ body {
 .test-data__result {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: (auto)[3];
-      grid-template-columns: repeat(3, auto);
-  gap: 5px;
+  -ms-grid-columns: minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0, 1fr) auto;
   grid-auto-flow: row;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  gap: 5px 10px;
 }
 
 .test-data__small-title {
   margin: 0;
   font-weight: 900;
+  margin-bottom: 5px;
+}
+
+.test-data__note-inputs {
+  margin-bottom: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .test-data__note-inputs > button,
 .test-data__note-inputs > input {
   margin: 0;
-  padding: 2px 10px;
+  padding: 5px 10px;
   border: none;
   background-color: #f1e9e3;
   font-size: 15px;
+  border-radius: 0;
   -webkit-box-shadow: 0 0 0 0px #1F1424;
           box-shadow: 0 0 0 0px #1F1424;
   -webkit-transition: .2s ease;
@@ -220,12 +229,53 @@ body {
           box-shadow: 0 0 0 2px #1F1424;
 }
 
+.test-data__note-inputs > button {
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+}
+
+.test-data__note-inputs > input {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  margin-right: 5px;
+  margin-left: -10px;
+}
+
+.test-data__test-con {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.test-data__test-con_warn {
+  color: #C44536;
+}
+
+.test-data__test-con_warn > div {
+  background-color: #C44536;
+}
+
+.test-data__line {
+  height: 1px;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  background-color: #1F1424;
+  margin: 0 10px;
+}
+
 .test-data__note {
   margin: 0;
+  font-weight: bold;
 }
 
 .test-data__note-date {
   margin-bottom: 10px;
+  font-weight: 100;
 }
 
 .test-data__row {
@@ -256,7 +306,10 @@ body {
       grid-template-columns: 1fr 1fr;
   -ms-grid-rows: auto auto;
       grid-template-rows: auto auto;
-  gap: 5px;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  gap: 5px 40px;
 }
 
 .work-space {
