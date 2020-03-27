@@ -176,7 +176,7 @@ body {
     &__note-inputs {
         margin-bottom: 5px;
         display: flex;
-        
+
         >button,
         >input {
             margin: 0;
@@ -194,10 +194,12 @@ body {
                 box-shadow: 0 0 0 2px $color-dark;
             }
         }
-        > button {
+
+        >button {
             flex-shrink: 0;
         }
-        > input {
+
+        >input {
             flex: 1;
             margin-right: 5px;
             margin-left: -10px;
@@ -207,14 +209,17 @@ body {
     &__test-con {
         display: flex;
         align-items: center;
+
         &_warn {
             color: $color-bad;
-            > div {
+
+            >div {
                 background-color: $color-bad;
             }
         }
-        
+
     }
+
     &__line {
         height: 1px;
         flex: 1;
@@ -278,6 +283,7 @@ body {
     border-radius: 20px;
     padding: 10px;
     overflow: hidden;
+
     &__scroll {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -285,6 +291,7 @@ body {
         grid-auto-rows: 500px;
         gap: 20px;
     }
+
     &__cards-con {
         position: relative;
         flex: 1;
@@ -698,20 +705,18 @@ body {
         font-size: 15px;
         white-space: nowrap;
         transition: .7s ease;
-        
-        
+
         * {
             pointer-events: none;
         }
-        
+
         &:hover {
             cursor: pointer;
         }
-        
+
         &::before,
         &::after {
             content: '';
-            transition: .7s ease;
             width: 100%;
             height: 50%;
             left: 0;
@@ -720,7 +725,7 @@ body {
             border-right: solid 2px;
             border-left: solid 2px;
             z-index: -1;
-
+            transition: .7s ease;
         }
 
         &::before {
@@ -741,20 +746,25 @@ body {
 
             &::before,
             &::after {
+                transform: skewX(0deg);
                 background-color: lighten($color-bad, 30);
                 border-color: $color-bad;
             }
         }
+
         &_future {
             font-weight: 900;
             z-index: 90;
+
             &::before,
             &::after {
-                background-color: lighten($color-good, 30);
-                border-color: $color-good;
+                background-color: $color-light;
+                border-color: darken($color-light, $amount: 30);
             }
         }
+
         &_EDM {
+
             &::before,
             &::after {
                 background-color: adjust-hue($color-light, 45);

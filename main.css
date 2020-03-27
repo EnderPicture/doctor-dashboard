@@ -844,8 +844,6 @@ body {
 
 .timeline__event::before, .timeline__event::after {
   content: '';
-  -webkit-transition: .7s ease;
-  transition: .7s ease;
   width: 100%;
   height: 50%;
   left: 0;
@@ -854,6 +852,8 @@ body {
   border-right: solid 2px;
   border-left: solid 2px;
   z-index: -1;
+  -webkit-transition: .7s ease;
+  transition: .7s ease;
 }
 
 .timeline__event::before {
@@ -876,6 +876,8 @@ body {
 }
 
 .timeline__event_now::before, .timeline__event_now::after {
+  -webkit-transform: skewX(0deg);
+          transform: skewX(0deg);
   background-color: #e8b2ab;
   border-color: #C44536;
 }
@@ -886,8 +888,8 @@ body {
 }
 
 .timeline__event_future::before, .timeline__event_future::after {
-  background-color: #74c079;
-  border-color: #306B34;
+  background-color: #E8DCD2;
+  border-color: #b48d6d;
 }
 
 .timeline__event_EDM::before, .timeline__event_EDM::after {
