@@ -37,6 +37,7 @@ body {
     color: $color-light;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 
     .no-bottom-margin {
         margin-bottom: 0;
@@ -696,19 +697,21 @@ body {
         z-index: 0;
         font-size: 15px;
         white-space: nowrap;
-
-
+        transition: .7s ease;
+        
+        
         * {
             pointer-events: none;
         }
-
+        
         &:hover {
             cursor: pointer;
         }
-
+        
         &::before,
         &::after {
             content: '';
+            transition: .7s ease;
             width: 100%;
             height: 50%;
             left: 0;
@@ -732,8 +735,26 @@ body {
             transform: skewX(-30deg);
         }
 
-        &_EDM {
+        &_now {
+            font-weight: 900;
+            z-index: 90;
 
+            &::before,
+            &::after {
+                background-color: lighten($color-bad, 30);
+                border-color: $color-bad;
+            }
+        }
+        &_future {
+            font-weight: 900;
+            z-index: 90;
+            &::before,
+            &::after {
+                background-color: lighten($color-good, 30);
+                border-color: $color-good;
+            }
+        }
+        &_EDM {
             &::before,
             &::after {
                 background-color: adjust-hue($color-light, 45);
@@ -904,7 +925,7 @@ body {
         position: relative;
         overflow: hidden;
         background-color: lighten($color-dark, 5);
-        margin: 0 -10px -10px -10px;
+        margin: 0 -20px -20px -20px;
     }
 
     &__scroll {
@@ -914,7 +935,7 @@ body {
         top: 0;
         left: 0;
         overflow-y: scroll;
-        padding: 10px;
+        padding: 10px 20px;
     }
 
     &__note-text {
@@ -937,18 +958,24 @@ body {
 
     &__input,
     &__save {
-        margin-bottom: 5px;
-        padding: 2.5px 5px;
-        border-radius: 10px;
-        background-color: $color-light;
+        color: $color-light;
+        margin: 0 -20px 10px -20px;
+
+        padding: 2.5px 20px;
+        border-radius: 0;
+        background-color: lighten($color-dark, 5);
         resize: none;
         transition: .2s ease;
         border: none;
 
+        &::placeholder {
+            color: lighten($color-dark, 30);
+        }
+
         &:focus,
         &:hover {
             outline: none;
-            box-shadow: 0 0 0 5px darken(($color-light), 20);
+            box-shadow: 0 0 0 5px lighten(($color-dark), 30);
         }
     }
 }

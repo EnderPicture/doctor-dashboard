@@ -36,6 +36,7 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  overflow: hidden;
 }
 
 .sidebar .no-bottom-margin {
@@ -829,6 +830,8 @@ body {
   z-index: 0;
   font-size: 15px;
   white-space: nowrap;
+  -webkit-transition: .7s ease;
+  transition: .7s ease;
 }
 
 .timeline__event * {
@@ -841,6 +844,8 @@ body {
 
 .timeline__event::before, .timeline__event::after {
   content: '';
+  -webkit-transition: .7s ease;
+  transition: .7s ease;
   width: 100%;
   height: 50%;
   left: 0;
@@ -863,6 +868,26 @@ body {
   border-bottom: solid 2px;
   -webkit-transform: skewX(-30deg);
           transform: skewX(-30deg);
+}
+
+.timeline__event_now {
+  font-weight: 900;
+  z-index: 90;
+}
+
+.timeline__event_now::before, .timeline__event_now::after {
+  background-color: #e8b2ab;
+  border-color: #C44536;
+}
+
+.timeline__event_future {
+  font-weight: 900;
+  z-index: 90;
+}
+
+.timeline__event_future::before, .timeline__event_future::after {
+  background-color: #74c079;
+  border-color: #306B34;
 }
 
 .timeline__event_EDM::before, .timeline__event_EDM::after {
@@ -1027,7 +1052,7 @@ body {
   position: relative;
   overflow: hidden;
   background-color: #2d1d34;
-  margin: 0 -10px -10px -10px;
+  margin: 0 -20px -20px -20px;
 }
 
 .notes__scroll {
@@ -1037,7 +1062,7 @@ body {
   top: 0;
   left: 0;
   overflow-y: scroll;
-  padding: 10px;
+  padding: 10px 20px;
 }
 
 .notes__note-text {
@@ -1057,20 +1082,37 @@ body {
 }
 
 .notes__input, .notes__save {
-  margin-bottom: 5px;
-  padding: 2.5px 5px;
-  border-radius: 10px;
-  background-color: #E8DCD2;
+  color: #E8DCD2;
+  margin: 0 -20px 10px -20px;
+  padding: 2.5px 20px;
+  border-radius: 0;
+  background-color: #2d1d34;
   resize: none;
   -webkit-transition: .2s ease;
   transition: .2s ease;
   border: none;
 }
 
+.notes__input::-webkit-input-placeholder, .notes__save::-webkit-input-placeholder {
+  color: #744b86;
+}
+
+.notes__input:-ms-input-placeholder, .notes__save:-ms-input-placeholder {
+  color: #744b86;
+}
+
+.notes__input::-ms-input-placeholder, .notes__save::-ms-input-placeholder {
+  color: #744b86;
+}
+
+.notes__input::placeholder, .notes__save::placeholder {
+  color: #744b86;
+}
+
 .notes__input:focus, .notes__input:hover, .notes__save:focus, .notes__save:hover {
   outline: none;
-  -webkit-box-shadow: 0 0 0 5px #c6a88f;
-          box-shadow: 0 0 0 5px #c6a88f;
+  -webkit-box-shadow: 0 0 0 5px #744b86;
+          box-shadow: 0 0 0 5px #744b86;
 }
 
 .list-enter,

@@ -23,8 +23,11 @@
                 <div class="sidebar__line"></div>
                 <p class="sidebar__title">Chief Complaint</p>
                 <p class="sidebar__text">{{patient.EDM.ChiefComplaint}}</p>
+                <p class="sidebar__title">Current Location</p>
+                <p class="sidebar__text" v-if="currentLocation !== undefined">{{currentLocation.To}}</p>
+                <p class="sidebar__text" v-else>not in felicities</p>
                 <p class="sidebar__title">Dietary Restrictions</p>
-                <div v-for="restriction in patientDietaryRestrictions.slice(0,2)">
+                <div v-for="restriction in patientDietaryRestrictions.slice(0,1)">
                     <p class="sidebar__text no-bottom-margin">{{restriction.key}}</p>
                     <p class="sidebar__text">{{fromToday(restriction.value[0].ServiceDate)}}</p>
                 </div>
@@ -84,7 +87,8 @@
                                     <div v-for="key in Object.keys(clinicalDocs)">
                                         <object :data="clinicalDocs[key].filePath" type="application/pdf" width="100%"
                                             height="100%">
-                                            <p>Alternative text - include a link <a href="myfile.pdf">to the PDF!</a></p>
+                                            <p>Alternative text - include a link <a href="myfile.pdf">to the PDF!</a>
+                                            </p>
                                         </object>
                                     </div>
                                 </div>
@@ -131,6 +135,16 @@
             let maxDelta = (max - min) / 30;
             return value < min + maxDelta || value > max - maxDelta;
         }
+        let bundleTemplate = {
+            startDate: null,
+            endDate: null,
+            type: '',
+            niceName: '',
+            tileName: '',
+            id: 0,
+            deltaDays: 0,
+            items: [],
+        };
 
         let others = {
             selection: [],
@@ -421,6 +435,42 @@
                 }
             },
             computed: {
+                timeDataWithCurrentTime() {
+                    bundle = JSON.parse(JSON.stringify(bundleTemplate));
+                    if (this.realTime) {
+                        bundle.type = 'future';
+                    } else {
+                        bundle.type = 'now';
+                    }
+                    bundle.niceName = 'now';
+                    bundle.id = -1;
+                    bundle.tileName = 'current time';
+                    bundle.startDate = this.today;
+                    bundle.endDate = this.today;
+                    bundle.items = [];
+
+                    let index = this.timeData.reduce((acc, d, index) => {
+                        if (d.startDate.unix() < this.today.unix()) {
+                            if (index > acc) {
+                                return index;
+                            } else {
+                                return acc;
+                            }
+                        } else {
+                            return acc;
+                        }
+                    }, 0);
+
+                    let newTimeData = [];
+                    this.timeData.forEach((d, i) => {
+                        newTimeData.push(d);
+                        if (index === i) {
+                            newTimeData.push(bundle);
+                        }
+                    })
+
+                    return newTimeData;
+                },
                 timeData() {
                     let chronologicalData = [];
                     let date = null;
@@ -449,13 +499,13 @@
                         chronologicalData[index].from = 'Appointments';
                     });
                     this.data.EDMLocationHistory.forEach(d => {
-                        let date = this.momentParseDMYT(d.StartDate);
+                        let date = this.momentParseDMYT(d.EndDate);
                         let index = chronologicalData.push(d) - 1;
                         chronologicalData[index].parsedDate = date;
                         chronologicalData[index].from = 'EDMLocationHistory';
                     });
                     this.data.ADMLocationHistory.forEach(d => {
-                        let date = this.momentParseDMYT(d.StartDate);
+                        let date = this.momentParseDMYT(d.EndDate);
                         let index = chronologicalData.push(d) - 1;
                         chronologicalData[index].parsedDate = date;
                         chronologicalData[index].from = 'ADMLocationHistory';
@@ -472,15 +522,7 @@
                     });
 
                     let bundledData = [];
-                    let bundleTemplate = {
-                        startDate: null,
-                        endDate: null,
-                        type: '',
-                        niceName: '',
-                        tileName: '',
-                        deltaDays: 0,
-                        items: [],
-                    };
+
                     let nameMapping = {
                         EDM: 'Emergency',
                         ADM: 'Transfer to Hospital',
@@ -500,7 +542,7 @@
                         Surgeries: 'Surgery',
                     };
                     let bundle = null;
-                    chronologicalData.forEach(d => {
+                    chronologicalData.forEach((d, index) => {
                         if (bundle === null || bundle.type !== d.from) {
                             if (bundle !== null) {
                                 bundle.endDate = d.parsedDate;
@@ -518,6 +560,7 @@
                             bundle.niceName = nameMapping[d.from];
                             bundle.tileName = titleNameMapping[d.from];
                             bundle.startDate = d.parsedDate;
+                            bundle.id = index;
                             bundle.items = [];
                         }
                         bundle.items.push(d);
@@ -538,7 +581,12 @@
                     this.screenY = e.clientY - 10;
                 },
                 eventClicked(event) {
-                    this.$emit('chose-date', event.endDate);
+                    if (event.type === 'future') return;
+                    if (event.type === 'now') {
+                        this.resetToNow();
+                    } else {
+                        this.$emit('chose-date', event.endDate);
+                    }
                 },
                 resetToNow() {
                     this.$emit('reset-date');
@@ -555,10 +603,29 @@
                 <div class="timeline__hover" v-if="hovering !== null" ref="hoverBox"
                     :style="{transform: 'translate3d('+screenX+'px, '+screenY+'px, 0px)'}">
                     <div class="timeline__hover-content">
-                        <p class="title">{{hovering.tileName}}</p>
-                        <p>{{this.formatDate(hovering.startDate)}} - {{this.formatDate(hovering.endDate)}}</p>
-                        <p>events: {{hovering.items.length}}</p>
-                        <p>from: {{hovering.type}}</p>
+                        <template v-if="hovering.type === 'now'">
+                            <p class="title">click to reset time</p>
+                        </template>
+                        <template v-else-if="hovering.type === 'future'">
+                            <p class="title">today</p>
+                        </template>
+                        <template v-else>
+
+                            <p class="title">{{hovering.tileName}}</p>
+                            <p>{{this.formatDate(hovering.startDate)}} - {{this.formatDate(hovering.endDate)}}</p>
+                            <p>events: {{hovering.items.length}}</p>
+                            <template
+                                v-if="hovering.items[0].from === 'ADMLocationHistory' || hovering.items[0].from === 'EDMLocationHistory'">
+                                <p>from: {{hovering.items[0].From}}</p>
+                                <p>to: {{hovering.items[0].To}}</p>
+                            </template>
+                            <template v-if="hovering.items[0].from === 'Surgeries'">
+                                <p>Procedure: {{hovering.items[0].ProcedureDescription}}</p>
+                                <p>Urgency: {{hovering.items[0].Status}}</p>
+                                <p>Surgeon: {{hovering.items[0].Surgeon}}</p>
+                                <p>Anaesthetist: {{hovering.items[0].Anaesthetist}}</p>
+                            </template>
+                        </template>
                     </div>
                 </div>
             </transition>
@@ -568,12 +635,14 @@
             </div>
 
             <div class="timeline__main" ref="line">
-                <div class="timeline__track">
-                    <div :class="eventClassGen(event.type)" v-for="event in timeData" @mouseover="hovering = event"
-                        @mouseout="hovering = null" @mousemove="hover" @click="eventClicked(event)">
+                <transition-group name="list" class="timeline__track">
+
+                    <div :class="eventClassGen(event.type)" v-for="event in timeDataWithCurrentTime"
+                        @mouseover="hovering = event" @mouseout="hovering = null" @mousemove="hover"
+                        @click="eventClicked(event)" :key="event.id">
                         <div>{{event.niceName}}</div>
                     </div>
-                </div>
+                </transition-group>
             </div>
         </div>
     </template>
@@ -632,7 +701,7 @@
         <div class="notes">
             <p class="sidebar__title" v-if="selected !== undefined">{{selected}} Notes</p>
             <p class="sidebar__title" v-else>Patient Notes</p>
-            <textarea class="notes__input" v-model="notesInput" type="text"
+            <textarea class="notes__input" v-model="notesInput" type="text" placeholder="New note here..."
                 @keydown.enter.shift.exact.prevent="saveNote">
             </textarea>
             <button class="notes__save" @click="saveNote" v-if="selected !== undefined">add to {{selected}}
@@ -1149,6 +1218,15 @@
                 }
             },
             computed: {
+                currentLocation() {
+                    let locationHistory = this.patient.EDMLocationHistory.concat(this.patient.ADMLocationHistory);
+                    locationHistory = locationHistory.filter(d => this.momentParseDMYT(d.EndDate).unix() < this.today.unix());
+                    locationHistory = locationHistory.sort((a, b) => {
+                        return this.momentParseDMYT(b.StartDate).unix() - this.momentParseDMYT(a.StartDate).unix();
+                    });
+                    return locationHistory[0];
+
+                },
                 now() {
                     if (this.patientIndex === 0) {
                         return moment("2031 02 20", "YYYY MM DD")
