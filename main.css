@@ -1007,6 +1007,17 @@ body {
   margin: 0;
 }
 
+.explain__click {
+  text-decoration: underline;
+  -webkit-transition: .2s ease;
+  transition: .2s ease;
+}
+
+.explain__click:hover {
+  cursor: pointer;
+  opacity: .5;
+}
+
 .tabs {
   background-color: #1F1424;
   display: -webkit-box;

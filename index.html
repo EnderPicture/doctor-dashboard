@@ -64,7 +64,8 @@
                         :raw-data="patients[patientIndex].OrderEntry" :expand-index="-1"></expanded>
                     <div class="explain" v-else>
                         <p class="explain__title">Nothing Selected</p>
-                        <p class="explain__instruction">Select a card from the Overview tab by <Strong>(right
+                        <p class="explain__instruction">Select a card from the <strong class="explain__click"
+                                @click="tabIndex = 0">overview</strong> tab by <Strong>(right
                                 click)</Strong></p>
                     </div>
                 </div>
@@ -75,7 +76,8 @@
                     </category>
                     <div class="explain" v-else>
                         <p class="explain__title">Nothing Flagged</p>
-                        <p class="explain__instruction">Select many cards from the Overview tab using <strong>(control +
+                        <p class="explain__instruction">Select many cards from the <strong class="explain__click"
+                                @click="tabIndex = 0">overview</strong> tab using <strong>(control +
                                 left click)</strong></p>
                     </div>
                 </div>

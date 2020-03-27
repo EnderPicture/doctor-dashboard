@@ -894,6 +894,14 @@ body {
         font-size: 24px;
         margin: 0;
     }
+    &__click {
+        text-decoration: underline;
+        transition: .2s ease;
+        &:hover {
+            cursor: pointer;
+            opacity: .5;
+        }
+    }
 }
 
 .tabs {
