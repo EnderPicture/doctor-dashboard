@@ -631,7 +631,9 @@ body {
 
 .data-card__more:hover {
   cursor: pointer;
-  opacity: .5;
+  opacity: .75;
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
 }
 
 .data-card__more_faded {

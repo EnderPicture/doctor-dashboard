@@ -528,7 +528,8 @@ body {
         transition: .2s ease;
         &:hover {
             cursor: pointer;
-            opacity: .5;
+            opacity: .75;
+            transform: scale(1.2);
         }
         
         &_faded {
