@@ -949,6 +949,15 @@ body {
   border-color: #b46d82;
 }
 
+.timeline__event_inactive {
+  color: #b3b3b3;
+}
+
+.timeline__event_inactive::before, .timeline__event_inactive::after {
+  background-color: white;
+  border-color: #b3b3b3;
+}
+
 .timeline__warning {
   background-color: #C44536;
   color: #E8DCD2;

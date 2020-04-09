@@ -839,6 +839,15 @@ body {
                 border-color: darken(adjust-hue($color-light, 315), $amount: 30);
             }
         }
+
+        &_inactive {
+            color: darken(adjust-hue(#fff, 315), $amount: 30);
+            &::before,
+            &::after {
+                background-color: adjust-hue(#fff, 315);
+                border-color: darken(adjust-hue(#fff, 315), $amount: 30);
+            }
+        }
     }
 
     &__warning {

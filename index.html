@@ -145,6 +145,7 @@
             tileName: '',
             id: 0,
             deltaDays: 0,
+            inactive: false,
             items: [],
         };
 
@@ -444,7 +445,7 @@
                     } else {
                         bundle.type = 'now';
                     }
-                    bundle.niceName = 'now';
+                    bundle.niceName = 'filter limit';
                     bundle.id = -1;
                     bundle.tileName = 'current time';
                     bundle.startDate = this.today;
@@ -465,6 +466,11 @@
 
                     let newTimeData = [];
                     this.timeData.forEach((d, i) => {
+                        if (index < i) {
+                            d.inactive = true;
+                        } else {
+                            d.inactive = false;
+                        }
                         newTimeData.push(d);
                         if (index === i) {
                             newTimeData.push(bundle);
@@ -572,10 +578,11 @@
                 },
             },
             methods: {
-                eventClassGen(type) {
+                eventClassGen(event) {
                     let classObject = {};
                     classObject['timeline__event'] = true;
-                    classObject['timeline__event_' + type] = true;
+                    classObject['timeline__event_' + event.type] = true;
+                    classObject['timeline__event_inactive'] = event.inactive;
                     return classObject;
                 },
                 hover(e) {
@@ -639,7 +646,7 @@
             <div class="timeline__main" ref="line">
                 <transition-group name="list" class="timeline__track">
 
-                    <div :class="eventClassGen(event.type)" v-for="event in timeDataWithCurrentTime"
+                    <div :class="eventClassGen(event)" v-for="event in timeDataWithCurrentTime"
                         @mouseover="hovering = event" @mouseout="hovering = null" @mousemove="hover"
                         @click="eventClicked(event)" :key="event.id">
                         <div>{{event.niceName}}</div>
