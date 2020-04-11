@@ -690,10 +690,19 @@ body {
         left: 0;
         z-index: 100;
     }
+    &__hover-tail {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        background-color: lighten($color-dark, 10);
+        width: 20px;
+        height: 20px;
+        transform: translate(-50%, 50%) rotate(45deg);
+    }
 
     &__hover-content {
         background-color: lighten($color-dark, 10);
-        transform: translate(-50%, -100%);
+        transform: translate(-50%, -110%);
         color: $color-light;
         padding: 20px;
         border-radius: 10px;
